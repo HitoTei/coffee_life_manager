@@ -1,33 +1,33 @@
 import 'dart:convert';
 
-import '../constant_string.dart';
-
 class Rate {
-  Rate();
+  Rate()
+      : values = {
+          bitternessKey: 0,
+          sournessKey: 0,
+          fragranceKey: 0,
+          richKey: 0,
+          overallKey: 0,
+        };
 
-  Rate.fromJsonStr(String json) {
-    final map = jsonDecode(json) as Map<String, dynamic>;
-    bitterness = map[bitternessKey] as int;
-    sourness = map[sournessKey] as int;
-    fragrance = map[fragranceKey] as int;
-    rich = map[richKey] as int;
-    overall = map[overallKey] as int;
-  }
+  Rate.fromJsonStr(String json)
+      : values = (jsonDecode(json) as Map<String, dynamic>).cast<String, int>();
 
-  int bitterness = 0;
-  int sourness = 0;
-  int fragrance = 0;
-  int rich = 0;
-  int overall = 0;
+  static const bitternessDisplayString = '苦味';
+  static const sournessDisplayString = '酸味';
+  static const fragranceDisplayString = '香り';
+  static const richDisplayString = 'コク';
+  static const overallDisplayString = '総合評価';
+
+  static const bitternessKey = 'bitternessKey';
+  static const sournessKey = 'sournessKey';
+  static const fragranceKey = 'fragranceKey';
+  static const richKey = 'richKey';
+  static const overallKey = 'overallKey';
+
+  final Map<String, int> values;
 
   String toJsonStr() {
-    final map = <String, dynamic>{
-      bitternessKey: bitterness,
-      sournessKey: sourness,
-      fragranceKey: fragrance,
-      richKey: rich,
-      overallKey: overall,
-    };
-    return jsonEncode(map);
+    return jsonEncode(values);
   }
 }
