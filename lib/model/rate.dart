@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import '../constant_string.dart';
 
 class Rate {
   Rate();
-  Rate.fromMap(Map<String, dynamic> map) {
-    uid = map[uidKey] as int;
+
+  Rate.fromJsonStr(String json) {
+    final map = jsonDecode(json) as Map<String, dynamic>;
     bitterness = map[bitternessKey] as int;
     sourness = map[sournessKey] as int;
     fragrance = map[fragranceKey] as int;
@@ -11,21 +14,20 @@ class Rate {
     overall = map[overallKey] as int;
   }
 
-  int uid;
-  int bitterness;
-  int sourness;
-  int fragrance;
-  int rich;
-  int overall;
+  int bitterness = 0;
+  int sourness = 0;
+  int fragrance = 0;
+  int rich = 0;
+  int overall = 0;
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      uidKey: uid,
+  String toJsonStr() {
+    final map = <String, dynamic>{
       bitternessKey: bitterness,
       sournessKey: sourness,
       fragranceKey: fragrance,
       richKey: rich,
       overallKey: overall,
     };
+    return jsonEncode(map);
   }
 }
