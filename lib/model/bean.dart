@@ -15,6 +15,7 @@ class Bean {
     price = map[priceKey] as int;
     shopId = map[shopIdKey] as int;
     memo = map[memoKey] as String;
+    imageUri = map[imageUriKey] as String;
 
     roast = Roast.values[map[roastKey] as int];
     freshnessDate = DateTime.parse(map[freshnessDateKey] as String);
@@ -34,6 +35,7 @@ class Bean {
   Rate rate = Rate(); // 評価
   int shopId;
   String memo = ''; // メモ
+  String imageUri;
   bool isFavorite = false; // お気に入りか
 
   Map<String, dynamic> toMap() {
@@ -45,7 +47,7 @@ class Bean {
       priceKey: price,
       shopIdKey: shopId,
       memoKey: memo,
-
+      imageUriKey: imageUri,
       // Sqliteで扱えないので扱える型にする
       rateKey: rate.toJsonStr(),
       roastKey: roast.index,

@@ -37,6 +37,7 @@ class SqlDatabase {
       $cafeNameKey TEXT,
       $mapUrlKey TEXT,
       $regularHolidayKey TEXT,
+      $imageUriKey TEXT,
       $isFavoriteKey INTEGER
     );
     ''');
@@ -52,6 +53,7 @@ class SqlDatabase {
       $rateKey TEXT,
       $cafeIdKey INTEGER,
       $memoKey TEXT,
+      $imageUriKey TEXT,
       $isFavoriteKey INTEGER
     );
     ''');
@@ -70,6 +72,7 @@ class SqlDatabase {
       $rateKey TEXT,
       $beanIdKey INTEGER,
       $memoKey TEXT,
+      $imageUriKey TEXT,
       $isFavoriteKey INTEGER
     );
     ''');
@@ -89,6 +92,7 @@ class SqlDatabase {
       $rateKey TEXT,
       $shopIdKey INTEGER,
       $memoKey TEXT,
+      $imageUriKey TEXT,
       $isFavoriteKey INTEGER
     );
     ''');

@@ -10,6 +10,7 @@ class Cafe {
     uid = map[uidKey] as int;
     cafeName = map[cafeNameKey] as String;
     mapUrl = map[mapUrlKey] as String;
+    imageUri = map[imageUriKey] as String;
     regularHoliday =
         jsonStrToDayOfTheWeekList(map[regularHolidayKey] as String);
 
@@ -19,6 +20,7 @@ class Cafe {
   int uid;
   String cafeName = '';
   String mapUrl = '';
+  String imageUri;
   List<DayOfTheWeek> regularHoliday = [];
   bool isFavorite = false;
 
@@ -27,6 +29,7 @@ class Cafe {
       uidKey: uid,
       cafeNameKey: cafeName,
       mapUrlKey: mapUrl,
+      imageUriKey: imageUri,
       // Sqliteで扱えないので扱える型にする
       regularHolidayKey: dayOfTheWeekListToJsonStr(regularHoliday),
       isFavoriteKey: boolToInt(isFavorite),

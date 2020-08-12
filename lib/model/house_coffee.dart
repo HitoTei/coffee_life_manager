@@ -15,6 +15,7 @@ class HouseCoffee {
     numOfCups = map[numOfCupsKey] as int;
     beanId = map[beanIdKey] as int;
     memo = map[memoKey] as String;
+    imageUri = map[imageUriKey] as String;
 
     grind = Grind.values[map[grindKey] as int];
     drip = Drip.values[map[dripKey] as int];
@@ -34,6 +35,7 @@ class HouseCoffee {
   Rate rate = Rate();
   int beanId;
   String memo = '';
+  String imageUri;
   bool isFavorite = false;
 
   Map<String, dynamic> toMap() {
@@ -43,6 +45,7 @@ class HouseCoffee {
       numOfCupsKey: numOfCups,
       beanIdKey: beanId,
       memoKey: memo,
+      imageUriKey: imageUri,
       // Sqliteで扱えないので扱える型にする
       grindKey: grind.index,
       dripKey: drip.index,

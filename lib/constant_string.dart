@@ -20,3 +20,4 @@ const cafeNameKey = 'cafeNameKey';
 const mapUrlKey = 'mapUrlKey';
 const regularHolidayKey = 'regularHolidayKey';
 const uidKey = 'uidKey';
+const imageUriKey = 'imageUriKey';
