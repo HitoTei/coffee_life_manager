@@ -7,7 +7,6 @@ import 'package:path_provider/path_provider.dart';
 
 class ImageCardWidgetViewModel {
   ImageCardWidgetViewModel({this.information});
-
   final ImageCardInformation information;
 
   // カメラで撮ってから取得して、ローカルに保存後そのファイルの名前を返す

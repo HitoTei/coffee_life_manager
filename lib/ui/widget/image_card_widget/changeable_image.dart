@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:coffee_life_manager/function/get_file.dart';
 import 'package:coffee_life_manager/ui/widget/image_card_widget/image_card_widget_viewmodel.dart';
+import 'package:coffee_life_manager/ui/widget/local_image/local_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +31,7 @@ class ChangeableImage extends StatelessWidget {
       // ToDo: FIX.途中で購読がされなくなる？
       child: ValueListenableProvider<File>(
         create: (_) => image,
-        child: _Image(),
+        child: LocalImage(),
       ),
     );
   }
@@ -61,26 +62,6 @@ class ChangeableImage extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-}
-
-class _Image extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final file = Provider.of<File>(context);
-    log('image build');
-
-    return Container(
-      constraints: const BoxConstraints.expand(),
-      child: file != null
-          ? Image.file(
-              file,
-              fit: BoxFit.fill, // or fitWidth
-            )
-          : const Center(
-              child: Text('イメージ無し'),
-            ),
     );
   }
 }
