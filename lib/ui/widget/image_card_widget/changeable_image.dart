@@ -15,20 +15,20 @@ class ChangeableImage extends StatelessWidget {
     final image = ValueNotifier<File>(null);
     viewModel.getLocalFile().then((value) => image.value = value);
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints.expand(height: 120), // TODO: 調整する
-      child: FlatButton(
-        color: Colors.black12,
-        onPressed: () async {
-          final file = await showImagePickerDialog(context, viewModel);
-          if (file != null) {
-            image.value = file;
-          }
-        },
-        child: ValueListenableProvider<File>(
-          create: (_) => image,
-          child: _Image(),
-        ),
+    return FlatButton(
+      color: Colors.black12,
+      onPressed: () async {
+        final file = await showImagePickerDialog(context, viewModel);
+        if (file != null) {
+          image.value = file;
+          log('file fetched. file: $file');
+        }
+      },
+
+      // ToDo: FIX.途中で購読がされなくなる？
+      child: ValueListenableProvider<File>(
+        create: (_) => image,
+        child: _Image(),
       ),
     );
   }
@@ -69,8 +69,16 @@ class _Image extends StatelessWidget {
     final file = Provider.of<File>(context);
     log('image build');
 
-    return file != null
-        ? Image.file(file)
-        : const Center(child: Text('イメージ無し'));
+    return Container(
+      constraints: const BoxConstraints.expand(),
+      child: file != null
+          ? Image.file(
+              file,
+              fit: BoxFit.fill, // or fitWidth
+            )
+          : const Center(
+              child: Text('イメージ無し'),
+            ),
+    );
   }
 }

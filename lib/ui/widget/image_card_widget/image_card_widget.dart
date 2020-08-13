@@ -23,43 +23,52 @@ class ImageCardWidget extends StatelessWidget {
       () => viewModel.information.setTitle(_editingController.text),
     );
 
-    return Card(
-      child: Column(
-        children: [
-          Stack(
-            children: [
-              Provider.value(
-                value: viewModel,
-                child: ChangeableImage(),
-              ),
-              if (viewModel.information.getMessage() != null)
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Container(
-                    color: Colors.black,
-                    child: Text(
-                      viewModel.information.getMessage(),
-                      style: const TextStyle(color: Colors.white),
-                    ),
+    return SizedBox(
+      height: 180,
+      child: Card(
+        child: Column(
+          children: [
+            ConstrainedBox(
+              constraints:
+                  const BoxConstraints.expand(height: 120), // TODO: 調整する
+              child: Stack(
+                children: [
+                  Provider.value(
+                    value: viewModel,
+                    child: ChangeableImage(),
                   ),
-                ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                child: TextField(
-                  controller: _editingController,
-                ),
-                width: 200,
+                  if (viewModel.information.getMessage() != null)
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        margin: const EdgeInsets.all(2),
+                        color: Colors.black54,
+                        child: Text(
+                          viewModel.information.getMessage(),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                ],
               ),
-              Row(
-                children: actions,
-              ),
-            ],
-          ),
-        ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  child: TextField(
+                    controller: _editingController,
+                  ),
+                  width: 200,
+                ),
+                Row(
+                  children: actions,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
