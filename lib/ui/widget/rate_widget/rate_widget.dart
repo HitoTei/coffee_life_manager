@@ -15,23 +15,23 @@ class RateWidget extends StatelessWidget {
       child: Container(
         child: Column(
           children: const [
-            const _RateItem(
+            _RateItem(
               title: Rate.bitternessDisplayString,
               rateKey: Rate.bitternessKey,
             ),
-            const _RateItem(
+            _RateItem(
               title: Rate.sournessDisplayString,
               rateKey: Rate.sournessKey,
             ),
-            const _RateItem(
+            _RateItem(
               title: Rate.fragranceDisplayString,
               rateKey: Rate.fragranceKey,
             ),
-            const _RateItem(
+            _RateItem(
               title: Rate.richDisplayString,
               rateKey: Rate.richKey,
             ),
-            const _RateItem(
+            _RateItem(
               title: Rate.overallDisplayString,
               rateKey: Rate.overallKey,
             ),
