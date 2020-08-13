@@ -1,4 +1,5 @@
 import 'package:coffee_life_manager/function/int_bool_parse.dart';
+import 'package:coffee_life_manager/model/interface/image_card_information.dart';
 import 'package:coffee_life_manager/model/rate.dart';
 
 import '../constant_string.dart';
@@ -6,7 +7,7 @@ import 'enums/drip.dart';
 import 'enums/grind.dart';
 import 'enums/roast.dart';
 
-class HouseCoffee {
+class HouseCoffee implements ImageCardInformation {
   HouseCoffee();
 
   HouseCoffee.fromMap(Map<String, dynamic> map) {
@@ -55,4 +56,19 @@ class HouseCoffee {
       isFavoriteKey: boolToInt(isFavorite),
     };
   }
+
+  @override
+  String getImageUri() => imageUri;
+
+  @override
+  void setImageUri(String value) => imageUri = value;
+
+  @override
+  String getTitle() => beanName;
+
+  @override
+  void setTitle(String value) => beanName = value;
+
+  @override
+  String getMessage() => drinkDay.toLocal().toString();
 }

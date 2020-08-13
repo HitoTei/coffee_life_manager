@@ -1,9 +1,10 @@
 import 'package:coffee_life_manager/function/int_bool_parse.dart';
 import 'package:coffee_life_manager/model/enums/day_of_the_week.dart';
+import 'package:coffee_life_manager/model/interface/image_card_information.dart';
 
 import '../constant_string.dart';
 
-class Cafe {
+class Cafe implements ImageCardInformation {
   Cafe();
 
   Cafe.fromMap(Map<String, dynamic> map) {
@@ -35,4 +36,19 @@ class Cafe {
       isFavoriteKey: boolToInt(isFavorite),
     };
   }
+
+  @override
+  String getImageUri() => imageUri;
+
+  @override
+  void setImageUri(String value) => imageUri = value;
+
+  @override
+  String getTitle() => cafeName;
+
+  @override
+  void setTitle(String value) => cafeName = value;
+
+  @override
+  String getMessage() => null;
 }

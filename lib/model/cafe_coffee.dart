@@ -1,9 +1,10 @@
 import 'package:coffee_life_manager/function/int_bool_parse.dart';
+import 'package:coffee_life_manager/model/interface/image_card_information.dart';
 import 'package:coffee_life_manager/model/rate.dart';
 
 import '../constant_string.dart';
 
-class CafeCoffee {
+class CafeCoffee implements ImageCardInformation {
   CafeCoffee();
 
   CafeCoffee.fromMap(Map<String, dynamic> map) {
@@ -42,4 +43,19 @@ class CafeCoffee {
       isFavoriteKey: boolToInt(isFavorite),
     };
   }
+
+  @override
+  String getImageUri() => imageUri;
+
+  @override
+  void setImageUri(String value) => imageUri = value;
+
+  @override
+  String getTitle() => productName;
+
+  @override
+  void setTitle(String value) => productName = value;
+
+  @override
+  String getMessage() => drinkDay.toLocal().toString();
 }
