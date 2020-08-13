@@ -34,11 +34,4 @@ class ImageCardWidgetViewModel {
     await image.copy('$path/$savePath');
     return image;
   }
-
-  Future<File> getLocalFile() async {
-    final path = (await getApplicationDocumentsDirectory()).path;
-    final fileName = information.getImageUri();
-    if (fileName == null) return null;
-    return File('$path/$fileName');
-  }
 }
