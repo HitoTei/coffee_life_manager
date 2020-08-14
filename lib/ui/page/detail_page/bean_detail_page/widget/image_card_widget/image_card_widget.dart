@@ -1,10 +1,10 @@
 import 'package:coffee_life_manager/model/interface/image_card_information.dart';
-import 'package:coffee_life_manager/ui/widget/image_card_widget/image_card_widget_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'changeable_image.dart';
+import 'image_card_widget_viewmodel.dart';
 
 class ImageCardWidget extends StatelessWidget {
   ImageCardWidget(

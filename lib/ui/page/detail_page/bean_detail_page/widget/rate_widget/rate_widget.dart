@@ -1,8 +1,9 @@
 import 'package:coffee_life_manager/model/rate.dart';
-import 'package:coffee_life_manager/ui/widget/rate_widget/rate_widget_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'rate_widget_viewmodel.dart';
 
 class RateWidget extends StatelessWidget {
   RateWidget(Rate rate) : _viewModel = RateWidgetViewModel(rate);

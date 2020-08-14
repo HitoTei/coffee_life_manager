@@ -1,5 +1,5 @@
 import 'package:coffee_life_manager/model/rate.dart';
-import 'package:coffee_life_manager/ui/widget/rate_widget/rate_widget.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/bean_detail_page/widget/rate_widget/rate_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
