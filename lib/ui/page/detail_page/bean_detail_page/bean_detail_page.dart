@@ -1,9 +1,8 @@
 import 'package:coffee_life_manager/model/bean.dart';
-import 'package:coffee_life_manager/ui/page/detail_page/bean_detail_page/widget/rate_widget/rate_widget.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/detail_page.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/image_card_widget.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget/rate_widget.dart';
 import 'package:flutter/material.dart';
-
-import 'widget/image_card_widget/image_card_widget.dart';
 
 class BeanDetailPage extends StatelessWidget {
   BeanDetailPage(this.bean);
