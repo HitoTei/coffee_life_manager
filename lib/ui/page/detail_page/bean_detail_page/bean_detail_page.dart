@@ -1,5 +1,9 @@
 import 'package:coffee_life_manager/model/bean.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/detail_page.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/detail_datetime_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/detail_int_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/roast_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/image_card_widget.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget/rate_widget.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +22,11 @@ class BeanDetailPage extends StatelessWidget {
       header: ImageCardWidget(
         imageInformation: bean,
         actions: [
-          IconButton(
-            icon: Icon(
-                (bean.isFavorite) ? Icons.favorite : Icons.favorite_border),
-            onPressed: () => bean.isFavorite = !bean.isFavorite,
+          FavButton(
+            isFavorite: bean.isFavorite,
+            onChanged: (val) {
+              bean.isFavorite = val;
+            },
           ),
           IconButton(icon: const Icon(Icons.local_cafe), onPressed: () {}),
           IconButton(
@@ -31,50 +36,48 @@ class BeanDetailPage extends StatelessWidget {
         ],
       ),
       detailList: [
-        ListTile(
+        DetailIntListTile(
           title: const Text('残量'),
-          subtitle: Text('${bean.remainingAmount}g'),
-          onTap: () {
-            // TODO: 値を変更できるダイアログの追加
+          unit: 'g',
+          initialValue: bean.remainingAmount,
+          onChanged: (val) {
+            bean.remainingAmount = val;
           },
         ),
-        ListTile(
-          title: const Text('残り'),
-          subtitle: Text('${bean.remainingAmount / bean.oneCupPerGram}杯'),
-        ),
-        ListTile(
+        DetailIntListTile(
           title: const Text('一杯当たり'),
-          subtitle: Text('${bean.oneCupPerGram}g'),
-          onTap: () {
-            // TODO: 値を変更できるダイアログの追加
+          unit: 'g',
+          initialValue: bean.oneCupPerGram,
+          onChanged: (val) {
+            bean.oneCupPerGram = val;
           },
         ),
-        ListTile(
+        DetailIntListTile(
           title: const Text('値段'),
-          subtitle: Text('${bean.price}'),
-          onTap: () {
-            // TODO: 値を変更できるダイアログの追加
+          unit: '円',
+          initialValue: bean.price,
+          onChanged: (val) {
+            bean.price = val;
           },
         ),
-        ListTile(
-          title: const Text('焙煎'),
-          subtitle: Text('${bean.roast}'),
-          onTap: () {
-            // TODO: 焙煎度合いを選択できるダイアログの追加
+        RoastListTile(
+          initialValue: bean.roast,
+          onChanged: (val) {
+            bean.roast = val;
           },
         ),
-        ListTile(
+        DetailDateTimeListTile(
           title: const Text('賞味期限'),
-          subtitle: Text('${bean.freshnessDate}'),
-          onTap: () {
+          initialValue: bean.freshnessDate,
+          onChanged: (val) {
             // TODO: 賞味期限を変更できるダイアログの追加
           },
         ),
-        ListTile(
+        DetailDateTimeListTile(
           title: const Text('開封日時'),
-          subtitle: Text('${bean.openTime}'),
-          onTap: () {
-            // TODO: 開封日時を変更できるダイアログの追加
+          initialValue: bean.openTime,
+          onChanged: (val) {
+            bean.openTime = val;
           },
         ),
       ],
@@ -98,6 +101,9 @@ class BeanDetailPage extends StatelessWidget {
         decoration: const InputDecoration(
           labelText: 'メモ',
         ),
+        onChanged: (val) {
+          bean.memo = val;
+        },
         maxLength: 50,
         maxLines: 5,
       ),

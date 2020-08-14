@@ -27,20 +27,18 @@ class ImageCardWidget extends StatelessWidget {
       elevation: 5,
       expandedHeight: 250,
       actions: actions,
-      floating: true,
+      pinned: true,
       title: SizedBox(
         child: TextField(
+          decoration:
+              const InputDecoration(fillColor: Colors.white30, filled: true),
           controller: _editingController,
         ),
-        width: 150,
       ),
       flexibleSpace: FlexibleSpaceBar(
-        background: ConstrainedBox(
-          constraints: const BoxConstraints.expand(height: 120), // TODO: 調整する
-          child: Provider.value(
-            value: viewModel,
-            child: ChangeableImage(),
-          ),
+        background: Provider.value(
+          value: viewModel,
+          child: ChangeableImage(),
         ),
       ),
     );
