@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 import 'changeable_image.dart';
 import 'image_card_widget_viewmodel.dart';
 
-class ImageCardWidget extends StatelessWidget {
-  ImageCardWidget(
+class DetailHeader extends StatelessWidget {
+  DetailHeader(
       {@required ImageCardInformation imageInformation, @required this.actions})
       : viewModel = ImageCardWidgetViewModel(information: imageInformation),
         _editingController = TextEditingController()

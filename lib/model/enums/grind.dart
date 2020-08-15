@@ -5,3 +5,11 @@ enum Grind {
   fineGrind, // 細挽き
   extraFineGrind, // 極細挽き
 }
+
+const grindStr = [
+  '極粗挽き',
+  '粗挽き',
+  '中挽き',
+  '細挽き',
+  '極細挽き',
+];
