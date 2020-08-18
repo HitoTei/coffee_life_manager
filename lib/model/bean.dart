@@ -14,7 +14,7 @@ class Bean implements ImageCardInformation {
     remainingAmount = map[remainingAmountKey] as int;
     oneCupPerGram = map[oneCupPerGramKey] as int;
     price = map[priceKey] as int;
-    shopId = map[shopIdKey] as int;
+    cafeId = map[cafeIdKey] as int;
     memo = map[memoKey] as String;
     imageUri = map[imageUriKey] as String;
 
@@ -34,7 +34,7 @@ class Bean implements ImageCardInformation {
   DateTime openTime; // 開封日時
   int price = 0; // 値段
   Rate rate = Rate(); // 評価
-  int shopId;
+  int cafeId;
   String memo = ''; // メモ
   String imageUri;
   bool isFavorite = false; // お気に入りか
@@ -46,7 +46,7 @@ class Bean implements ImageCardInformation {
       remainingAmountKey: remainingAmount,
       oneCupPerGramKey: oneCupPerGram,
       priceKey: price,
-      shopIdKey: shopId,
+      cafeIdKey: cafeId,
       memoKey: memo,
       imageUriKey: imageUri,
       // Sqliteで扱えないので扱える型にする
