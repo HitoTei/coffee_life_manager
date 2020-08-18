@@ -1,7 +1,6 @@
+import 'package:coffee_life_manager/model/cafe.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail_page/cafe_detail_page.dart';
 import 'package:flutter/material.dart';
-
-import 'model/bean.dart';
-import 'ui/page/detail_page/bean_detail_page/bean_detail_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,7 +22,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BeanDetailPage(Bean()),
+      body: CafeDetailPage(Cafe()),
     );
   }
 }

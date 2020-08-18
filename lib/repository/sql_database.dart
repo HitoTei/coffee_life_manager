@@ -38,6 +38,8 @@ class SqlDatabase {
       $mapUrlKey TEXT,
       $regularHolidayKey TEXT,
       $imageUriKey TEXT,
+      $startTimeKey TEXT,
+      $endTimeKey TEXT,
       $isFavoriteKey INTEGER
     );
     ''');
