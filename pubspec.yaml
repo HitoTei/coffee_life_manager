@@ -41,7 +41,7 @@ dev_dependencies:
   shared_preferences: ^0.5.7+3
   fluttertoast: ^4.0.0
   time_range: ^0.4.0
-
+  maps_launcher: ^1.2.2+1
   pedantic_mono: any
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

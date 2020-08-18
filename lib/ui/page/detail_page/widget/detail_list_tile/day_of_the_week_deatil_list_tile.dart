@@ -27,15 +27,24 @@ class _DayOfTheWeekDetailListTileState
     ];
   }
 
+  String makeTitleStr() {
+    if (!value.contains(true)) return '無し';
+
+    var cnt = 0;
+    var res = '';
+    for (var i = 0; i < value.length; i++) {
+      if (value[i]) {
+        if (cnt != 0) res += '・';
+        res += dayOfTheWeekStr[i];
+        cnt++;
+      }
+    }
+    return res;
+  }
+
   @override
   Widget build(BuildContext context) {
-    var cnt = 0;
-    final subTitle = (widget.value.isEmpty)
-        ? '無し'
-        : '${[
-            for (var i = 0; i < value.length; i++)
-              if (value[i]) dayOfTheWeekStr[i] + ((cnt++ != 0) ? '・' : ''),
-          ]}';
+    final subTitle = makeTitleStr();
 
     return ListTile(
       title: widget.title,
@@ -46,18 +55,7 @@ class _DayOfTheWeekDetailListTileState
           builder: (_) {
             return AlertDialog(
               title: widget.title,
-              content: ListView(
-                children: [
-                  for (final day in DayOfTheWeek.values)
-                    CheckboxListTile(
-                      title: Text(dayOfTheWeekStr[day.index]),
-                      value: value[day.index],
-                      onChanged: (val) {
-                        value[day.index] = !value[day.index];
-                      },
-                    ),
-                ],
-              ),
+              content: _DayOfTheWeekAlertDialogContent(value, setState),
               actions: [
                 FlatButton(
                   child: const Text('Cancel'),
@@ -66,8 +64,10 @@ class _DayOfTheWeekDetailListTileState
                       for (var i = 0; i < value.length; i++)
                         if (value[i]) DayOfTheWeek.values[i]
                     ];
+
                     widget.value.removeRange(0, widget.value.length);
                     widget.value.addAll(res);
+
                     Navigator.pop(context);
                   },
                 ),
@@ -82,6 +82,42 @@ class _DayOfTheWeekDetailListTileState
           },
         );
       },
+    );
+  }
+}
+
+class _DayOfTheWeekAlertDialogContent extends StatefulWidget {
+  const _DayOfTheWeekAlertDialogContent(this.values, this.parentSetState);
+
+  final List<bool> values;
+  final Function(Function()) parentSetState;
+
+  @override
+  __DayOfTheWeekAlertDialogContentState createState() =>
+      __DayOfTheWeekAlertDialogContentState();
+}
+
+class __DayOfTheWeekAlertDialogContentState
+    extends State<_DayOfTheWeekAlertDialogContent> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        for (final day in DayOfTheWeek.values)
+          CheckboxListTile(
+            title: Text(dayOfTheWeekStr[day.index]),
+            value: widget.values[day.index],
+            onChanged: (val) {
+              setState(
+                () => widget.parentSetState(
+                  () {
+                    widget.values[day.index] = !widget.values[day.index];
+                  },
+                ),
+              );
+            },
+          ),
+      ],
     );
   }
 }
