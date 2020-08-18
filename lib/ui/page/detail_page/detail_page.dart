@@ -24,8 +24,8 @@ class DetailPage extends StatelessWidget {
           delegate: SliverChildListDelegate([
             for (var detail in detailList) detail,
             const Divider(),
-            rate,
-            const Divider(),
+            if (rate != null) rate,
+            if (rate != null) const Divider(),
             for (var link in links) link,
             const Divider(),
             memo,

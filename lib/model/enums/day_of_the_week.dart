@@ -8,7 +8,19 @@ enum DayOfTheWeek {
   thursday,
   friday,
   saturday,
+  publicHoliday
 }
+
+const dayOfTheWeekStr = [
+  '日',
+  '月',
+  '火',
+  '水',
+  '木',
+  '金',
+  '土',
+  '祝日',
+];
 
 String dayOfTheWeekListToJsonStr(List<DayOfTheWeek> list) {
   return jsonEncode(list.map((e) => e.index).toList());

@@ -21,3 +21,5 @@ const mapUrlKey = 'mapUrlKey';
 const regularHolidayKey = 'regularHolidayKey';
 const uidKey = 'uidKey';
 const imageUriKey = 'imageUriKey';
+const startTimeKey = 'startTimeKey';
+const endTimeKey = 'endTimeKey';

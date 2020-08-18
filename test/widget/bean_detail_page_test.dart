@@ -14,7 +14,7 @@ void main() {
       ),
     );
 
-    expect(find.byType(ImageCardWidget), findsOneWidget);
+    expect(find.byType(DetailHeader), findsOneWidget);
     expect(find.byIcon(Icons.favorite_border), findsOneWidget);
     expect(find.byIcon(Icons.local_cafe), findsOneWidget);
     expect(find.byIcon(Icons.share), findsOneWidget);
