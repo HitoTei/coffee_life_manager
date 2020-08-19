@@ -1,4 +1,4 @@
-import 'package:coffee_life_manager/main.dart';
+import 'package:coffee_life_manager/app.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
