@@ -3,6 +3,8 @@ import 'package:coffee_life_manager/model/bean.dart';
 abstract class BeanRepository {
   Future<List<Bean>> fetchAll();
 
+  Future<List<Bean>> fetchFavorite();
+
   Future<List<Bean>> fetchByCafeId(int cafeId);
 
   Future<Bean> fetchByUid(int uid);
