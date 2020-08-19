@@ -1,6 +1,6 @@
 import 'package:coffee_life_manager/model/bean.dart';
 
-abstract class BeanRepository {
+abstract class BeanDao {
   Future<List<Bean>> fetchAll();
 
   Future<List<Bean>> fetchFavorite();
@@ -9,7 +9,7 @@ abstract class BeanRepository {
 
   Future<Bean> fetchByUid(int uid);
 
-  Future<int> save(Bean bean);
+  Future<int> insert(Bean bean);
 
   Future<int> delete(Bean bean);
 

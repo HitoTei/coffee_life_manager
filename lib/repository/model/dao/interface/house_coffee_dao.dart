@@ -1,15 +1,15 @@
 import 'package:coffee_life_manager/model/house_coffee.dart';
 
-abstract class HouseCoffeeRepository {
+abstract class HouseCoffeeDao {
   Future<List<HouseCoffee>> fetchAll();
 
   Future<List<HouseCoffee>> fetchFavorite();
 
   Future<List<HouseCoffee>> fetchByBeanId();
 
-  Future<HouseCoffee> fetchByUid(int id);
+  Future<HouseCoffee> fetchByUid(int uid);
 
-  Future<int> save(HouseCoffee coffee);
+  Future<int> insert(HouseCoffee coffee);
 
   Future<int> delete(HouseCoffee coffee);
 

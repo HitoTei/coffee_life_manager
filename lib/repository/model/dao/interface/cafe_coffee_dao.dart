@@ -1,6 +1,6 @@
 import 'package:coffee_life_manager/model/cafe_coffee.dart';
 
-abstract class CafeCoffeeRepository {
+abstract class CafeCoffeeDao {
   Future<List<CafeCoffee>> fetchAll();
 
   Future<List<CafeCoffee>> fetchFavorite();
@@ -9,7 +9,7 @@ abstract class CafeCoffeeRepository {
 
   Future<CafeCoffee> fetchByUid(int uid);
 
-  Future<int> save(CafeCoffee cafe);
+  Future<int> insert(CafeCoffee cafe);
 
   Future<int> delete(CafeCoffee cafe);
 
