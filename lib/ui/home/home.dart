@@ -81,9 +81,13 @@ class _MyHomePageState extends State<MyHomePage> {
           labelColor: Theme.of(context).primaryColor,
           tabs: MyHomePage._tab,
         ),
+
+        /*
+         *  TODO: Fix
+         *  Speed Dial が うまく dock しない
+         */
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         floatingActionButton: SpeedDial(
-          // これだと上手く上のやつとドッキングしない。最悪自作する
           animatedIcon: AnimatedIcons.menu_close,
           animatedIconTheme: const IconThemeData(size: 22),
           curve: Curves.bounceIn,
