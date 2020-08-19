@@ -21,7 +21,9 @@ class BeanDetailPage extends StatefulWidget {
 class _BeanDetailPageState extends State<BeanDetailPage> {
   @override
   void dispose() {
-    BeanDaoImpl().insert(widget._bean);
+    BeanDaoImpl()
+        .insert(widget._bean)
+        .then((value) => widget._bean.uid = value);
     super.dispose();
   }
 

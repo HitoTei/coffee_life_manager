@@ -22,7 +22,9 @@ class CafeCoffeeDetailPage extends StatefulWidget {
 class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
   @override
   void dispose() {
-    CafeCoffeeDaoImpl().insert(widget._coffee);
+    CafeCoffeeDaoImpl()
+        .insert(widget._coffee)
+        .then((value) => widget._coffee.uid = value);
     super.dispose();
   }
 
