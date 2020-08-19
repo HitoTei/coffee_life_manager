@@ -6,6 +6,10 @@ import 'package:coffee_life_manager/repository/model/dao/bean_dao_impl.dart';
 import 'package:coffee_life_manager/repository/model/dao/cafe_coffee_dao_impl.dart';
 import 'package:coffee_life_manager/repository/model/dao/cafe_dao_impl.dart';
 import 'package:coffee_life_manager/repository/model/dao/house_coffee_dao_impl.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/bean_detail_page/bean_detail_page.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/cafe_coffee_detail_page/cafe_coffee_detail_page.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail_page/cafe_detail_page.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail_page/house_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/bean_list_page/bean_list_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_coffee_list_page/cafe_coffee_list_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_list_page/cafe_list_page.dart';
@@ -55,52 +59,102 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Scaffold(
         body: TabBarView(
           children: [
-            ChangeNotifierProvider(
-              create: (_) => beanList,
+            ValueListenableProvider.value(
+              value: beanList,
               child: BeanListPage(),
             ),
-            ChangeNotifierProvider(
-              create: (_) => cafeList,
+            ValueListenableProvider.value(
+              value: cafeList,
               child: CafeListPage(),
             ),
-            ChangeNotifierProvider(
-              create: (_) => cafeCoffeeList,
+            ValueListenableProvider.value(
+              value: cafeCoffeeList,
               child: CafeCoffeeListPage(),
             ),
-            ChangeNotifierProvider(
-              create: (_) => houseCoffeeList,
+            ValueListenableProvider.value(
+              value: houseCoffeeList,
               child: HouseCoffeeListPage(),
             ),
           ],
         ),
-        appBar: const TabBar(
+        appBar: TabBar(
+          labelColor: Theme.of(context).primaryColor,
           tabs: MyHomePage._tab,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         floatingActionButton: SpeedDial(
+          // これだと上手く上のやつとドッキングしない。最悪自作する
           animatedIcon: AnimatedIcons.menu_close,
           animatedIconTheme: const IconThemeData(size: 22),
           curve: Curves.bounceIn,
           children: [
             SpeedDialChild(
               label: '豆',
-              onTap: () {},
+              onTap: () async {
+                final bean = Bean();
+                await Navigator.push<dynamic>(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (_) {
+                      return BeanDetailPage(bean);
+                    },
+                  ),
+                );
+                beanList.value = [...beanList.value, bean];
+              },
             ),
             SpeedDialChild(
               label: 'カフェ',
-              onTap: () {},
+              onTap: () async {
+                final cafe = Cafe();
+                await Navigator.push<dynamic>(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (_) {
+                      return CafeDetailPage(cafe);
+                    },
+                  ),
+                );
+                cafeList.value = [...cafeList.value, cafe];
+              },
             ),
             SpeedDialChild(
               label: 'カフェコーヒー',
-              onTap: () {},
+              onTap: () async {
+                final cafeCoffee = CafeCoffee();
+                await Navigator.push<dynamic>(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (_) {
+                      return CafeCoffeeDetailPage(cafeCoffee);
+                    },
+                  ),
+                );
+                cafeCoffeeList.value = [...cafeCoffeeList.value, cafeCoffee];
+              },
             ),
             SpeedDialChild(
               label: '家コーヒー',
-              onTap: () {},
+              onTap: () async {
+                final houseCoffee = HouseCoffee();
+                await Navigator.push<dynamic>(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (_) {
+                      return HouseCoffeeDetailPage(houseCoffee);
+                    },
+                  ),
+                );
+                houseCoffeeList.value = [...houseCoffeeList.value, houseCoffee];
+              },
             ),
           ],
         ),
         bottomNavigationBar: BottomAppBar(
+          color: Theme
+              .of(context)
+              .primaryColor,
+          notchMargin: 6,
           shape: const AutomaticNotchedShape(
             RoundedRectangleBorder(),
             StadiumBorder(
