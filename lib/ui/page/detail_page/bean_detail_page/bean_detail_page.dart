@@ -12,6 +12,7 @@ import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget/rate_
 import 'package:coffee_life_manager/ui/page/list_page/cafe_list_page/cafe_list_page.dart';
 import 'package:coffee_life_manager/ui/page/page_to_make/make_house_coffee_page.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class BeanDetailPage extends StatefulWidget {
@@ -24,6 +25,16 @@ class BeanDetailPage extends StatefulWidget {
 }
 
 class _BeanDetailPageState extends State<BeanDetailPage> {
+  @override
+  void initState() {
+    if (widget._bean.uid == null) {
+      BeanDaoImpl()
+          .insert(widget._bean)
+          .then((value) => widget._bean.uid = value);
+    }
+    super.initState();
+  }
+
   @override
   void dispose() {
     BeanDaoImpl()
@@ -47,6 +58,10 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
           IconButton(
             icon: const Icon(Icons.local_cafe),
             onPressed: () {
+              if (widget._bean.remainingAmount < widget._bean.oneCupPerGram) {
+                Fluttertoast.showToast(msg: 'コーヒーの残量が足りません');
+                return;
+              }
               Navigator.push<dynamic>(
                 context,
                 MaterialPageRoute<dynamic>(

@@ -23,6 +23,14 @@ class CafeDetailPage extends StatefulWidget {
 
 class _CafeDetailPageState extends State<CafeDetailPage> {
   @override
+  void initState() {
+    CafeDaoImpl()
+        .insert(widget._cafe)
+        .then((value) => widget._cafe.uid = value);
+    super.initState();
+  }
+
+  @override
   void dispose() {
     CafeDaoImpl()
         .insert(widget._cafe)
@@ -55,7 +63,7 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
           title: const Text('営業時間'),
           subtitle: TimeRange(
             initialRange:
-                TimeRangeResult(widget._cafe.startTime, widget._cafe.endTime),
+            TimeRangeResult(widget._cafe.startTime, widget._cafe.endTime),
             firstTime: const TimeOfDay(hour: 0, minute: 0),
             lastTime: const TimeOfDay(hour: 24, minute: 0),
             fromTitle: const Text('始業時間'),
