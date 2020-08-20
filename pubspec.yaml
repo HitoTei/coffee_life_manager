@@ -43,6 +43,7 @@ dev_dependencies:
   time_range: ^0.4.0
   maps_launcher: ^1.2.2+1
   flutter_speed_dial: ^1.2.5
+  flutter_speed_dial_material_design: ^2.0.0
   pedantic_mono: any
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

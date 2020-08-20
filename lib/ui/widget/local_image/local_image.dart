@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ class LocalImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final file = Provider.of<File>(context);
-    log('image build');
 
     return Container(
       constraints: const BoxConstraints.expand(),

@@ -2,6 +2,7 @@ import 'package:coffee_life_manager/model/cafe.dart';
 import 'package:coffee_life_manager/model/cafe_coffee.dart';
 import 'package:coffee_life_manager/repository/model/dao/cafe_coffee_dao_impl.dart';
 import 'package:coffee_life_manager/repository/model/dao/cafe_dao_impl.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/cafe_coffee_detail_page/cafe_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/day_of_the_week_deatil_list_tile.dart';
@@ -50,7 +51,18 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
           ),
           IconButton(
             icon: const Icon(Icons.local_cafe),
-            onPressed: () {},
+            onPressed: () {
+              final coffee = CafeCoffee()
+                ..cafeId = widget._cafe.uid
+                ..drinkDay = DateTime.now();
+
+              Navigator.pushReplacement<dynamic, dynamic>(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (_) => CafeCoffeeDetailPage(coffee),
+                ),
+              );
+            },
           ),
           IconButton(
             icon: const Icon(Icons.share),

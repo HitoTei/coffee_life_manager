@@ -9,7 +9,7 @@ import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/roast_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/image_card_widget.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget/rate_widget.dart';
-import 'package:coffee_life_manager/ui/page/list_page/cafe_list_page/cafe_list_page.dart';
+import 'package:coffee_life_manager/ui/page/list_page/house_coffee_list_page/house_coffee_list_page.dart';
 import 'package:coffee_life_manager/ui/page/page_to_make/make_house_coffee_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -62,7 +62,7 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
                 Fluttertoast.showToast(msg: 'コーヒーの残量が足りません');
                 return;
               }
-              Navigator.push<dynamic>(
+              Navigator.pushReplacement<dynamic, dynamic>(
                 context,
                 MaterialPageRoute<dynamic>(
                   builder: (_) => MakeHouseCoffeePage(widget._bean),
@@ -111,7 +111,7 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
           title: const Text('賞味期限'),
           initialValue: widget._bean.freshnessDate,
           onChanged: (val) {
-            // TODO: 賞味期限を変更できるダイアログの追加
+            widget._bean.freshnessDate = val;
           },
         ),
         DetailDateTimeListTile(
@@ -136,7 +136,7 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
               MaterialPageRoute<dynamic>(
                 builder: (_) => ValueListenableProvider.value(
                   value: list,
-                  child: CafeListPage(),
+                  child: HouseCoffeeListPage(),
                 ),
               ),
             );
