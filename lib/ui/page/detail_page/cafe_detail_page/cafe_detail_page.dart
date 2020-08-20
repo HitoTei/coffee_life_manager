@@ -1,12 +1,15 @@
 import 'package:coffee_life_manager/model/cafe.dart';
+import 'package:coffee_life_manager/model/cafe_coffee.dart';
+import 'package:coffee_life_manager/repository/model/dao/cafe_coffee_dao_impl.dart';
 import 'package:coffee_life_manager/repository/model/dao/cafe_dao_impl.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/day_of_the_week_deatil_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/map_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/image_card_widget.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:coffee_life_manager/ui/page/list_page/cafe_coffee_list_page/cafe_coffee_list_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:time_range/time_range.dart';
 
 class CafeDetailPage extends StatefulWidget {
@@ -83,7 +86,21 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
       links: [
         ListTile(
           title: const Text('飲んだコーヒー'),
-          onTap: () {},
+          onTap: () {
+            final list = ValueNotifier<List<CafeCoffee>>(null);
+            CafeCoffeeDaoImpl()
+                .fetchByCafeId(widget._cafe.uid)
+                .then((value) => list.value = value);
+            Navigator.push<dynamic>(
+              context,
+              MaterialPageRoute<dynamic>(
+                builder: (_) => ValueListenableProvider.value(
+                  value: list,
+                  child: CafeCoffeeListPage(),
+                ),
+              ),
+            );
+          },
         ),
         ListTile(
           title: const Text('購入したコーヒー豆'),

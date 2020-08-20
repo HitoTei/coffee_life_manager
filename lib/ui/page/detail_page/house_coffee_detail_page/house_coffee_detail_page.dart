@@ -1,5 +1,7 @@
 import 'package:coffee_life_manager/model/house_coffee.dart';
+import 'package:coffee_life_manager/repository/model/dao/bean_dao_impl.dart';
 import 'package:coffee_life_manager/repository/model/dao/house_coffee_dao_impl.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/bean_detail_page/bean_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/detail_datetime_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/detail_int_list_tile.dart';
@@ -78,7 +80,15 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
       links: [
         ListTile(
           title: const Text('使用した豆'),
-          onTap: () {},
+          onTap: () async {
+            final bean = await BeanDaoImpl().fetchByUid(widget._coffee.beanId);
+            await Navigator.push<dynamic>(
+              context,
+              MaterialPageRoute<dynamic>(
+                builder: (_) => BeanDetailPage(bean),
+              ),
+            );
+          },
         ),
       ],
       memo: TextFormField(

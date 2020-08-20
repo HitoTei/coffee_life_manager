@@ -1,5 +1,7 @@
 import 'package:coffee_life_manager/model/bean.dart';
+import 'package:coffee_life_manager/model/house_coffee.dart';
 import 'package:coffee_life_manager/repository/model/dao/bean_dao_impl.dart';
+import 'package:coffee_life_manager/repository/model/dao/house_coffee_dao_impl.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/detail_datetime_list_tile.dart';
@@ -7,7 +9,10 @@ import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/roast_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/image_card_widget.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget/rate_widget.dart';
+import 'package:coffee_life_manager/ui/page/list_page/cafe_list_page/cafe_list_page.dart';
+import 'package:coffee_life_manager/ui/page/page_to_make/make_house_coffee_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BeanDetailPage extends StatefulWidget {
   const BeanDetailPage(this._bean);
@@ -39,7 +44,17 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
               widget._bean.isFavorite = val;
             },
           ),
-          IconButton(icon: const Icon(Icons.local_cafe), onPressed: () {}),
+          IconButton(
+            icon: const Icon(Icons.local_cafe),
+            onPressed: () {
+              Navigator.push<dynamic>(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (_) => MakeHouseCoffeePage(widget._bean),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.share),
             onPressed: () {},
@@ -97,14 +112,25 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
         ListTile(
           title: const Text('この豆で淹れたコーヒー'),
           onTap: () {
-            // TODO: この豆で淹れたコーヒーリストへ飛ばす
+            final list = ValueNotifier<List<HouseCoffee>>(null);
+            HouseCoffeeDaoImpl()
+                .fetchByBeanId(widget._bean.uid)
+                .then((value) => list.value = value);
+            Navigator.push<dynamic>(
+              context,
+              MaterialPageRoute<dynamic>(
+                builder: (_) => ValueListenableProvider.value(
+                  value: list,
+                  child: CafeListPage(),
+                ),
+              ),
+            );
           },
         ),
         ListTile(
+          // なんか面倒なのでなくてもいいかも
           title: const Text('豆を購入した店'),
-          onTap: () {
-            // TODO: この豆を購入した店の詳細画面へ飛ぶ
-          },
+          onTap: () async {},
         ),
       ],
       memo: TextFormField(

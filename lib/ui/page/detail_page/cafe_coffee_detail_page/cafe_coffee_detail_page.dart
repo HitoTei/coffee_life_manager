@@ -1,5 +1,7 @@
 import 'package:coffee_life_manager/model/cafe_coffee.dart';
 import 'package:coffee_life_manager/repository/model/dao/cafe_coffee_dao_impl.dart';
+import 'package:coffee_life_manager/repository/model/dao/cafe_dao_impl.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail_page/cafe_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/detail_datetime_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/detail_int_list_tile.dart';
@@ -63,7 +65,15 @@ class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
       links: [
         ListTile(
           title: const Text('カフェ'),
-          onTap: () {},
+          onTap: () async {
+            final cafe = await CafeDaoImpl().fetchByUid(widget._coffee.cafeId);
+            await Navigator.push<dynamic>(
+              context,
+              MaterialPageRoute<dynamic>(
+                builder: (_) => CafeDetailPage(cafe),
+              ),
+            );
+          },
         ),
       ],
       memo: TextFormField(
