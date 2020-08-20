@@ -19,11 +19,14 @@ class HouseCoffeeDaoImpl implements HouseCoffeeDao {
   }
 
   @override
-  Future<List<HouseCoffee>> fetchByBeanId() async {
+  Future<List<HouseCoffee>> fetchByBeanId(int id) async {
     final db = await _db;
     final list = await db.query(
       _table,
-      where: '$isFavoriteKey = 1',
+      where: '$beanIdKey = ?',
+      whereArgs: <dynamic>[
+        id,
+      ],
     );
     return list.map((e) => HouseCoffee.fromMap(e)).toList();
   }

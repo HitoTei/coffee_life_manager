@@ -19,15 +19,19 @@ class Bean implements ImageCardInformation {
     imageUri = map[imageUriKey] as String;
 
     roast = Roast.values[map[roastKey] as int];
-    freshnessDate = DateTime.parse(map[freshnessDateKey] as String);
-    openTime = DateTime.parse(map[openTimeKey] as String);
+    freshnessDate = (map[freshnessDateKey] as String == 'null')
+        ? null
+        : DateTime.parse(map[freshnessDateKey] as String);
+    openTime = (map[openTimeKey] as String == 'null')
+        ? null
+        : DateTime.parse(map[openTimeKey] as String);
     rate = Rate.fromJsonStr(map[rateKey] as String);
-    isFavorite = map[isFavoriteKey] as bool;
+    isFavorite = intToBool(map[isFavoriteKey] as int);
   }
 
   int uid;
   String beanName = '';
-  int remainingAmount = 0; // 残量
+  int remainingAmount = 100; // 残量
   int oneCupPerGram = 10; // 一杯当たりの豆の量
   Roast roast = Roast.values[0]; // 焙煎
   DateTime freshnessDate; // 賞味期限

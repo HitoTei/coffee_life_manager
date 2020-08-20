@@ -5,7 +5,7 @@ abstract class HouseCoffeeDao {
 
   Future<List<HouseCoffee>> fetchFavorite();
 
-  Future<List<HouseCoffee>> fetchByBeanId();
+  Future<List<HouseCoffee>> fetchByBeanId(int id);
 
   Future<HouseCoffee> fetchByUid(int uid);
 

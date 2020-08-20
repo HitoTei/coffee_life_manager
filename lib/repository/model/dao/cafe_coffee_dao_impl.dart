@@ -20,6 +20,7 @@ class CafeCoffeeDaoImpl implements CafeCoffeeDao {
 
   @override
   Future<List<CafeCoffee>> fetchByCafeId(int cafeId) async {
+    if (cafeId == null) return [];
     final db = await _db;
     final list = await db.query(
       _table,
