@@ -25,28 +25,61 @@ class HouseCoffeeListPage extends StatelessWidget {
       body: ListView(
         children: [
           for (final coffee in coffeeList)
-            ImageCardListTile(
-              actions: [
-                FavButton(
-                  isFavorite: coffee.isFavorite,
-                  onChanged: (val) {
-                    coffee.isFavorite = val;
-                    viewModel.onFavChanged(coffee);
-                  },
-                ),
-              ],
-              information: coffee,
-              gotoDetailPage: () async {
-                await Navigator.push<dynamic>(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (_) => HouseCoffeeDetailPage(coffee),
-                  ),
-                );
+            InkWell(
+              onLongPress: () {
+                Provider.of<Function(dynamic)>(context).call(coffee);
               },
+              child: HouseCoffeeListTile(coffee, viewModel),
             ),
         ],
       ),
+    );
+  }
+}
+
+class HouseCoffeeListTile extends StatefulWidget {
+  const HouseCoffeeListTile(this.coffee, this.viewModel);
+
+  final HouseCoffee coffee;
+  final HouseCoffeeListPageViewModel viewModel;
+
+  @override
+  _HouseCoffeeListTileState createState() => _HouseCoffeeListTileState();
+}
+
+class _HouseCoffeeListTileState extends State<HouseCoffeeListTile> {
+  HouseCoffee coffee;
+
+  @override
+  void initState() {
+    coffee = widget.coffee;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ImageCardListTile(
+      actions: [
+        FavButton(
+          isFavorite: widget.coffee.isFavorite,
+          onChanged: (val) {
+            widget.coffee.isFavorite = val;
+            widget.viewModel.onFavChanged(widget.coffee);
+          },
+        ),
+      ],
+      information: widget.coffee,
+      gotoDetailPage: () async {
+        await Navigator.push<dynamic>(
+          context,
+          MaterialPageRoute<dynamic>(
+            builder: (_) => HouseCoffeeDetailPage(widget.coffee),
+          ),
+        );
+        setState(() {
+          coffee = widget.coffee;
+        });
+      },
     );
   }
 }

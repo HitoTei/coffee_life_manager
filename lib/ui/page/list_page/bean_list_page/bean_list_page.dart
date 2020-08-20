@@ -23,7 +23,13 @@ class BeanListPage extends StatelessWidget {
     return Scaffold(
       body: ListView(
         children: [
-          for (final bean in beanList) _BeanListTile(bean, viewModel),
+          for (final bean in beanList)
+            InkWell(
+              onLongPress: () {
+                Provider.of<Function(dynamic)>(context).call(bean);
+              },
+              child: _BeanListTile(bean, viewModel),
+            ),
         ],
       ),
     );
@@ -61,6 +67,7 @@ class __BeanListTileState extends State<_BeanListTile> {
           },
         ),
       ],
+      // 挙動がおかしかったら、ここをbeanに変更する。
       information: widget.bean,
       gotoDetailPage: () async {
         await Navigator.push<dynamic>(

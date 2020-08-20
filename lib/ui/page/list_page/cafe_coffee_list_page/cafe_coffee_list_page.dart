@@ -24,28 +24,62 @@ class CafeCoffeeListPage extends StatelessWidget {
       body: ListView(
         children: [
           for (final coffee in coffeeList)
-            ImageCardListTile(
-              actions: [
-                FavButton(
-                  isFavorite: coffee.isFavorite,
-                  onChanged: (val) {
-                    coffee.isFavorite = val;
-                    viewModel.onFavChanged(coffee);
-                  },
-                ),
-              ],
-              information: coffee,
-              gotoDetailPage: () async {
-                await Navigator.push<dynamic>(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (_) => CafeCoffeeDetailPage(coffee),
-                  ),
-                );
+            InkWell(
+              onLongPress: () {
+                Provider.of<Function(dynamic)>(context).call(coffee);
               },
+              child: _CafeCoffeeListTile(coffee, viewModel),
             ),
         ],
       ),
+    );
+  }
+}
+
+class _CafeCoffeeListTile extends StatefulWidget {
+  const _CafeCoffeeListTile(this.coffee, this.viewModel);
+
+  final CafeCoffee coffee;
+  final CafeCoffeeListPageViewModel viewModel;
+
+  @override
+  _CafeCoffeeListTileState createState() => _CafeCoffeeListTileState();
+}
+
+class _CafeCoffeeListTileState extends State<_CafeCoffeeListTile> {
+  CafeCoffee coffee;
+
+  @override
+  void initState() {
+    coffee = widget.coffee;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ImageCardListTile(
+      actions: [
+        FavButton(
+          isFavorite: widget.coffee.isFavorite,
+          onChanged: (val) {
+            widget.coffee.isFavorite = val;
+            widget.viewModel.onFavChanged(widget.coffee);
+          },
+        ),
+      ],
+      // 挙動がおかしかったら、ここを変更する。
+      information: widget.coffee,
+      gotoDetailPage: () async {
+        await Navigator.push<dynamic>(
+          context,
+          MaterialPageRoute<dynamic>(
+            builder: (_) => CafeCoffeeDetailPage(widget.coffee),
+          ),
+        );
+        setState(() {
+          coffee = widget.coffee;
+        });
+      },
     );
   }
 }

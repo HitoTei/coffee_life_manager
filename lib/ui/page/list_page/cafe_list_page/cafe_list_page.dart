@@ -24,29 +24,64 @@ class CafeListPage extends StatelessWidget {
     return Scaffold(
       body: ListView(
         children: [
-          for (final coffee in cafeList)
-            ImageCardListTile(
-              actions: [
-                FavButton(
-                  isFavorite: coffee.isFavorite,
-                  onChanged: (val) {
-                    coffee.isFavorite = val;
-                    viewModel.onFavChanged(coffee);
-                  },
-                ),
-              ],
-              information: coffee,
-              gotoDetailPage: () async {
-                await Navigator.push<dynamic>(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (_) => CafeDetailPage(coffee),
-                  ),
-                );
+          for (final cafe in cafeList)
+            InkWell(
+              onLongPress: () {
+                Provider.of<Function(dynamic)>(context).call(cafe);
               },
+              child: CafeListTile(cafe, viewModel),
             ),
         ],
       ),
+    );
+  }
+}
+
+class CafeListTile extends StatefulWidget {
+  const CafeListTile(this.cafe, this.viewModel);
+
+  final Cafe cafe;
+  final CafeListPageViewModel viewModel;
+
+  @override
+  _CafeListTileState createState() => _CafeListTileState();
+}
+
+class _CafeListTileState extends State<CafeListTile> {
+  Cafe cafe;
+
+  @override
+  void initState() {
+    cafe = widget.cafe;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ImageCardListTile(
+      actions: [
+        FavButton(
+          isFavorite: widget.cafe.isFavorite,
+          onChanged: (val) {
+            widget.cafe.isFavorite = val;
+            widget.viewModel.onFavChanged(widget.cafe);
+          },
+        ),
+      ],
+
+      // 挙動がおかしかったら、ここを変更する。
+      information: widget.cafe,
+      gotoDetailPage: () async {
+        await Navigator.push<dynamic>(
+          context,
+          MaterialPageRoute<dynamic>(
+            builder: (_) => CafeDetailPage(widget.cafe),
+          ),
+        );
+        setState(() {
+          cafe = widget.cafe;
+        });
+      },
     );
   }
 }
