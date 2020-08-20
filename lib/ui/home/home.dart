@@ -31,7 +31,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         bottomNavigationBar: BottomAppBar(
-          color: Theme.of(context).primaryColor,
           notchMargin: 6,
           shape: const AutomaticNotchedShape(
             RoundedRectangleBorder(),

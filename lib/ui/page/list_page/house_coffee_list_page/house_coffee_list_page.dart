@@ -25,9 +25,11 @@ class HouseCoffeeListPage extends StatelessWidget {
       body: ListView(
         children: [
           for (final coffee in coffeeList)
-            InkWell(
-              onLongPress: () {
-                Provider.of<Function(dynamic)>(context).call(coffee);
+            Dismissible(
+              key: UniqueKey(),
+              onDismissed: (_) {
+                Provider.of<Function(dynamic)>(context, listen: false)
+                    .call(coffee);
               },
               child: HouseCoffeeListTile(coffee, viewModel),
             ),

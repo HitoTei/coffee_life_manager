@@ -1,4 +1,3 @@
-import 'package:coffee_life_manager/dialog/show_delete_dialog.dart';
 import 'package:coffee_life_manager/model/bean.dart';
 import 'package:coffee_life_manager/model/cafe.dart';
 import 'package:coffee_life_manager/repository/model/dao/bean_dao_impl.dart';
@@ -49,13 +48,9 @@ class _HomeMakersState extends State<HomeMakers> {
                 ValueListenableProvider.value(value: beanList),
                 Provider<Function(dynamic)>.value(
                   value: (dynamic val) {
-                    showDeleteDialog(context, () {
-                      BeanDaoImpl().delete(val as Bean);
-                      beanList.value.remove(val);
-                      setState(
-                        () => beanList.value = [...beanList.value],
-                      );
-                    });
+                    BeanDaoImpl().delete(val as Bean);
+                    beanList.value.remove(val);
+                    beanList.value = [...beanList.value];
                   },
                 ),
               ],
@@ -66,13 +61,9 @@ class _HomeMakersState extends State<HomeMakers> {
                 ValueListenableProvider.value(value: cafeList),
                 Provider<Function(dynamic)>.value(
                   value: (dynamic val) {
-                    showDeleteDialog(context, () {
-                      CafeDaoImpl().delete(val as Cafe);
-                      cafeList.value.remove(val);
-                      setState(
-                        () => cafeList.value = [...cafeList.value],
-                      );
-                    });
+                    CafeDaoImpl().delete(val as Cafe);
+                    cafeList.value.remove(val);
+                    cafeList.value = [...cafeList.value];
                   },
                 ),
               ],

@@ -1,4 +1,3 @@
-import 'package:coffee_life_manager/dialog/show_delete_dialog.dart';
 import 'package:coffee_life_manager/model/cafe_coffee.dart';
 import 'package:coffee_life_manager/model/house_coffee.dart';
 import 'package:coffee_life_manager/repository/model/dao/cafe_coffee_dao_impl.dart';
@@ -53,12 +52,9 @@ class _HomeCoffeeState extends State<HomeCoffee> {
                 ValueListenableProvider.value(value: houseCoffeeList),
                 Provider<Function(dynamic)>.value(
                   value: (dynamic val) {
-                    showDeleteDialog(context, () {
-                      HouseCoffeeDaoImpl().delete(val as HouseCoffee);
-                      houseCoffeeList.value.remove(val);
-                      setState(() =>
-                          houseCoffeeList.value = [...houseCoffeeList.value]);
-                    });
+                    HouseCoffeeDaoImpl().delete(val as HouseCoffee);
+                    houseCoffeeList.value.remove(val);
+                    houseCoffeeList.value = [...houseCoffeeList.value];
                   },
                 ),
               ],
@@ -71,17 +67,11 @@ class _HomeCoffeeState extends State<HomeCoffee> {
                 ),
                 Provider<Function(dynamic)>.value(
                   value: (dynamic val) {
-                    showDeleteDialog(
-                      context,
-                      () {
-                        CafeCoffeeDaoImpl().delete(val as CafeCoffee);
-                        cafeCoffeeList.value.remove(val);
-                        setState(
-                          () =>
-                              cafeCoffeeList.value = [...cafeCoffeeList.value],
-                        );
-                      },
-                    );
+                    CafeCoffeeDaoImpl().delete(val as CafeCoffee);
+
+                    cafeCoffeeList.value.remove(val);
+
+                    cafeCoffeeList.value = [...cafeCoffeeList.value];
                   },
                 ),
               ],

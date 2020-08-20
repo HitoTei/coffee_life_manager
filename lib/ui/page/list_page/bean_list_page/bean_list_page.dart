@@ -24,9 +24,11 @@ class BeanListPage extends StatelessWidget {
       body: ListView(
         children: [
           for (final bean in beanList)
-            InkWell(
-              onLongPress: () {
-                Provider.of<Function(dynamic)>(context).call(bean);
+            Dismissible(
+              key: UniqueKey(),
+              onDismissed: (_) {
+                Provider.of<Function(dynamic)>(context, listen: false)
+                    .call(bean);
               },
               child: _BeanListTile(bean, viewModel),
             ),
