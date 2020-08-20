@@ -77,9 +77,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
-        appBar: TabBar(
-          labelColor: Theme.of(context).primaryColor,
-          tabs: MyHomePage._tab,
+        appBar: AppBar(
+          toolbarHeight: 50,
+          bottom: const TabBar(
+            tabs: MyHomePage._tab,
+          ),
         ),
 
         /*
@@ -87,72 +89,85 @@ class _MyHomePageState extends State<MyHomePage> {
          *  Speed Dial が うまく dock しない
          */
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        floatingActionButton: SpeedDial(
-          animatedIcon: AnimatedIcons.menu_close,
-          animatedIconTheme: const IconThemeData(size: 22),
-          curve: Curves.bounceIn,
-          children: [
-            SpeedDialChild(
-              label: '豆',
-              onTap: () async {
-                final bean = Bean();
-                await Navigator.push<dynamic>(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (_) {
-                      return BeanDetailPage(bean);
-                    },
-                  ),
-                );
-                beanList.value = [...beanList.value, bean];
-              },
-            ),
-            SpeedDialChild(
-              label: 'カフェ',
-              onTap: () async {
-                final cafe = Cafe();
-                await Navigator.push<dynamic>(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (_) {
-                      return CafeDetailPage(cafe);
-                    },
-                  ),
-                );
-                cafeList.value = [...cafeList.value, cafe];
-              },
-            ),
-            SpeedDialChild(
-              label: 'カフェコーヒー',
-              onTap: () async {
-                final cafeCoffee = CafeCoffee();
-                await Navigator.push<dynamic>(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (_) {
-                      return CafeCoffeeDetailPage(cafeCoffee);
-                    },
-                  ),
-                );
-                cafeCoffeeList.value = [...cafeCoffeeList.value, cafeCoffee];
-              },
-            ),
-            SpeedDialChild(
-              label: '家コーヒー',
-              onTap: () async {
-                final houseCoffee = HouseCoffee();
-                await Navigator.push<dynamic>(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (_) {
-                      return HouseCoffeeDetailPage(houseCoffee);
-                    },
-                  ),
-                );
-                houseCoffeeList.value = [...houseCoffeeList.value, houseCoffee];
-              },
-            ),
-          ],
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: SpeedDial(
+            animatedIcon: AnimatedIcons.menu_close,
+            animatedIconTheme: const IconThemeData(size: 22),
+            curve: Curves.bounceIn,
+            overlayOpacity: 0,
+            children: [
+              SpeedDialChild(
+                label: '豆',
+                labelStyle: TextStyle(color: Theme.of(context).primaryColor),
+                child: const Icon(Icons.local_cafe),
+                onTap: () async {
+                  final bean = Bean();
+                  await Navigator.push<dynamic>(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                      builder: (_) {
+                        return BeanDetailPage(bean);
+                      },
+                    ),
+                  );
+                  beanList.value = [...beanList.value, bean];
+                },
+              ),
+              SpeedDialChild(
+                label: 'カフェ',
+                labelStyle: TextStyle(color: Theme.of(context).primaryColor),
+                child: const Icon(Icons.store),
+                onTap: () async {
+                  final cafe = Cafe();
+                  await Navigator.push<dynamic>(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                      builder: (_) {
+                        return CafeDetailPage(cafe);
+                      },
+                    ),
+                  );
+                  cafeList.value = [...cafeList.value, cafe];
+                },
+              ),
+              SpeedDialChild(
+                label: 'カフェコーヒー',
+                labelStyle: TextStyle(color: Theme.of(context).primaryColor),
+                onTap: () async {
+                  final cafeCoffee = CafeCoffee();
+                  await Navigator.push<dynamic>(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                      builder: (_) {
+                        return CafeCoffeeDetailPage(cafeCoffee);
+                      },
+                    ),
+                  );
+                  cafeCoffeeList.value = [...cafeCoffeeList.value, cafeCoffee];
+                },
+              ),
+              SpeedDialChild(
+                label: '家コーヒー',
+                labelStyle: TextStyle(color: Theme.of(context).primaryColor),
+                onTap: () async {
+                  final houseCoffee = HouseCoffee();
+                  await Navigator.push<dynamic>(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                      builder: (_) {
+                        return HouseCoffeeDetailPage(houseCoffee);
+                      },
+                    ),
+                  );
+                  houseCoffeeList.value = [
+                    ...houseCoffeeList.value,
+                    houseCoffee
+                  ];
+                },
+              ),
+            ],
+          ),
         ),
         bottomNavigationBar: BottomAppBar(
           color: Theme.of(context).primaryColor,
