@@ -17,21 +17,23 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        header,
-        SliverList(
-          delegate: SliverChildListDelegate([
-            for (var detail in detailList) detail,
-            const Divider(),
-            if (rate != null) rate,
-            if (rate != null) const Divider(),
-            for (var link in links) link,
-            const Divider(),
-            memo,
-          ]),
-        ),
-      ],
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          header,
+          SliverList(
+            delegate: SliverChildListDelegate([
+              for (var detail in detailList) detail,
+              const Divider(),
+              if (rate != null) rate,
+              if (rate != null) const Divider(),
+              for (var link in links) link,
+              const Divider(),
+              memo,
+            ]),
+          ),
+        ],
+      ),
     );
   }
 }

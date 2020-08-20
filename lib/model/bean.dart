@@ -14,27 +14,31 @@ class Bean implements ImageCardInformation {
     remainingAmount = map[remainingAmountKey] as int;
     oneCupPerGram = map[oneCupPerGramKey] as int;
     price = map[priceKey] as int;
-    shopId = map[shopIdKey] as int;
+    cafeId = map[cafeIdKey] as int;
     memo = map[memoKey] as String;
     imageUri = map[imageUriKey] as String;
 
     roast = Roast.values[map[roastKey] as int];
-    freshnessDate = DateTime.parse(map[freshnessDateKey] as String);
-    openTime = DateTime.parse(map[openTimeKey] as String);
+    freshnessDate = (map[freshnessDateKey] as String == 'null')
+        ? null
+        : DateTime.parse(map[freshnessDateKey] as String);
+    openTime = (map[openTimeKey] as String == 'null')
+        ? null
+        : DateTime.parse(map[openTimeKey] as String);
     rate = Rate.fromJsonStr(map[rateKey] as String);
-    isFavorite = map[isFavoriteKey] as bool;
+    isFavorite = intToBool(map[isFavoriteKey] as int);
   }
 
   int uid;
   String beanName = '';
-  int remainingAmount = 0; // 残量
+  int remainingAmount = 100; // 残量
   int oneCupPerGram = 10; // 一杯当たりの豆の量
   Roast roast = Roast.values[0]; // 焙煎
   DateTime freshnessDate; // 賞味期限
   DateTime openTime; // 開封日時
   int price = 0; // 値段
   Rate rate = Rate(); // 評価
-  int shopId;
+  int cafeId;
   String memo = ''; // メモ
   String imageUri;
   bool isFavorite = false; // お気に入りか
@@ -46,7 +50,7 @@ class Bean implements ImageCardInformation {
       remainingAmountKey: remainingAmount,
       oneCupPerGramKey: oneCupPerGram,
       priceKey: price,
-      shopIdKey: shopId,
+      cafeIdKey: cafeId,
       memoKey: memo,
       imageUriKey: imageUri,
       // Sqliteで扱えないので扱える型にする

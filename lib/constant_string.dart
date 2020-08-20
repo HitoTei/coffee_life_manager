@@ -15,7 +15,6 @@ const beanIdKey = 'beanIdKey';
 const productNameKey = 'productNameKey';
 const cafeIdKey = 'cafeIdKey';
 const beanNameKey = 'beanNameKey';
-const shopIdKey = 'shopIdKey';
 const cafeNameKey = 'cafeNameKey';
 const mapUrlKey = 'mapUrlKey';
 const regularHolidayKey = 'regularHolidayKey';

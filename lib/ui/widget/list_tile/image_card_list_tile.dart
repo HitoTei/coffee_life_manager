@@ -24,49 +24,51 @@ class ImageCardListTile extends StatelessWidget {
 
     return SizedBox(
       height: 180,
-      child: Card(
-        child: Column(
-          children: [
-            ConstrainedBox(
-              constraints:
-                  const BoxConstraints.expand(height: 120), // TODO: 調整する
-              child: Stack(
-                children: [
-                  ValueListenableProvider<File>(
-                    create: (_) => image,
-                    child: LocalImage(),
-                  ),
-                  if (information.getMessage() != null)
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        margin: const EdgeInsets.all(2),
-                        color: Colors.black54,
-                        child: Text(
-                          information.getMessage(),
-                          style: const TextStyle(color: Colors.white),
+      child: InkWell(
+        onTap: gotoDetailPage,
+        child: Card(
+          child: Column(
+            children: [
+              ConstrainedBox(
+                constraints: const BoxConstraints.expand(height: 120),
+                child: Stack(
+                  children: [
+                    ValueListenableProvider<File>(
+                      create: (_) => image,
+                      child: LocalImage(),
+                    ),
+                    if (information.getMessage() != null)
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          margin: const EdgeInsets.all(2),
+                          color: Colors.black54,
+                          child: Text(
+                            information.getMessage(),
+                            style: const TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    child: Text(
+                      information.getTitle(),
                     ),
+                    width: 200,
+                  ),
+                  Row(
+                    children: actions,
+                  ),
                 ],
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  child: Text(
-                    information.getTitle(),
-                  ),
-                  width: 200,
-                ),
-                Row(
-                  children: actions,
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

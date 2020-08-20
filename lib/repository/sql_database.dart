@@ -92,7 +92,7 @@ class SqlDatabase {
       $openTimeKey TEXT,
       $priceKey INTEGER,
       $rateKey TEXT,
-      $shopIdKey INTEGER,
+      $cafeIdKey INTEGER,
       $memoKey TEXT,
       $imageUriKey TEXT,
       $isFavoriteKey INTEGER
