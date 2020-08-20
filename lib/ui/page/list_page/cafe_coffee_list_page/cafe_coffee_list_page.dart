@@ -20,30 +20,32 @@ class CafeCoffeeListPage extends StatelessWidget {
       );
     }
 
-    return ListView(
-      children: [
-        for (final coffee in coffeeList)
-          ImageCardListTile(
-            actions: [
-              FavButton(
-                isFavorite: coffee.isFavorite,
-                onChanged: (val) {
-                  coffee.isFavorite = val;
-                  viewModel.onFavChanged(coffee);
-                },
-              ),
-            ],
-            information: coffee,
-            gotoDetailPage: () async {
-              await Navigator.push<dynamic>(
-                context,
-                MaterialPageRoute<dynamic>(
-                  builder: (_) => CafeCoffeeDetailPage(coffee),
+    return Scaffold(
+      body: ListView(
+        children: [
+          for (final coffee in coffeeList)
+            ImageCardListTile(
+              actions: [
+                FavButton(
+                  isFavorite: coffee.isFavorite,
+                  onChanged: (val) {
+                    coffee.isFavorite = val;
+                    viewModel.onFavChanged(coffee);
+                  },
                 ),
-              );
-            },
-          ),
-      ],
+              ],
+              information: coffee,
+              gotoDetailPage: () async {
+                await Navigator.push<dynamic>(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (_) => CafeCoffeeDetailPage(coffee),
+                  ),
+                );
+              },
+            ),
+        ],
+      ),
     );
   }
 }

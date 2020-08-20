@@ -20,30 +20,32 @@ class BeanListPage extends StatelessWidget {
       );
     }
 
-    return ListView(
-      children: [
-        for (final bean in beanList)
-          ImageCardListTile(
-            actions: [
-              FavButton(
-                isFavorite: bean.isFavorite,
-                onChanged: (val) {
-                  bean.isFavorite = val;
-                  viewModel.onFavChanged(bean);
-                },
-              ),
-            ],
-            information: bean,
-            gotoDetailPage: () async {
-              await Navigator.push<dynamic>(
-                context,
-                MaterialPageRoute<dynamic>(
-                  builder: (_) => BeanDetailPage(bean),
+    return Scaffold(
+      body: ListView(
+        children: [
+          for (final bean in beanList)
+            ImageCardListTile(
+              actions: [
+                FavButton(
+                  isFavorite: bean.isFavorite,
+                  onChanged: (val) {
+                    bean.isFavorite = val;
+                    viewModel.onFavChanged(bean);
+                  },
                 ),
-              );
-            },
-          ),
-      ],
+              ],
+              information: bean,
+              gotoDetailPage: () async {
+                await Navigator.push<dynamic>(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (_) => BeanDetailPage(bean),
+                  ),
+                );
+              },
+            ),
+        ],
+      ),
     );
   }
 }
