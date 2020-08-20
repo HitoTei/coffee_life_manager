@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:coffee_life_manager/model/interface/image_card_information.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -26,11 +27,13 @@ class ImageCardWidgetViewModel {
     final image = File(file.path);
     final path = (await getApplicationDocumentsDirectory()).path;
     final uri = information.getImageUri();
-    final savePath = (uri != null) ? uri : DateTime.now().toString();
+    final savePath = uri ?? DateTime.now().toString();
 
     information.setImageUri(savePath);
     log('save path: $path/$savePath');
     await image.copy('$path/$savePath');
+    // 追加されるたびに画像のキャッシュをクリアするのはどうかと思う
+    imageCache.clear();
     return image;
   }
 }

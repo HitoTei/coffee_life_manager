@@ -23,29 +23,56 @@ class BeanListPage extends StatelessWidget {
     return Scaffold(
       body: ListView(
         children: [
-          for (final bean in beanList)
-            ImageCardListTile(
-              actions: [
-                FavButton(
-                  isFavorite: bean.isFavorite,
-                  onChanged: (val) {
-                    bean.isFavorite = val;
-                    viewModel.onFavChanged(bean);
-                  },
-                ),
-              ],
-              information: bean,
-              gotoDetailPage: () async {
-                await Navigator.push<dynamic>(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (_) => BeanDetailPage(bean),
-                  ),
-                );
-              },
-            ),
+          for (final bean in beanList) _BeanListTile(bean, viewModel),
         ],
       ),
+    );
+  }
+}
+
+class _BeanListTile extends StatefulWidget {
+  const _BeanListTile(this.bean, this.viewModel);
+
+  final Bean bean;
+  final BeanListPageViewModel viewModel;
+
+  @override
+  __BeanListTileState createState() => __BeanListTileState();
+}
+
+class __BeanListTileState extends State<_BeanListTile> {
+  Bean bean;
+
+  @override
+  void initState() {
+    bean = widget.bean;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ImageCardListTile(
+      actions: [
+        FavButton(
+          isFavorite: widget.bean.isFavorite,
+          onChanged: (val) {
+            widget.bean.isFavorite = val;
+            widget.viewModel.onFavChanged(widget.bean);
+          },
+        ),
+      ],
+      information: widget.bean,
+      gotoDetailPage: () async {
+        await Navigator.push<dynamic>(
+          context,
+          MaterialPageRoute<dynamic>(
+            builder: (_) => BeanDetailPage(widget.bean),
+          ),
+        );
+        setState(() {
+          bean = widget.bean;
+        });
+      },
     );
   }
 }
