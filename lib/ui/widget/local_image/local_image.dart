@@ -13,9 +13,12 @@ class LocalImage extends StatelessWidget {
     return Container(
       constraints: const BoxConstraints.expand(),
       child: file != null
-          ? Image.file(
-              file,
-              fit: BoxFit.fitWidth, // or fitWidth
+          ? Hero(
+              tag: file,
+              child: Image.file(
+                file,
+                fit: BoxFit.fitWidth, // or fitWidth
+              ),
             )
           : const Center(
               child: Text('イメージ無し'),

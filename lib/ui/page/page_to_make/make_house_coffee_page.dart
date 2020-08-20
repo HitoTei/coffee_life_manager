@@ -81,29 +81,32 @@ class __BeanAmountWidgetState extends State<_BeanAmountWidget> {
     return Center(
       child: Row(
         children: [
+          IconButton(
+            icon: const Icon(Icons.arrow_drop_up),
+            onPressed: () {
+              if ((cup + 1) * bean.oneCupPerGram > bean.remainingAmount) return;
+              setState(() => cup++);
+              widget.onChanged(cup);
+            },
+          ),
           Column(
             children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_drop_up),
-                onPressed: () {
-                  if ((cup + 1) * bean.oneCupPerGram > bean.remainingAmount)
-                    return;
-                  setState(() => cup++);
-                  widget.onChanged(cup);
-                },
+              Text(
+                '$cup杯(${cup * bean.oneCupPerGram}g)',
               ),
-              Text('$cup杯(${cup * bean.oneCupPerGram}g)'),
-              IconButton(
-                icon: const Icon(Icons.arrow_drop_down),
-                onPressed: () {
-                  if (cup <= 1) return;
-                  setState(() => cup--);
-                  widget.onChanged(cup);
-                },
+              Text(
+                '残量: ${bean.remainingAmount - cup * bean.oneCupPerGram}g',
               ),
             ],
           ),
-          Text('残量: ${bean.remainingAmount - cup * bean.oneCupPerGram}g'),
+          IconButton(
+            icon: const Icon(Icons.arrow_drop_down),
+            onPressed: () {
+              if (cup <= 1) return;
+              setState(() => cup--);
+              widget.onChanged(cup);
+            },
+          ),
         ],
       ),
     );
