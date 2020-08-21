@@ -115,6 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             leading: const Icon(Icons.local_cafe),
                             title: const Text('豆を追加'),
                             onTap: () async {
+                              Navigator.pop(context);
                               final bean = Bean();
                               await Navigator.push<dynamic>(
                                 context,
@@ -123,13 +124,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               );
                               viewModel.beanController.add(bean);
-                              Navigator.pop(context);
                             },
                           ),
                           ListTile(
                             leading: const Icon(Icons.store),
                             title: const Text('カフェを追加'),
                             onTap: () async {
+                              Navigator.pop(context);
                               final cafe = Cafe();
                               await Navigator.push<dynamic>(
                                 context,
@@ -138,7 +139,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               );
                               viewModel.cafeController.add(cafe);
-                              Navigator.pop(context);
                             },
                           ),
                         ],
