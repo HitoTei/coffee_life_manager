@@ -28,28 +28,25 @@ class _GrindListTileState extends State<GrindListTile> {
     return ListTile(
       title: const Text('挽き方'),
       subtitle: Text('${grindStr[value.index]}'),
-      onTap: () {
-        showDialog<void>(
+      onTap: () async {
+        final next = await showMenu<Grind>(
           context: context,
-          builder: (_) {
-            return SimpleDialog(
-              title: const Text('挽き方'),
-              children: [
-                for (final grind in Grind.values)
-                  FlatButton(
-                    child: Text(grindStr[grind.index]),
-                    onPressed: () {
-                      setState(() {
-                        value = grind;
-                      });
-                      widget.onChanged(grind);
-                      Navigator.pop(context);
-                    },
-                  ),
-              ],
-            );
-          },
+          position: RelativeRect.fill,
+          initialValue: value,
+          semanticLabel: '焙煎',
+          items: [
+            for (final grind in Grind.values)
+              PopupMenuItem(
+                value: grind,
+                child: Text(grindStr[grind.index]),
+              ),
+          ],
         );
+        if (next != null) {
+          setState(() {
+            value = next;
+          });
+        }
       },
     );
   }

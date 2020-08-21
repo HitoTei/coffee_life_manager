@@ -28,28 +28,25 @@ class _DripListTileState extends State<DripListTile> {
     return ListTile(
       title: const Text('淹れ方'),
       subtitle: Text('${dripStr[value.index]}'),
-      onTap: () {
-        showDialog<void>(
+      onTap: () async {
+        final next = await showMenu<Drip>(
           context: context,
-          builder: (_) {
-            return SimpleDialog(
-              title: const Text('淹れ方'),
-              children: [
-                for (final drip in Drip.values)
-                  FlatButton(
-                    child: Text(dripStr[drip.index]),
-                    onPressed: () {
-                      setState(() {
-                        value = drip;
-                      });
-                      widget.onChanged(drip);
-                      Navigator.pop(context);
-                    },
-                  ),
-              ],
-            );
-          },
+          position: RelativeRect.fill,
+          initialValue: value,
+          semanticLabel: '淹れ方',
+          items: [
+            for (final drip in Drip.values)
+              PopupMenuItem(
+                value: drip,
+                child: Text(dripStr[drip.index]),
+              ),
+          ],
         );
+        if (next != null) {
+          setState(() {
+            value = next;
+          });
+        }
       },
     );
   }

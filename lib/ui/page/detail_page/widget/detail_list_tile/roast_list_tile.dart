@@ -28,28 +28,25 @@ class _RoastListTileState extends State<RoastListTile> {
     return ListTile(
       title: const Text('焙煎'),
       subtitle: Text('${roastStr[value.index]}'),
-      onTap: () {
-        showDialog<void>(
+      onTap: () async {
+        final next = await showMenu<Roast>(
           context: context,
-          builder: (_) {
-            return SimpleDialog(
-              title: const Text('焙煎'),
-              children: [
-                for (final roast in Roast.values)
-                  FlatButton(
-                    child: Text(roastStr[roast.index]),
-                    onPressed: () {
-                      setState(() {
-                        value = roast;
-                      });
-                      widget.onChanged(roast);
-                      Navigator.pop(context);
-                    },
-                  ),
-              ],
-            );
-          },
+          position: RelativeRect.fill,
+          initialValue: value,
+          semanticLabel: '焙煎',
+          items: [
+            for (final roast in Roast.values)
+              PopupMenuItem(
+                value: roast,
+                child: Text(roastStr[roast.index]),
+              ),
+          ],
         );
+        if (next != null) {
+          setState(() {
+            value = next;
+          });
+        }
       },
     );
   }
