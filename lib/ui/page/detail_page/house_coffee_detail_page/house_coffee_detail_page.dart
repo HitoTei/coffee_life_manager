@@ -3,10 +3,10 @@ import 'package:coffee_life_manager/repository/model/dao/bean_dao_impl.dart';
 import 'package:coffee_life_manager/repository/model/dao/house_coffee_dao_impl.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/bean_detail_page/bean_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
-import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/detail_datetime_list_tile.dart';
-import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/detail_int_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/datetime_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/drip_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/grind_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/int_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/roast_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/image_card_widget.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget/rate_widget.dart';
@@ -50,7 +50,7 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
         ],
       ),
       detailList: [
-        DetailIntListTile(
+        IntListTile(
           title: const Text('淹れた量'),
           unit: '杯',
           initialValue: widget._coffee.numOfCups,
@@ -68,7 +68,7 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
           initialValue: widget._coffee.roast,
           onChanged: (val) => widget._coffee.roast = val,
         ),
-        DetailDateTimeListTile(
+        DateTimeListTile(
           title: const Text('淹れた日'),
           initialValue: widget._coffee.drinkDay,
           onChanged: (val) => widget._coffee.drinkDay,

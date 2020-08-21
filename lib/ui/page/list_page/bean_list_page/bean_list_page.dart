@@ -1,3 +1,4 @@
+import 'package:coffee_life_manager/dialog/show_delete_dialog.dart';
 import 'package:coffee_life_manager/model/bean.dart';
 import 'package:coffee_life_manager/repository/model/dao/bean_dao_impl.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/bean_detail_page/bean_detail_page.dart';
@@ -24,11 +25,14 @@ class BeanListPage extends StatelessWidget {
       body: ListView(
         children: [
           for (final bean in beanList)
-            Dismissible(
+            InkWell(
               key: UniqueKey(),
-              onDismissed: (_) {
-                Provider.of<Function(dynamic)>(context, listen: false)
-                    .call(bean);
+              onLongPress: () {
+                showDeleteDialog(
+                  context,
+                  () => Provider.of<Function(dynamic)>(context, listen: false)
+                      .call(bean),
+                );
               },
               child: _BeanListTile(bean, viewModel),
             ),

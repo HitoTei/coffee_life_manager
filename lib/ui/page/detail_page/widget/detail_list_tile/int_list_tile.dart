@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class DetailIntListTile extends StatefulWidget {
-  const DetailIntListTile({
+class IntListTile extends StatefulWidget {
+  const IntListTile({
     @required this.title,
     @required this.unit,
     @required this.initialValue,
@@ -15,10 +15,10 @@ class DetailIntListTile extends StatefulWidget {
   final void Function(int) onChanged;
 
   @override
-  _DetailIntListTileState createState() => _DetailIntListTileState();
+  _IntListTileState createState() => _IntListTileState();
 }
 
-class _DetailIntListTileState extends State<DetailIntListTile> {
+class _IntListTileState extends State<IntListTile> {
   int value;
   final _editingController = TextEditingController();
 

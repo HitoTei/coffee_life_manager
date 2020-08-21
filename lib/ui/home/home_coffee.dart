@@ -30,7 +30,6 @@ class _HomeCoffeeState extends State<HomeCoffee> {
     HouseCoffeeDaoImpl()
         .fetchAll()
         .then((value) => houseCoffeeList.value = value);
-
     super.initState();
   }
 
@@ -40,7 +39,7 @@ class _HomeCoffeeState extends State<HomeCoffee> {
       length: HomeCoffee._tab.length,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('コーヒー'),
+          toolbarHeight: kToolbarHeight,
           bottom: const TabBar(
             tabs: HomeCoffee._tab,
           ),
@@ -68,9 +67,7 @@ class _HomeCoffeeState extends State<HomeCoffee> {
                 Provider<Function(dynamic)>.value(
                   value: (dynamic val) {
                     CafeCoffeeDaoImpl().delete(val as CafeCoffee);
-
                     cafeCoffeeList.value.remove(val);
-
                     cafeCoffeeList.value = [...cafeCoffeeList.value];
                   },
                 ),

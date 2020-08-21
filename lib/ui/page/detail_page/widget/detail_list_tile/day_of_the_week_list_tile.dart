@@ -1,8 +1,8 @@
 import 'package:coffee_life_manager/model/enums/day_of_the_week.dart';
 import 'package:flutter/material.dart';
 
-class DayOfTheWeekDetailListTile extends StatefulWidget {
-  const DayOfTheWeekDetailListTile({
+class DayOfTheWeekListTile extends StatefulWidget {
+  const DayOfTheWeekListTile({
     @required this.title,
     @required this.value,
   });
@@ -11,12 +11,10 @@ class DayOfTheWeekDetailListTile extends StatefulWidget {
   final List<DayOfTheWeek> value;
 
   @override
-  _DayOfTheWeekDetailListTileState createState() =>
-      _DayOfTheWeekDetailListTileState();
+  _DayOfTheWeekListTileState createState() => _DayOfTheWeekListTileState();
 }
 
-class _DayOfTheWeekDetailListTileState
-    extends State<DayOfTheWeekDetailListTile> {
+class _DayOfTheWeekListTileState extends State<DayOfTheWeekListTile> {
   List<bool> value;
 
   @override

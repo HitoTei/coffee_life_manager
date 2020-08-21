@@ -3,8 +3,8 @@ import 'package:coffee_life_manager/repository/model/dao/cafe_coffee_dao_impl.da
 import 'package:coffee_life_manager/repository/model/dao/cafe_dao_impl.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail_page/cafe_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
-import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/detail_datetime_list_tile.dart';
-import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/detail_int_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/datetime_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/int_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/image_card_widget.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget/rate_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -47,13 +47,13 @@ class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
         ],
       ),
       detailList: [
-        DetailIntListTile(
+        IntListTile(
           title: const Text('値段'),
           unit: '円',
           initialValue: widget._coffee.price,
           onChanged: (val) => widget._coffee.price = val,
         ),
-        DetailDateTimeListTile(
+        DateTimeListTile(
           title: const Text('飲んだ日'),
           initialValue: widget._coffee.drinkDay,
           onChanged: (val) => widget._coffee.drinkDay,

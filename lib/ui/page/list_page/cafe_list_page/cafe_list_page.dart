@@ -1,3 +1,4 @@
+import 'package:coffee_life_manager/dialog/show_delete_dialog.dart';
 import 'package:coffee_life_manager/model/cafe.dart';
 import 'package:coffee_life_manager/repository/model/dao/cafe_dao_impl.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail_page/cafe_detail_page.dart';
@@ -25,11 +26,14 @@ class CafeListPage extends StatelessWidget {
       body: ListView(
         children: [
           for (final cafe in cafeList)
-            Dismissible(
+            InkWell(
               key: UniqueKey(),
-              onDismissed: (_) {
-                Provider.of<Function(dynamic)>(context, listen: false)
-                    .call(cafe);
+              onLongPress: () {
+                showDeleteDialog(
+                  context,
+                  () => Provider.of<Function(dynamic)>(context, listen: false)
+                      .call(cafe),
+                );
               },
               child: CafeListTile(cafe, viewModel),
             ),
