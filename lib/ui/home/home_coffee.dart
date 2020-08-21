@@ -39,7 +39,7 @@ class _HomeCoffeeState extends State<HomeCoffee> {
       length: HomeCoffee._tab.length,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('コーヒー'),
+          toolbarHeight: kToolbarHeight,
           bottom: const TabBar(
             tabs: HomeCoffee._tab,
           ),

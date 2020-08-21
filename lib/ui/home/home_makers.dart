@@ -53,6 +53,7 @@ class _HomeMakersState extends State<HomeMakers> {
       length: HomeMakers._tab.length,
       child: Scaffold(
         appBar: AppBar(
+          toolbarHeight: kToolbarHeight,
           bottom: const TabBar(
             tabs: HomeMakers._tab,
           ),
