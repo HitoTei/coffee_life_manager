@@ -1,11 +1,13 @@
+import 'dart:developer';
+
 import 'package:coffee_life_manager/model/bean.dart';
 import 'package:coffee_life_manager/model/house_coffee.dart';
 import 'package:coffee_life_manager/repository/model/dao/bean_dao_impl.dart';
 import 'package:coffee_life_manager/repository/model/dao/house_coffee_dao_impl.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
-import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/detail_datetime_list_tile.dart';
-import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/detail_int_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/datetime_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/int_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/roast_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/image_card_widget.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget/rate_widget.dart';
@@ -14,6 +16,7 @@ import 'package:coffee_life_manager/ui/page/page_to_make/make_house_coffee_page.
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 class BeanDetailPage extends StatefulWidget {
   const BeanDetailPage(this._bean);
@@ -72,12 +75,18 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
           ),
           IconButton(
             icon: const Icon(Icons.share),
-            onPressed: () {},
+            onPressed: () {
+              log('share');
+              Share.share(
+                'テスト',
+                subject: 'test',
+              );
+            },
           ),
         ],
       ),
       detailList: [
-        DetailIntListTile(
+        IntListTile(
           title: const Text('残量'),
           unit: 'g',
           initialValue: widget._bean.remainingAmount,
@@ -85,7 +94,7 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
             widget._bean.remainingAmount = val;
           },
         ),
-        DetailIntListTile(
+        IntListTile(
           title: const Text('一杯当たり'),
           unit: 'g',
           initialValue: widget._bean.oneCupPerGram,
@@ -93,7 +102,7 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
             widget._bean.oneCupPerGram = val;
           },
         ),
-        DetailIntListTile(
+        IntListTile(
           title: const Text('値段'),
           unit: '円',
           initialValue: widget._bean.price,
@@ -107,14 +116,14 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
             widget._bean.roast = val;
           },
         ),
-        DetailDateTimeListTile(
+        DateTimeListTile(
           title: const Text('賞味期限'),
           initialValue: widget._bean.freshnessDate,
           onChanged: (val) {
             widget._bean.freshnessDate = val;
           },
         ),
-        DetailDateTimeListTile(
+        DateTimeListTile(
           title: const Text('開封日時'),
           initialValue: widget._bean.openTime,
           onChanged: (val) {
