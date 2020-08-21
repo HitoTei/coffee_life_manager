@@ -82,6 +82,13 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
             toTitle: const Text('終業時間'),
             timeStep: 10,
             timeBlock: 10,
+            backgroundColor: Theme.of(context).canvasColor,
+            activeTextStyle: TextStyle(
+              color:
+                  (Theme.of(context).primaryColorBrightness == Brightness.dark)
+                      ? Colors.white
+                      : Colors.black,
+            ),
             onRangeCompleted: (res) {
               widget._cafe.startTime = res.start;
               if (widget._cafe.startTime.after(widget._cafe.endTime)) {
