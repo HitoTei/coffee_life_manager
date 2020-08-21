@@ -5,6 +5,7 @@ import 'package:coffee_life_manager/ui/home/home_makers.dart';
 import 'package:coffee_life_manager/ui/home/home_viewmodel.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/bean_detail_page/bean_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail_page/cafe_detail_page.dart';
+import 'package:coffee_life_manager/ui/page/theme_selector/theme_selector_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -58,23 +59,39 @@ class _MyHomePageState extends State<MyHomePage> {
                     icon: const Icon(Icons.more_vert),
                     onPressed: () {
                       showModalBottomSheet<dynamic>(
-                          context: context,
-                          builder: (_) => Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ListTile(
-                                    leading: const Icon(Icons.compare_arrows),
-                                    title: const Text('リストを変更する'),
-                                    subtitle: Text(
-                                      '変更後: ${isMakers ? 'コーヒー' : 'カフェ・豆'}',
-                                    ),
-                                    onTap: () {
-                                      setState(() => isMakers = !isMakers);
-                                      Navigator.pop(context);
+                        context: context,
+                        builder: (_) => Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListTile(
+                              leading: const Icon(Icons.compare_arrows),
+                              title: const Text('リストを変更する'),
+                              subtitle: Text(
+                                '変更後: ${isMakers ? 'コーヒー' : 'カフェ・豆'}',
+                              ),
+                              onTap: () {
+                                setState(() => isMakers = !isMakers);
+                                Navigator.pop(context);
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.apps),
+                              title: const Text('テーマを変更する'),
+                              onTap: () async {
+                                await Navigator.push<dynamic>(
+                                  context,
+                                  MaterialPageRoute<dynamic>(
+                                    builder: (_) {
+                                      return ThemeSelectorPage();
                                     },
                                   ),
-                                ],
-                              ));
+                                );
+                                Navigator.pop(context);
+                              },
+                            )
+                          ],
+                        ),
+                      );
                     },
                   ),
                   IconButton(
