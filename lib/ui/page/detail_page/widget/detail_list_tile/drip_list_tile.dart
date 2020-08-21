@@ -26,14 +26,14 @@ class _DripListTileState extends State<DripListTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: const Text('挽き方'),
+      title: const Text('淹れ方'),
       subtitle: Text('${dripStr[value.index]}'),
       onTap: () {
         showDialog<void>(
           context: context,
           builder: (_) {
             return SimpleDialog(
-              title: const Text('挽き方'),
+              title: const Text('淹れ方'),
               children: [
                 for (final drip in Drip.values)
                   FlatButton(
