@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DetailDateTimeListTile extends StatefulWidget {
-  const DetailDateTimeListTile({
+class DateTimeListTile extends StatefulWidget {
+  const DateTimeListTile({
     @required this.title,
     @required this.initialValue,
     @required this.onChanged,
@@ -13,10 +13,10 @@ class DetailDateTimeListTile extends StatefulWidget {
   final void Function(DateTime) onChanged;
 
   @override
-  _DetailDateTimeListTileState createState() => _DetailDateTimeListTileState();
+  _DateTimeListTileState createState() => _DateTimeListTileState();
 }
 
-class _DetailDateTimeListTileState extends State<DetailDateTimeListTile> {
+class _DateTimeListTileState extends State<DateTimeListTile> {
   DateTime value;
 
   @override
@@ -29,7 +29,7 @@ class _DetailDateTimeListTileState extends State<DetailDateTimeListTile> {
   Widget build(BuildContext context) {
     return ListTile(
       title: widget.title,
-      subtitle: Text('${value}'),
+      subtitle: Text('$value'),
       onTap: () async {
         final date = await showDatePicker(
           context: context,
