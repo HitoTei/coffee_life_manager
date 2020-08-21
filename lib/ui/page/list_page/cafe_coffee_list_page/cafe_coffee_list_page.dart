@@ -1,3 +1,4 @@
+import 'package:coffee_life_manager/dialog/show_delete_dialog.dart';
 import 'package:coffee_life_manager/model/cafe_coffee.dart';
 import 'package:coffee_life_manager/repository/model/dao/cafe_coffee_dao_impl.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_coffee_detail_page/cafe_coffee_detail_page.dart';
@@ -24,11 +25,14 @@ class CafeCoffeeListPage extends StatelessWidget {
       body: ListView(
         children: [
           for (final coffee in coffeeList)
-            Dismissible(
+            InkWell(
               key: UniqueKey(),
-              onDismissed: (_) {
-                Provider.of<Function(dynamic)>(context, listen: false)
-                    .call(coffee);
+              onLongPress: () {
+                showDeleteDialog(
+                  context,
+                  () => Provider.of<Function(dynamic)>(context, listen: false)
+                      .call(coffee),
+                );
               },
               child: _CafeCoffeeListTile(coffee, viewModel),
             ),
@@ -50,6 +54,7 @@ class _CafeCoffeeListTile extends StatefulWidget {
 
 class _CafeCoffeeListTileState extends State<_CafeCoffeeListTile> {
   CafeCoffee coffee;
+
   @override
   void initState() {
     coffee = widget.coffee;
