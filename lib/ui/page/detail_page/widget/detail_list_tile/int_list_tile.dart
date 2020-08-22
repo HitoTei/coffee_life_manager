@@ -1,45 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class IntListTile extends StatefulWidget {
-  const IntListTile({
+class IntListTile extends StatelessWidget {
+  IntListTile({
     @required this.title,
     @required this.unit,
-    @required this.initialValue,
+    @required this.value,
     @required this.onChanged,
-  });
+  }) : _editingController = TextEditingController()..text = value.toString();
 
   final Widget title;
   final String unit;
-  final int initialValue;
-  final void Function(int) onChanged;
-
-  @override
-  _IntListTileState createState() => _IntListTileState();
-}
-
-class _IntListTileState extends State<IntListTile> {
-  int value;
-  final _editingController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    value = widget.initialValue;
-    _editingController.text = value.toString();
-  }
+  final int value;
+  final Function(int) onChanged;
+  final TextEditingController _editingController;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: widget.title,
-      subtitle: Text('$value${widget.unit}'),
+      title: title,
+      subtitle: Text('$value$unit'),
       onTap: () {
         showDialog<void>(
           context: context,
           builder: (_) {
             return AlertDialog(
-              title: widget.title,
+              title: title,
               content: TextField(
                 controller: _editingController,
                 keyboardType: TextInputType.number,
@@ -61,10 +47,7 @@ class _IntListTileState extends State<IntListTile> {
                 FlatButton(
                   child: const Text('Ok'),
                   onPressed: () {
-                    setState(() {
-                      value = int.parse(_editingController.text);
-                    });
-                    widget.onChanged(value);
+                    onChanged(int.parse(_editingController.text));
                     Navigator.pop(context);
                   },
                 ),

@@ -67,10 +67,12 @@ class _CafeListTileState extends State<CafeListTile> {
     return ImageCardListTile(
       actions: [
         FavButton(
-          isFavorite: widget.cafe.isFavorite,
+          value: cafe.isFavorite,
           onChanged: (val) {
-            widget.cafe.isFavorite = val;
-            widget.viewModel.onFavChanged(widget.cafe);
+            setState(() {
+              cafe.isFavorite = val;
+              widget.viewModel.onFavChanged(widget.cafe);
+            });
           },
         ),
       ],

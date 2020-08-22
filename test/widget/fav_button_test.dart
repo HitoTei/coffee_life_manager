@@ -3,14 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('rate widget test', (WidgetTester tester) async {
+  testWidgets('fav button test', (WidgetTester tester) async {
     var fav = false;
+    final notifier = ValueNotifier(fav);
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: FavButton(
-            isFavorite: fav,
-            onChanged: (val) => fav = val,
+          body: ValueListenableBuilder(
+            valueListenable: notifier,
+            builder: (context, bool value, _) => FavButton(
+              value: value,
+              onChanged: (val) {
+                notifier.value = val;
+                fav = val;
+              },
+            ),
           ),
         ),
       ),

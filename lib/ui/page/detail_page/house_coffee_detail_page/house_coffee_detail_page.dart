@@ -1,7 +1,11 @@
+import 'package:coffee_life_manager/model/enums/drip.dart';
+import 'package:coffee_life_manager/model/enums/grind.dart';
+import 'package:coffee_life_manager/model/enums/roast.dart';
 import 'package:coffee_life_manager/model/house_coffee.dart';
 import 'package:coffee_life_manager/repository/model/dao/bean_dao_impl.dart';
 import 'package:coffee_life_manager/repository/model/dao/house_coffee_dao_impl.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/bean_detail_page/bean_detail_page.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail_page/house_coffee_detail_page_viewmodel.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/datetime_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/drip_list_tile.dart';
@@ -10,15 +14,15 @@ import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/roast_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/image_card_widget.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget/rate_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../detail_page.dart';
 
 class HouseCoffeeDetailPage extends StatefulWidget {
-  const HouseCoffeeDetailPage(this._coffee);
-
-  final HouseCoffee _coffee;
+  HouseCoffeeDetailPage(HouseCoffee coffee)
+      : viewModel =
+            HouseCoffeeDetailPageViewModel(coffee, HouseCoffeeDaoImpl());
+  final HouseCoffeeDetailPageViewModel viewModel;
 
   @override
   _HouseCoffeeDetailPageState createState() => _HouseCoffeeDetailPageState();
@@ -26,10 +30,14 @@ class HouseCoffeeDetailPage extends StatefulWidget {
 
 class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
   @override
+  void initState() {
+    widget.viewModel.onInitState();
+    super.initState();
+  }
+
+  @override
   void dispose() {
-    HouseCoffeeDaoImpl()
-        .insert(widget._coffee)
-        .then((val) => widget._coffee.uid = val);
+    widget.viewModel.onDispose();
     super.dispose();
   }
 
@@ -37,51 +45,94 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
   Widget build(BuildContext context) {
     return DetailPage(
       header: DetailHeader(
-        imageInformation: widget._coffee,
+        imageInformation: widget.viewModel.coffee,
         actions: [
-          FavButton(
-            isFavorite: widget._coffee.isFavorite,
-            onChanged: (val) => widget._coffee.isFavorite = val,
+          ValueListenableBuilder(
+            valueListenable: widget.viewModel.isFavorite,
+            builder: (context, bool value, _) =>
+                FavButton(
+                  value: value,
+                  onChanged: (val) {
+                    widget.viewModel.isFavorite.value = val;
+                    widget.viewModel.coffee.isFavorite = val;
+                  },
+                ),
           ),
           IconButton(
             icon: const Icon(Icons.share),
-            onPressed: () {},
+            onPressed: widget.viewModel.share,
           ),
         ],
       ),
       detailList: [
-        IntListTile(
-          title: const Text('淹れた量'),
-          unit: '杯',
-          initialValue: widget._coffee.numOfCups,
-          onChanged: (val) => widget._coffee.numOfCups = val,
+        ValueListenableBuilder(
+          valueListenable: widget.viewModel.numOfCups,
+          builder: (context, int value, _) =>
+              IntListTile(
+                title: const Text('淹れた量'),
+                unit: '杯',
+                value: value,
+                onChanged: (val) {
+                  widget.viewModel.numOfCups.value = val;
+                  widget.viewModel.coffee.numOfCups = val;
+                },
+              ),
         ),
-        GrindListTile(
-          initialValue: widget._coffee.grind,
-          onChanged: (val) => widget._coffee.grind = val,
+        ValueListenableBuilder(
+          valueListenable: widget.viewModel.grind,
+          builder: (context, Grind value, _) =>
+              GrindListTile(
+                value: value,
+                onChanged: (val) {
+                  widget.viewModel.grind.value = val;
+                  widget.viewModel.coffee.grind = val;
+                },
+              ),
         ),
-        DripListTile(
-          initialValue: widget._coffee.drip,
-          onChanged: (val) => widget._coffee.drip = val,
+        ValueListenableBuilder(
+          valueListenable: widget.viewModel.drip,
+          builder: (context, Drip value, _) =>
+              DripListTile(
+                value: value,
+                onChanged: (val) {
+                  widget.viewModel.drip.value = val;
+                  widget.viewModel.coffee.drip = val;
+                },
+              ),
         ),
-        RoastListTile(
-          initialValue: widget._coffee.roast,
-          onChanged: (val) => widget._coffee.roast = val,
+        ValueListenableBuilder(
+          valueListenable: widget.viewModel.roast,
+          builder: (context, Roast value, _) =>
+              RoastListTile(
+                value: value,
+                onChanged: (val) {
+                  widget.viewModel.roast.value = val;
+                  widget.viewModel.coffee.roast = val;
+                },
+              ),
         ),
-        DateTimeListTile(
-          title: const Text('淹れた日'),
-          initialValue: widget._coffee.drinkDay,
-          onChanged: (val) => widget._coffee.drinkDay,
+        ValueListenableBuilder(
+          valueListenable: widget.viewModel.drinkDay,
+          builder: (context, DateTime value, _) =>
+              DateTimeListTile(
+                title: const Text('淹れた日'),
+                value: value,
+                onChanged: (val) {
+                  widget.viewModel.drinkDay.value = val;
+                  widget.viewModel.coffee.drinkDay = val;
+                },
+              ),
         ),
       ],
       rate: RateWidget(
-        widget._coffee.rate,
+        widget.viewModel.coffee.rate,
       ),
       links: [
         ListTile(
           title: const Text('使用した豆'),
           onTap: () async {
-            final bean = await BeanDaoImpl().fetchByUid(widget._coffee.beanId);
+            final bean =
+            await BeanDaoImpl().fetchByUid(widget.viewModel.coffee.beanId);
             await Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
@@ -92,12 +143,12 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
         ),
       ],
       memo: TextFormField(
-        initialValue: widget._coffee.memo,
+        initialValue: widget.viewModel.coffee.memo,
         decoration: const InputDecoration(
           labelText: 'メモ',
         ),
         onChanged: (val) {
-          widget._coffee.memo = val;
+          widget.viewModel.coffee.memo = val;
         },
         maxLength: 50,
         maxLines: 5,

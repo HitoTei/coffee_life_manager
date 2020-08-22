@@ -67,10 +67,12 @@ class _HouseCoffeeListTileState extends State<HouseCoffeeListTile> {
     return ImageCardListTile(
       actions: [
         FavButton(
-          isFavorite: widget.coffee.isFavorite,
+          value: coffee.isFavorite,
           onChanged: (val) {
-            widget.coffee.isFavorite = val;
-            widget.viewModel.onFavChanged(widget.coffee);
+            setState(() {
+              coffee.isFavorite = val;
+              widget.viewModel.onFavChanged(widget.coffee);
+            });
           },
         ),
       ],

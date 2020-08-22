@@ -32,11 +32,11 @@ class MakeHouseCoffeePage extends StatelessWidget {
               child: _BeanAmountWidget((val) => coffee.numOfCups = val)),
           const Divider(),
           DripListTile(
-            initialValue: coffee.drip,
+            value: coffee.drip,
             onChanged: (val) => coffee.drip = val,
           ),
           GrindListTile(
-            initialValue: coffee.grind,
+            value: coffee.grind,
             onChanged: (val) => coffee.grind = val,
           ),
           FlatButton(

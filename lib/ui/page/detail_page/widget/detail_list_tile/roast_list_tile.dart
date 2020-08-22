@@ -1,27 +1,14 @@
 import 'package:coffee_life_manager/model/enums/roast.dart';
 import 'package:flutter/material.dart';
 
-class RoastListTile extends StatefulWidget {
+class RoastListTile extends StatelessWidget {
   const RoastListTile({
-    @required this.initialValue,
+    @required this.value,
     @required this.onChanged,
   });
 
-  final Roast initialValue;
+  final Roast value;
   final void Function(Roast) onChanged;
-
-  @override
-  _RoastListTileState createState() => _RoastListTileState();
-}
-
-class _RoastListTileState extends State<RoastListTile> {
-  Roast value;
-
-  @override
-  void initState() {
-    super.initState();
-    value = widget.initialValue;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +30,7 @@ class _RoastListTileState extends State<RoastListTile> {
           ],
         );
         if (next != null) {
-          setState(() {
-            value = next;
-          });
+          onChanged(next);
         }
       },
     );

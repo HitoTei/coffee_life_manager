@@ -1,9 +1,9 @@
-import 'dart:developer';
-
 import 'package:coffee_life_manager/model/bean.dart';
+import 'package:coffee_life_manager/model/enums/roast.dart';
 import 'package:coffee_life_manager/model/house_coffee.dart';
 import 'package:coffee_life_manager/repository/model/dao/bean_dao_impl.dart';
 import 'package:coffee_life_manager/repository/model/dao/house_coffee_dao_impl.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/bean_detail_page/bean_detail_page_viewmodel.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/datetime_list_tile.dart';
@@ -16,12 +16,12 @@ import 'package:coffee_life_manager/ui/page/page_to_make/make_house_coffee_page.
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:share/share.dart';
 
 class BeanDetailPage extends StatefulWidget {
-  const BeanDetailPage(this._bean);
+  BeanDetailPage(Bean bean)
+      : viewModel = BeanDetailPageViewModel(bean, BeanDaoImpl());
 
-  final Bean _bean;
+  final BeanDetailPageViewModel viewModel;
 
   @override
   _BeanDetailPageState createState() => _BeanDetailPageState();
@@ -30,19 +30,13 @@ class BeanDetailPage extends StatefulWidget {
 class _BeanDetailPageState extends State<BeanDetailPage> {
   @override
   void initState() {
-    if (widget._bean.uid == null) {
-      BeanDaoImpl()
-          .insert(widget._bean)
-          .then((value) => widget._bean.uid = value);
-    }
+    widget.viewModel.onInitState();
     super.initState();
   }
 
   @override
   void dispose() {
-    BeanDaoImpl()
-        .insert(widget._bean)
-        .then((value) => widget._bean.uid = value);
+    widget.viewModel.onDispose();
     super.dispose();
   }
 
@@ -50,95 +44,117 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
   Widget build(BuildContext context) {
     return DetailPage(
       header: DetailHeader(
-        imageInformation: widget._bean,
+        imageInformation: widget.viewModel.bean,
         actions: [
-          FavButton(
-            isFavorite: widget._bean.isFavorite,
-            onChanged: (val) {
-              widget._bean.isFavorite = val;
-            },
+          ValueListenableBuilder(
+            valueListenable: widget.viewModel.isFavorite,
+            builder: (context, bool value, _) => FavButton(
+              value: value,
+              onChanged: (val) {
+                widget.viewModel.isFavorite.value = val;
+                widget.viewModel.bean.isFavorite = val;
+              },
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.local_cafe),
             onPressed: () {
-              if (widget._bean.remainingAmount < widget._bean.oneCupPerGram) {
+              if (widget.viewModel.canDripCoffee()) {
                 Fluttertoast.showToast(msg: 'コーヒーの残量が足りません');
                 return;
               }
               Navigator.pushReplacement<dynamic, dynamic>(
                 context,
                 MaterialPageRoute<dynamic>(
-                  builder: (_) => MakeHouseCoffeePage(widget._bean),
+                  builder: (_) => MakeHouseCoffeePage(widget.viewModel.bean),
                 ),
               );
             },
           ),
           IconButton(
             icon: const Icon(Icons.share),
-            onPressed: () {
-              log('share');
-              Share.share(
-                'テスト',
-                subject: 'test',
-              );
-            },
+            onPressed: widget.viewModel.share,
           ),
         ],
       ),
       detailList: [
-        IntListTile(
-          title: const Text('残量'),
-          unit: 'g',
-          initialValue: widget._bean.remainingAmount,
-          onChanged: (val) {
-            widget._bean.remainingAmount = val;
-          },
+        ValueListenableBuilder(
+          valueListenable: widget.viewModel.remainingAmount,
+          builder: (context, int value, _) => IntListTile(
+            title: const Text('残量'),
+            unit: 'g',
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.remainingAmount.value = val;
+              widget.viewModel.bean.remainingAmount = val;
+            },
+          ),
         ),
-        IntListTile(
-          title: const Text('一杯当たり'),
-          unit: 'g',
-          initialValue: widget._bean.oneCupPerGram,
-          onChanged: (val) {
-            widget._bean.oneCupPerGram = val;
-          },
+        ValueListenableBuilder(
+          valueListenable: widget.viewModel.oneCupPerGram,
+          builder: (context, int value, _) => IntListTile(
+            title: const Text('一杯当たり'),
+            unit: 'g',
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.oneCupPerGram.value = val;
+              widget.viewModel.bean.oneCupPerGram = val;
+            },
+          ),
         ),
-        IntListTile(
-          title: const Text('値段'),
-          unit: '円',
-          initialValue: widget._bean.price,
-          onChanged: (val) {
-            widget._bean.price = val;
-          },
+        ValueListenableBuilder(
+          valueListenable: widget.viewModel.price,
+          builder: (context, int value, _) => IntListTile(
+            title: const Text('値段'),
+            unit: '円',
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.price.value = val;
+              widget.viewModel.bean.price = val;
+            },
+          ),
         ),
-        RoastListTile(
-          initialValue: widget._bean.roast,
-          onChanged: (val) {
-            widget._bean.roast = val;
-          },
+        ValueListenableBuilder(
+          valueListenable: widget.viewModel.roast,
+          builder: (context, Roast value, _) => RoastListTile(
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.roast.value = val;
+              widget.viewModel.bean.roast = val;
+            },
+          ),
         ),
-        DateTimeListTile(
-          title: const Text('賞味期限'),
-          initialValue: widget._bean.freshnessDate,
-          onChanged: (val) {
-            widget._bean.freshnessDate = val;
-          },
+        ValueListenableBuilder(
+          valueListenable: widget.viewModel.freshnessDate,
+          builder: (context, DateTime value, _) => DateTimeListTile(
+            title: const Text('賞味期限'),
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.freshnessDate.value = val;
+              widget.viewModel.bean.freshnessDate = val;
+            },
+          ),
         ),
-        DateTimeListTile(
-          title: const Text('開封日時'),
-          initialValue: widget._bean.openTime,
-          onChanged: (val) {
-            widget._bean.openTime = val;
-          },
+        ValueListenableBuilder(
+          valueListenable: widget.viewModel.openTime,
+          builder: (context, DateTime value, _) => DateTimeListTile(
+            title: const Text('開封日時'),
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.openTime.value = val;
+              widget.viewModel.bean.openTime = val;
+            },
+          ),
         ),
       ],
-      rate: RateWidget(widget._bean.rate),
+      rate: RateWidget(widget.viewModel.bean.rate),
       links: [
         ListTile(
           title: const Text('この豆で淹れたコーヒー'),
           onTap: () {
             final list = ValueNotifier<List<HouseCoffee>>(null);
             HouseCoffeeDaoImpl()
-                .fetchByBeanId(widget._bean.uid)
+                .fetchByBeanId(widget.viewModel.bean.uid)
                 .then((value) => list.value = value);
             Navigator.push<dynamic>(
               context,
@@ -158,12 +174,12 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
         ),
       ],
       memo: TextFormField(
-        initialValue: widget._bean.memo,
+        initialValue: widget.viewModel.bean.memo,
         decoration: const InputDecoration(
           labelText: 'メモ',
         ),
         onChanged: (val) {
-          widget._bean.memo = val;
+          widget.viewModel.bean.memo = val;
         },
         maxLength: 50,
         maxLines: 5,
