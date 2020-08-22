@@ -21,8 +21,10 @@ class CafeCoffeeListPage extends StatelessWidget {
       );
     }
     if (coffeeList.isEmpty) {
-      return const Center(
-        child: Text('要素がありません'),
+      return const Scaffold(
+        body: Center(
+          child: Text('要素がありません'),
+        ),
       );
     }
 

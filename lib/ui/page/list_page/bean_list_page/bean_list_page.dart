@@ -22,8 +22,10 @@ class BeanListPage extends StatelessWidget {
     }
 
     if (beanList.isEmpty) {
-      return const Center(
-        child: Text('要素がありません'),
+      return const Scaffold(
+        body: Center(
+          child: Text('要素がありません'),
+        ),
       );
     }
 
