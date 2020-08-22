@@ -167,11 +167,6 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
             );
           },
         ),
-        ListTile(
-          // なんか面倒なのでなくてもいいかも
-          title: const Text('豆を購入した店'),
-          onTap: () async {},
-        ),
       ],
       memo: TextFormField(
         initialValue: widget.viewModel.bean.memo,

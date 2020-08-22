@@ -155,10 +155,6 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
             );
           },
         ),
-        ListTile(
-          title: const Text('購入したコーヒー豆'),
-          onTap: () {},
-        ),
       ],
       memo: Container(),
     );
