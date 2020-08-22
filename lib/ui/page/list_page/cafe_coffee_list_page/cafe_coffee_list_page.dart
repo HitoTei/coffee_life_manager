@@ -20,6 +20,11 @@ class CafeCoffeeListPage extends StatelessWidget {
         child: CircularProgressIndicator(),
       );
     }
+    if (coffeeList.isEmpty) {
+      return const Center(
+        child: Text('要素がありません'),
+      );
+    }
 
     return Scaffold(
       body: ListView(

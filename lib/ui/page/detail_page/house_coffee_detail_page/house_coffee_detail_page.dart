@@ -66,16 +66,15 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
       detailList: [
         ValueListenableBuilder(
           valueListenable: widget.viewModel.numOfCups,
-          builder: (context, int value, _) =>
-              IntListTile(
-                title: const Text('淹れた量'),
-                unit: '杯',
-                value: value,
-                onChanged: (val) {
-                  widget.viewModel.numOfCups.value = val;
-                  widget.viewModel.coffee.numOfCups = val;
-                },
-              ),
+          builder: (context, int value, _) => IntListTile(
+            title: const Text('淹れた量'),
+            unit: '杯',
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.numOfCups.value = val;
+              widget.viewModel.coffee.numOfCups = val;
+            },
+          ),
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.grind,
