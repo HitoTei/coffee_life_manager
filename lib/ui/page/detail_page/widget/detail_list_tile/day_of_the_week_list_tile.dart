@@ -5,10 +5,12 @@ class DayOfTheWeekListTile extends StatefulWidget {
   const DayOfTheWeekListTile({
     @required this.title,
     @required this.value,
+    @required this.onChanged,
   });
 
   final Widget title;
   final List<DayOfTheWeek> value;
+  final Function(List<DayOfTheWeek>) onChanged;
 
   @override
   _DayOfTheWeekListTileState createState() => _DayOfTheWeekListTileState();
@@ -58,20 +60,17 @@ class _DayOfTheWeekListTileState extends State<DayOfTheWeekListTile> {
                 FlatButton(
                   child: const Text('Cancel'),
                   onPressed: () {
-                    final res = [
-                      for (var i = 0; i < value.length; i++)
-                        if (value[i]) DayOfTheWeek.values[i]
-                    ];
-
-                    widget.value.removeRange(0, widget.value.length);
-                    widget.value.addAll(res);
-
                     Navigator.pop(context);
                   },
                 ),
                 FlatButton(
                   child: const Text('Ok'),
                   onPressed: () {
+                    final res = [
+                      for (var i = 0; i < value.length; i++)
+                        if (value[i]) DayOfTheWeek.values[i]
+                    ];
+                    widget.onChanged(res);
                     Navigator.pop(context);
                   },
                 ),

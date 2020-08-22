@@ -103,6 +103,7 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
         DayOfTheWeekListTile(
           title: const Text('定休日'),
           value: widget._cafe.regularHoliday,
+          onChanged: (val) => widget._cafe.regularHoliday = val,
         ),
         MapListTile(
           title: const Text('場所'),
