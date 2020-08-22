@@ -61,16 +61,15 @@ class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
       detailList: [
         ValueListenableBuilder(
           valueListenable: widget.viewModel.price,
-          builder: (context, int value, _) =>
-              IntListTile(
-                title: const Text('値段'),
-                unit: '円',
-                value: value,
-                onChanged: (val) {
-                  widget.viewModel.price.value = val;
-                  widget.viewModel.coffee.price = val;
-                },
-              ),
+          builder: (context, int value, _) => IntListTile(
+            title: const Text('値段'),
+            unit: '円',
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.price.value = val;
+              widget.viewModel.coffee.price = val;
+            },
+          ),
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.drinkDay,
@@ -94,6 +93,14 @@ class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
           onTap: () async {
             final cafe =
             await CafeDaoImpl().fetchByUid(widget.viewModel.coffee.cafeId);
+            if (cafe == null) {
+              Scaffold.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('そのカフェは削除されました'),
+                ),
+              );
+              return;
+            }
             await Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(

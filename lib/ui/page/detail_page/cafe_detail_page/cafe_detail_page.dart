@@ -120,15 +120,14 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.mapUrl,
-          builder: (context, String value, _) =>
-              MapListTile(
-                title: const Text('場所'),
-                value: value,
-                onChanged: (val) {
-                  widget.viewModel.mapUrl.value = val;
-                  widget.viewModel.cafe.mapUrl = val;
-                },
-              ),
+          builder: (context, String value, _) => MapListTile(
+            title: const Text('場所'),
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.mapUrl.value = val;
+              widget.viewModel.cafe.mapUrl = val;
+            },
+          ),
         ),
       ],
       rate: null,

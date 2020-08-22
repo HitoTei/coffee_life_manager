@@ -49,14 +49,13 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
         actions: [
           ValueListenableBuilder(
             valueListenable: widget.viewModel.isFavorite,
-            builder: (context, bool value, _) =>
-                FavButton(
-                  value: value,
-                  onChanged: (val) {
-                    widget.viewModel.isFavorite.value = val;
-                    widget.viewModel.coffee.isFavorite = val;
-                  },
-                ),
+            builder: (context, bool value, _) => FavButton(
+              value: value,
+              onChanged: (val) {
+                widget.viewModel.isFavorite.value = val;
+                widget.viewModel.coffee.isFavorite = val;
+              },
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.share),
@@ -133,6 +132,16 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
           onTap: () async {
             final bean =
             await BeanDaoImpl().fetchByUid(widget.viewModel.coffee.beanId);
+
+            if (bean == null) {
+              Scaffold.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('その豆は削除されました'),
+                ),
+              );
+              return;
+            }
+
             await Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
