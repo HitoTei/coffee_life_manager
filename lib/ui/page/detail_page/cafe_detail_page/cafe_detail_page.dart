@@ -86,14 +86,10 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
             toTitle: const Text('終業時間'),
             timeStep: 10,
             timeBlock: 10,
-            backgroundColor: Theme
-                .of(context)
-                .canvasColor,
+            backgroundColor: Theme.of(context).canvasColor,
             activeTextStyle: TextStyle(
               color:
-              (Theme
-                  .of(context)
-                  .primaryColorBrightness == Brightness.dark)
+                  (Theme.of(context).primaryColorBrightness == Brightness.dark)
                       ? Colors.white
                       : Colors.black,
             ),
