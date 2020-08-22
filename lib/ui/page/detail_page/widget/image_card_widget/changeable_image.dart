@@ -27,8 +27,6 @@ class ChangeableImage extends StatelessWidget {
           log('file fetched. file: $file');
         }
       },
-
-      // ToDo: FIX.途中で購読がされなくなる？
       child: ValueListenableProvider<File>(
         create: (_) => image,
         child: LocalImage(),

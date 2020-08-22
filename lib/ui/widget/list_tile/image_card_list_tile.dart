@@ -33,8 +33,8 @@ class ImageCardListTile extends StatelessWidget {
                 constraints: const BoxConstraints.expand(height: 120),
                 child: Stack(
                   children: [
-                    ValueListenableProvider<File>(
-                      create: (_) => image,
+                    ValueListenableProvider<File>.value(
+                      value: image,
                       child: LocalImage(),
                     ),
                     if (information.getMessage() != null)
