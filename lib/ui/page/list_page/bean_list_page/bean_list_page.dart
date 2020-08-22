@@ -66,10 +66,12 @@ class __BeanListTileState extends State<_BeanListTile> {
     return ImageCardListTile(
       actions: [
         FavButton(
-          isFavorite: widget.bean.isFavorite,
+          value: bean.isFavorite,
           onChanged: (val) {
-            widget.bean.isFavorite = val;
-            widget.viewModel.onFavChanged(widget.bean);
+            setState(() {
+              bean.isFavorite = val;
+              widget.viewModel.onFavChanged(widget.bean);
+            });
           },
         ),
       ],

@@ -1,27 +1,14 @@
 import 'package:coffee_life_manager/model/enums/grind.dart';
 import 'package:flutter/material.dart';
 
-class GrindListTile extends StatefulWidget {
+class GrindListTile extends StatelessWidget {
   const GrindListTile({
-    @required this.initialValue,
+    @required this.value,
     @required this.onChanged,
   });
 
-  final Grind initialValue;
+  final Grind value;
   final void Function(Grind) onChanged;
-
-  @override
-  _GrindListTileState createState() => _GrindListTileState();
-}
-
-class _GrindListTileState extends State<GrindListTile> {
-  Grind value;
-
-  @override
-  void initState() {
-    super.initState();
-    value = widget.initialValue;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +30,7 @@ class _GrindListTileState extends State<GrindListTile> {
           ],
         );
         if (next != null) {
-          setState(() {
-            value = next;
-          });
+          onChanged(next);
         }
       },
     );

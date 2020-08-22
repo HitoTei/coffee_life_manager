@@ -1,27 +1,14 @@
 import 'package:coffee_life_manager/model/enums/drip.dart';
 import 'package:flutter/material.dart';
 
-class DripListTile extends StatefulWidget {
+class DripListTile extends StatelessWidget {
   const DripListTile({
-    @required this.initialValue,
+    @required this.value,
     @required this.onChanged,
   });
 
-  final Drip initialValue;
-  final void Function(Drip) onChanged;
-
-  @override
-  _DripListTileState createState() => _DripListTileState();
-}
-
-class _DripListTileState extends State<DripListTile> {
-  Drip value;
-
-  @override
-  void initState() {
-    super.initState();
-    value = widget.initialValue;
-  }
+  final Drip value;
+  final Function(Drip) onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +30,7 @@ class _DripListTileState extends State<DripListTile> {
           ],
         );
         if (next != null) {
-          setState(() {
-            value = next;
-          });
+          onChanged(next);
         }
       },
     );

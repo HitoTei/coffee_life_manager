@@ -66,15 +66,17 @@ class _CafeCoffeeListTileState extends State<_CafeCoffeeListTile> {
     return ImageCardListTile(
       actions: [
         FavButton(
-          isFavorite: widget.coffee.isFavorite,
+          value: coffee.isFavorite,
           onChanged: (val) {
-            widget.coffee.isFavorite = val;
-            widget.viewModel.onFavChanged(widget.coffee);
+            setState(() {
+              coffee.isFavorite = val;
+              widget.viewModel.onFavChanged(widget.coffee);
+            });
           },
         ),
       ],
       // 挙動がおかしかったら、ここを変更する。
-      information: widget.coffee,
+      information: coffee,
       gotoDetailPage: () async {
         await Navigator.push<dynamic>(
           context,

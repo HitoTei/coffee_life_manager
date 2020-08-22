@@ -1,36 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
-class MapListTile extends StatefulWidget {
-  const MapListTile({
+class MapListTile extends StatelessWidget {
+  MapListTile({
     @required this.title,
-    @required this.initialValue,
+    @required this.value,
     @required this.onChanged,
-  });
+  }) : _editingController = TextEditingController()..text = value;
 
   final Widget title;
-  final String initialValue;
+  final String value;
   final void Function(String) onChanged;
 
-  @override
-  _MapListTileState createState() => _MapListTileState();
-}
-
-class _MapListTileState extends State<MapListTile> {
-  String value;
-  final _editingController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    value = widget.initialValue;
-    _editingController.text = value.toString();
-  }
+  final TextEditingController _editingController;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: widget.title,
+      title: title,
       subtitle: Text('$value'),
       onTap: () {
         showDialog<void>(
@@ -40,7 +27,7 @@ class _MapListTileState extends State<MapListTile> {
                 children: [
                   FlatButton(
                     child: const Text('場所を編集'),
-                    onPressed: _showEditTextDialog,
+                    onPressed: () => _showEditTextDialog(context),
                   ),
                   FlatButton(
                     child: const Text('マップへ移動'),
@@ -56,12 +43,12 @@ class _MapListTileState extends State<MapListTile> {
     );
   }
 
-  Future<void> _showEditTextDialog() {
+  Future<void> _showEditTextDialog(BuildContext context) {
     return showDialog<void>(
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: widget.title,
+          title: title,
           content: TextField(
             controller: _editingController,
             decoration: const InputDecoration(
@@ -79,10 +66,7 @@ class _MapListTileState extends State<MapListTile> {
             FlatButton(
               child: const Text('Ok'),
               onPressed: () {
-                setState(() {
-                  value = _editingController.text;
-                });
-                widget.onChanged(value);
+                onChanged(_editingController.text);
                 Navigator.pop(context);
               },
             ),

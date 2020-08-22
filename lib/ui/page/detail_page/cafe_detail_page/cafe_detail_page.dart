@@ -1,8 +1,10 @@
 import 'package:coffee_life_manager/model/cafe.dart';
 import 'package:coffee_life_manager/model/cafe_coffee.dart';
+import 'package:coffee_life_manager/model/enums/day_of_the_week.dart';
 import 'package:coffee_life_manager/repository/model/dao/cafe_coffee_dao_impl.dart';
 import 'package:coffee_life_manager/repository/model/dao/cafe_dao_impl.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_coffee_detail_page/cafe_coffee_detail_page.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail_page/cafe_detail_page_viewmodel.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/day_of_the_week_list_tile.dart';
@@ -14,9 +16,9 @@ import 'package:provider/provider.dart';
 import 'package:time_range/time_range.dart';
 
 class CafeDetailPage extends StatefulWidget {
-  const CafeDetailPage(this._cafe);
-
-  final Cafe _cafe;
+  CafeDetailPage(Cafe cafe)
+      : viewModel = CafeDetailPageViewModel(cafe, CafeDaoImpl());
+  final CafeDetailPageViewModel viewModel;
 
   @override
   _CafeDetailPageState createState() => _CafeDetailPageState();
@@ -25,17 +27,13 @@ class CafeDetailPage extends StatefulWidget {
 class _CafeDetailPageState extends State<CafeDetailPage> {
   @override
   void initState() {
-    CafeDaoImpl()
-        .insert(widget._cafe)
-        .then((value) => widget._cafe.uid = value);
+    widget.viewModel.onInitState();
     super.initState();
   }
 
   @override
   void dispose() {
-    CafeDaoImpl()
-        .insert(widget._cafe)
-        .then((value) => widget._cafe.uid = value);
+    widget.viewModel.onDispose();
     super.dispose();
   }
 
@@ -43,17 +41,23 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
   Widget build(BuildContext context) {
     return DetailPage(
       header: DetailHeader(
-        imageInformation: widget._cafe,
+        imageInformation: widget.viewModel.cafe,
         actions: [
-          FavButton(
-            isFavorite: widget._cafe.isFavorite,
-            onChanged: (val) => widget._cafe.isFavorite = val,
+          ValueListenableBuilder(
+            valueListenable: widget.viewModel.isFavorite,
+            builder: (context, bool value, _) => FavButton(
+              value: value,
+              onChanged: (val) {
+                widget.viewModel.isFavorite.value = val;
+                widget.viewModel.cafe.isFavorite = val;
+              },
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.local_cafe),
             onPressed: () {
               final coffee = CafeCoffee()
-                ..cafeId = widget._cafe.uid
+                ..cafeId = widget.viewModel.cafe.uid
                 ..drinkDay = DateTime.now();
 
               Navigator.pushReplacement<dynamic, dynamic>(
@@ -66,7 +70,7 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
           ),
           IconButton(
             icon: const Icon(Icons.share),
-            onPressed: () {},
+            onPressed: widget.viewModel.share,
           ),
         ],
       ),
@@ -74,39 +78,61 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
         ListTile(
           title: const Text('営業時間'),
           subtitle: TimeRange(
-            initialRange:
-                TimeRangeResult(widget._cafe.startTime, widget._cafe.endTime),
+            initialRange: TimeRangeResult(
+                widget.viewModel.cafe.startTime, widget.viewModel.cafe.endTime),
             firstTime: const TimeOfDay(hour: 0, minute: 0),
             lastTime: const TimeOfDay(hour: 24, minute: 0),
             fromTitle: const Text('始業時間'),
             toTitle: const Text('終業時間'),
             timeStep: 10,
             timeBlock: 10,
-            backgroundColor: Theme.of(context).canvasColor,
+            backgroundColor: Theme
+                .of(context)
+                .canvasColor,
             activeTextStyle: TextStyle(
               color:
-                  (Theme.of(context).primaryColorBrightness == Brightness.dark)
+              (Theme
+                  .of(context)
+                  .primaryColorBrightness == Brightness.dark)
                       ? Colors.white
                       : Colors.black,
             ),
             onRangeCompleted: (res) {
-              widget._cafe.startTime = res.start;
-              if (widget._cafe.startTime.after(widget._cafe.endTime)) {
-                widget._cafe.endTime = widget._cafe.startTime;
-                widget._cafe.endTime.add(minutes: 10);
+              widget.viewModel.cafe.startTime = res.start;
+              widget.viewModel.cafe.endTime = res.end;
+              if (widget.viewModel.cafe.startTime
+                  .after(widget.viewModel.cafe.endTime)) {
+                widget.viewModel.cafe.endTime = widget.viewModel.cafe.startTime;
+                widget.viewModel.cafe.endTime.add(minutes: 10);
               }
             },
           ),
         ),
         const Divider(),
-        DayOfTheWeekListTile(
-          title: const Text('定休日'),
-          value: widget._cafe.regularHoliday,
+        ValueListenableBuilder(
+          valueListenable: widget.viewModel.regularHoliday,
+          builder: (context, List<DayOfTheWeek> value, _) {
+            return DayOfTheWeekListTile(
+              title: const Text('定休日'),
+              value: value,
+              onChanged: (val) {
+                widget.viewModel.regularHoliday.value = val;
+                widget.viewModel.cafe.regularHoliday = val;
+              },
+            );
+          },
         ),
-        MapListTile(
-          title: const Text('場所'),
-          initialValue: widget._cafe.mapUrl,
-          onChanged: (val) => widget._cafe.mapUrl = val,
+        ValueListenableBuilder(
+          valueListenable: widget.viewModel.mapUrl,
+          builder: (context, String value, _) =>
+              MapListTile(
+                title: const Text('場所'),
+                value: value,
+                onChanged: (val) {
+                  widget.viewModel.mapUrl.value = val;
+                  widget.viewModel.cafe.mapUrl = val;
+                },
+              ),
         ),
       ],
       rate: null,
@@ -116,7 +142,7 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
           onTap: () {
             final list = ValueNotifier<List<CafeCoffee>>(null);
             CafeCoffeeDaoImpl()
-                .fetchByCafeId(widget._cafe.uid)
+                .fetchByCafeId(widget.viewModel.cafe.uid)
                 .then((value) => list.value = value);
             Navigator.push<dynamic>(
               context,

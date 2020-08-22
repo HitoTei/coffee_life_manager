@@ -1,6 +1,7 @@
 import 'package:coffee_life_manager/model/cafe_coffee.dart';
 import 'package:coffee_life_manager/repository/model/dao/cafe_coffee_dao_impl.dart';
 import 'package:coffee_life_manager/repository/model/dao/cafe_dao_impl.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/cafe_coffee_detail_page/cafe_coffee_detail_page_viewmodel.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail_page/cafe_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/datetime_list_tile.dart';
@@ -13,9 +14,10 @@ import 'package:flutter/material.dart';
 import '../detail_page.dart';
 
 class CafeCoffeeDetailPage extends StatefulWidget {
-  const CafeCoffeeDetailPage(this._coffee);
+  CafeCoffeeDetailPage(CafeCoffee coffee)
+      : viewModel = CafeCoffeeDetailPageViewModel(coffee, CafeCoffeeDaoImpl());
 
-  final CafeCoffee _coffee;
+  final CafeCoffeeDetailPageViewModel viewModel;
 
   @override
   _CafeCoffeeDetailPageState createState() => _CafeCoffeeDetailPageState();
@@ -23,10 +25,14 @@ class CafeCoffeeDetailPage extends StatefulWidget {
 
 class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
   @override
+  void initState() {
+    widget.viewModel.onInitState();
+    super.initState();
+  }
+
+  @override
   void dispose() {
-    CafeCoffeeDaoImpl()
-        .insert(widget._coffee)
-        .then((value) => widget._coffee.uid = value);
+    widget.viewModel.onDispose();
     super.dispose();
   }
 
@@ -34,39 +40,60 @@ class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
   Widget build(BuildContext context) {
     return DetailPage(
       header: DetailHeader(
-        imageInformation: widget._coffee,
+        imageInformation: widget.viewModel.coffee,
         actions: [
-          FavButton(
-            isFavorite: widget._coffee.isFavorite,
-            onChanged: (val) => widget._coffee.isFavorite = val,
+          ValueListenableBuilder(
+            valueListenable: widget.viewModel.isFavorite,
+            builder: (context, bool value, _) => FavButton(
+              value: value,
+              onChanged: (val) {
+                widget.viewModel.isFavorite.value = val;
+                widget.viewModel.coffee.isFavorite = val;
+              },
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.share),
-            onPressed: () {},
+            onPressed: widget.viewModel.share,
           ),
         ],
       ),
       detailList: [
-        IntListTile(
-          title: const Text('値段'),
-          unit: '円',
-          initialValue: widget._coffee.price,
-          onChanged: (val) => widget._coffee.price = val,
+        ValueListenableBuilder(
+          valueListenable: widget.viewModel.price,
+          builder: (context, int value, _) =>
+              IntListTile(
+                title: const Text('値段'),
+                unit: '円',
+                value: value,
+                onChanged: (val) {
+                  widget.viewModel.price.value = val;
+                  widget.viewModel.coffee.price = val;
+                },
+              ),
         ),
-        DateTimeListTile(
-          title: const Text('飲んだ日'),
-          initialValue: widget._coffee.drinkDay,
-          onChanged: (val) => widget._coffee.drinkDay,
+        ValueListenableBuilder(
+          valueListenable: widget.viewModel.drinkDay,
+          builder: (context, DateTime value, _) =>
+              DateTimeListTile(
+                title: const Text('飲んだ日'),
+                value: value,
+                onChanged: (val) {
+                  widget.viewModel.drinkDay.value = value;
+                  widget.viewModel.coffee.drinkDay = value;
+                },
+              ),
         ),
       ],
       rate: RateWidget(
-        widget._coffee.rate,
+        widget.viewModel.coffee.rate,
       ),
       links: [
         ListTile(
           title: const Text('カフェ'),
           onTap: () async {
-            final cafe = await CafeDaoImpl().fetchByUid(widget._coffee.cafeId);
+            final cafe =
+            await CafeDaoImpl().fetchByUid(widget.viewModel.coffee.cafeId);
             await Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
@@ -77,12 +104,12 @@ class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
         ),
       ],
       memo: TextFormField(
-        initialValue: widget._coffee.memo,
+        initialValue: widget.viewModel.coffee.memo,
         decoration: const InputDecoration(
           labelText: 'メモ',
         ),
         onChanged: (val) {
-          widget._coffee.memo = val;
+          widget.viewModel.coffee.memo = val;
         },
         maxLength: 50,
         maxLines: 5,
