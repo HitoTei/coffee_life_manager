@@ -33,9 +33,7 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
 
   @override
   void dispose() {
-    CafeDaoImpl()
-        .insert(widget._cafe)
-        .then((value) => widget._cafe.uid = value);
+    CafeDaoImpl().insert(widget._cafe);
     super.dispose();
   }
 
@@ -45,9 +43,11 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
       header: DetailHeader(
         imageInformation: widget._cafe,
         actions: [
-          FavButton(
-            isFavorite: widget._cafe.isFavorite,
-            onChanged: (val) => widget._cafe.isFavorite = val,
+          Provider(
+            create: (_) => widget._cafe.isFavorite,
+            child: FavButton(
+              onChanged: (val) => widget._cafe.isFavorite = val,
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.local_cafe),
@@ -91,6 +91,7 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
             ),
             onRangeCompleted: (res) {
               widget._cafe.startTime = res.start;
+              widget._cafe.endTime = res.end;
               if (widget._cafe.startTime.after(widget._cafe.endTime)) {
                 widget._cafe.endTime = widget._cafe.startTime;
                 widget._cafe.endTime.add(minutes: 10);
