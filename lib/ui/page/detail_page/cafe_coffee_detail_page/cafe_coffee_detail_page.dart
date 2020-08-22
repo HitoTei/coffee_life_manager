@@ -10,6 +10,7 @@ import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget/rate_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../detail_page.dart';
 
@@ -91,13 +92,9 @@ class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
           title: const Text('カフェ'),
           onTap: () async {
             final cafe =
-            await CafeDaoImpl().fetchByUid(widget.viewModel.coffee.cafeId);
+                await CafeDaoImpl().fetchByUid(widget.viewModel.coffee.cafeId);
             if (cafe == null) {
-              Scaffold.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('そのカフェは削除されました'),
-                ),
-              );
+              await Fluttertoast.showToast(msg: 'そのカフェは削除されました');
               return;
             }
             await Navigator.push<dynamic>(

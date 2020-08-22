@@ -15,6 +15,7 @@ import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/
 import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/image_card_widget.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget/rate_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../detail_page.dart';
 
@@ -78,14 +79,13 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.grind,
-          builder: (context, Grind value, _) =>
-              GrindListTile(
-                value: value,
-                onChanged: (val) {
-                  widget.viewModel.grind.value = val;
-                  widget.viewModel.coffee.grind = val;
-                },
-              ),
+          builder: (context, Grind value, _) => GrindListTile(
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.grind.value = val;
+              widget.viewModel.coffee.grind = val;
+            },
+          ),
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.drip,
@@ -133,11 +133,7 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
             await BeanDaoImpl().fetchByUid(widget.viewModel.coffee.beanId);
 
             if (bean == null) {
-              Scaffold.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('その豆は削除されました'),
-                ),
-              );
+              await Fluttertoast.showToast(msg: 'その豆は削除されました');
               return;
             }
 
