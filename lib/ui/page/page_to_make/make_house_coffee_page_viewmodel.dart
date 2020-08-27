@@ -36,9 +36,13 @@ class MakeHouseCoffeePageViewModel {
     coffee.grind = val;
   }
 
-  void cupChanged(int val) {
-    cup.value = val;
-    coffee.numOfCups = cup.value;
+  bool cupChanged(int val) {
+    if (val * bean.oneCupPerGram <= bean.remainingAmount) {
+      cup.value = val;
+      coffee.numOfCups = cup.value;
+      return true;
+    }
+    return false;
   }
 
   void cupIncrement() {

@@ -72,29 +72,52 @@ class _BeanAmountWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<MakeHouseCoffeePageViewModel>(context);
     final cup = Provider.of<int>(context);
-    return Center(
-      child: Row(
-        children: [
-          IconButton(
-              icon: const Icon(Icons.arrow_drop_up),
-              onPressed: viewModel.cupIncrement),
-          Column(
-            children: [
-              IntListTile(
-                title: Text('$cup杯(${cup * viewModel.bean.oneCupPerGram}g)'),
-                unit: 'g (残量)',
-                value: viewModel.bean.remainingAmount -
-                    cup * viewModel.bean.oneCupPerGram,
-                onChanged: viewModel.cupChanged,
-              ),
-            ],
+
+    final beanAmount = cup * viewModel.bean.oneCupPerGram;
+    return Row(
+      children: [
+        Expanded(
+          child: IconButton(
+            icon: const Icon(Icons.arrow_drop_up),
+            onPressed: viewModel.cupIncrement,
           ),
-          IconButton(
+        ),
+        Expanded(
+          flex: 3,
+          child: IntListTile(
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '使用できる豆の量 ${viewModel.bean.remainingAmount}g',
+                ),
+                Text(
+                  '使用する豆の量 $beanAmount g ',
+                ),
+              ],
+            ),
+            unit: '杯',
+            value: cup,
+            onChanged: (val) {
+              if (!viewModel.cupChanged(val)) {
+                Scaffold.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      '豆の量が足りません',
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+        ),
+        Expanded(
+          child: IconButton(
             icon: const Icon(Icons.arrow_drop_down),
             onPressed: viewModel.cupDecrement,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

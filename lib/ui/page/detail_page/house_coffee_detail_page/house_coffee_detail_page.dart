@@ -99,14 +99,13 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.roast,
-          builder: (context, Roast value, _) =>
-              RoastListTile(
-                value: value,
-                onChanged: (val) {
-                  widget.viewModel.roast.value = val;
-                  widget.viewModel.coffee.roast = val;
-                },
-              ),
+          builder: (context, Roast value, _) => RoastListTile(
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.roast.value = val;
+              widget.viewModel.coffee.roast = val;
+            },
+          ),
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.drinkDay,
