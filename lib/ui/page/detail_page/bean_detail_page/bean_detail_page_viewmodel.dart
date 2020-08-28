@@ -36,5 +36,40 @@ class BeanDetailPageViewModel {
   final ValueNotifier<DateTime> openTime;
   final ValueNotifier<Roast> roast;
 
+  void isFavoriteChanged(bool val) {
+    isFavorite.value = val;
+    bean.isFavorite = val;
+  }
+
+  void remainingAmountChanged(int val) {
+    remainingAmount.value = val;
+    bean.remainingAmount = val;
+  }
+
+  void oneCupPerGramChanged(int val) {
+    oneCupPerGram.value = val;
+    bean.oneCupPerGram = val;
+  }
+
+  void priceChanged(int val) {
+    price.value = val;
+    bean.price = val;
+  }
+
+  void freshnessDateChanged(DateTime val) {
+    freshnessDate.value = val;
+    bean.freshnessDate = val;
+  }
+
+  void openTimeChanged(DateTime val) {
+    openTime.value = val;
+    bean.openTime = val;
+  }
+
+  void roastChanged(Roast val) {
+    roast.value = val;
+    bean.roast = val;
+  }
+
   void share() {}
 }

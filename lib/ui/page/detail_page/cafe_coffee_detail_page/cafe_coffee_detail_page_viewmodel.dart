@@ -24,5 +24,20 @@ class CafeCoffeeDetailPageViewModel {
   final ValueNotifier<int> price;
   final ValueNotifier<DateTime> drinkDay;
 
+  void isFavoriteChanged(bool val) {
+    isFavorite.value = val;
+    coffee.isFavorite = val;
+  }
+
+  void priceChanged(int val) {
+    price.value = val;
+    coffee.price = val;
+  }
+
+  void drinkDayChanged(DateTime val) {
+    drinkDay.value = val;
+    coffee.drinkDay = val;
+  }
+
   void share() {}
 }
