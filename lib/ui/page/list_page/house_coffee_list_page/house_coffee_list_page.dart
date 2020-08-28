@@ -21,6 +21,13 @@ class HouseCoffeeListPage extends StatelessWidget {
         child: CircularProgressIndicator(),
       );
     }
+    if (coffeeList.isEmpty) {
+      return const Scaffold(
+        body: Center(
+          child: Text('要素がありません'),
+        ),
+      );
+    }
 
     return Scaffold(
       body: ListView(

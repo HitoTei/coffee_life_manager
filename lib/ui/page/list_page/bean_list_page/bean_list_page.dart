@@ -21,6 +21,14 @@ class BeanListPage extends StatelessWidget {
       );
     }
 
+    if (beanList.isEmpty) {
+      return const Scaffold(
+        body: Center(
+          child: Text('要素がありません'),
+        ),
+      );
+    }
+
     return Scaffold(
       body: ListView(
         children: [

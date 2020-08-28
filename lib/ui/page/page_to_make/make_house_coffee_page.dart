@@ -1,58 +1,61 @@
 import 'package:coffee_life_manager/model/bean.dart';
-import 'package:coffee_life_manager/model/house_coffee.dart';
+import 'package:coffee_life_manager/model/enums/drip.dart';
+import 'package:coffee_life_manager/model/enums/grind.dart';
 import 'package:coffee_life_manager/repository/model/dao/bean_dao_impl.dart';
 import 'package:coffee_life_manager/repository/model/dao/house_coffee_dao_impl.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail_page/house_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/drip_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/grind_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/int_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/page_to_make/make_house_coffee_page_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MakeHouseCoffeePage extends StatelessWidget {
-  const MakeHouseCoffeePage(this._bean);
-
-  final Bean _bean;
+  MakeHouseCoffeePage(Bean bean)
+      : viewModel = MakeHouseCoffeePageViewModel(
+            bean, BeanDaoImpl(), HouseCoffeeDaoImpl());
+  final MakeHouseCoffeePageViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
-    final coffee = HouseCoffee()
-      ..roast = _bean.roast
-      ..beanName = _bean.beanName
-      ..beanId = _bean.uid
-      ..drinkDay = DateTime.now();
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(_bean.beanName),
+        title: Text(viewModel.bean.beanName),
       ),
       body: ListView(
         children: [
-          Provider.value(
-              value: _bean,
-              child: _BeanAmountWidget((val) => coffee.numOfCups = val)),
-          const Divider(),
-          DripListTile(
-            value: coffee.drip,
-            onChanged: (val) => coffee.drip = val,
+          MultiProvider(
+            providers: [
+              Provider.value(value: viewModel),
+              ValueListenableProvider.value(value: viewModel.cup),
+            ],
+            child: _BeanAmountWidget(),
           ),
-          GrindListTile(
-            value: coffee.grind,
-            onChanged: (val) => coffee.grind = val,
+          const Divider(),
+          ValueListenableBuilder(
+            valueListenable: viewModel.drip,
+            builder: (context, Drip value, _) => DripListTile(
+              value: value,
+              onChanged: viewModel.dripChanged,
+            ),
+          ),
+          ValueListenableBuilder(
+            valueListenable: viewModel.grind,
+            builder: (context, Grind value, _) => GrindListTile(
+              value: value,
+              onChanged: viewModel.grindChanged,
+            ),
           ),
           FlatButton(
             child: const Text('決定'),
             onPressed: () {
-              _bean.remainingAmount -= coffee.numOfCups * _bean.oneCupPerGram;
-              BeanDaoImpl().update(_bean);
-              HouseCoffeeDaoImpl()
-                  .insert(coffee)
-                  .then((value) => coffee.uid = value);
-
+              viewModel.save();
               Navigator.pushReplacement<dynamic, dynamic>(
                 context,
                 MaterialPageRoute<dynamic>(
                   builder: (_) {
-                    return HouseCoffeeDetailPage(coffee);
+                    return HouseCoffeeDetailPage(viewModel.coffee);
                   },
                 ),
               );
@@ -64,51 +67,57 @@ class MakeHouseCoffeePage extends StatelessWidget {
   }
 }
 
-class _BeanAmountWidget extends StatefulWidget {
-  const _BeanAmountWidget(this.onChanged);
-
-  @override
-  __BeanAmountWidgetState createState() => __BeanAmountWidgetState();
-  final Function(int) onChanged;
-}
-
-class __BeanAmountWidgetState extends State<_BeanAmountWidget> {
-  int cup = 1;
-
+class _BeanAmountWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final bean = Provider.of<Bean>(context);
-    return Center(
-      child: Row(
-        children: [
-          IconButton(
+    final viewModel = Provider.of<MakeHouseCoffeePageViewModel>(context);
+    final cup = Provider.of<int>(context);
+
+    final beanAmount = cup * viewModel.bean.oneCupPerGram;
+    return Row(
+      children: [
+        Expanded(
+          child: IconButton(
             icon: const Icon(Icons.arrow_drop_up),
-            onPressed: () {
-              if ((cup + 1) * bean.oneCupPerGram > bean.remainingAmount) return;
-              setState(() => cup++);
-              widget.onChanged(cup);
+            onPressed: viewModel.cupIncrement,
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: IntListTile(
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '使用できる豆の量 ${viewModel.bean.remainingAmount}g',
+                ),
+                Text(
+                  '使用する豆の量 $beanAmount g ',
+                ),
+              ],
+            ),
+            unit: '杯',
+            value: cup,
+            onChanged: (val) {
+              if (!viewModel.cupChanged(val)) {
+                Scaffold.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      '豆の量が足りません',
+                    ),
+                  ),
+                );
+              }
             },
           ),
-          Column(
-            children: [
-              Text(
-                '$cup杯(${cup * bean.oneCupPerGram}g)',
-              ),
-              Text(
-                '残量: ${bean.remainingAmount - cup * bean.oneCupPerGram}g',
-              ),
-            ],
-          ),
-          IconButton(
+        ),
+        Expanded(
+          child: IconButton(
             icon: const Icon(Icons.arrow_drop_down),
-            onPressed: () {
-              if (cup <= 1) return;
-              setState(() => cup--);
-              widget.onChanged(cup);
-            },
+            onPressed: viewModel.cupDecrement,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

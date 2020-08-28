@@ -15,6 +15,7 @@ import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/
 import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/image_card_widget.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget/rate_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../detail_page.dart';
 
@@ -49,14 +50,13 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
         actions: [
           ValueListenableBuilder(
             valueListenable: widget.viewModel.isFavorite,
-            builder: (context, bool value, _) =>
-                FavButton(
-                  value: value,
-                  onChanged: (val) {
-                    widget.viewModel.isFavorite.value = val;
-                    widget.viewModel.coffee.isFavorite = val;
-                  },
-                ),
+            builder: (context, bool value, _) => FavButton(
+              value: value,
+              onChanged: (val) {
+                widget.viewModel.isFavorite.value = val;
+                widget.viewModel.coffee.isFavorite = val;
+              },
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.share),
@@ -67,49 +67,45 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
       detailList: [
         ValueListenableBuilder(
           valueListenable: widget.viewModel.numOfCups,
-          builder: (context, int value, _) =>
-              IntListTile(
-                title: const Text('淹れた量'),
-                unit: '杯',
-                value: value,
-                onChanged: (val) {
-                  widget.viewModel.numOfCups.value = val;
-                  widget.viewModel.coffee.numOfCups = val;
-                },
-              ),
+          builder: (context, int value, _) => IntListTile(
+            title: const Text('淹れた量'),
+            unit: '杯',
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.numOfCups.value = val;
+              widget.viewModel.coffee.numOfCups = val;
+            },
+          ),
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.grind,
-          builder: (context, Grind value, _) =>
-              GrindListTile(
-                value: value,
-                onChanged: (val) {
-                  widget.viewModel.grind.value = val;
-                  widget.viewModel.coffee.grind = val;
-                },
-              ),
+          builder: (context, Grind value, _) => GrindListTile(
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.grind.value = val;
+              widget.viewModel.coffee.grind = val;
+            },
+          ),
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.drip,
-          builder: (context, Drip value, _) =>
-              DripListTile(
-                value: value,
-                onChanged: (val) {
-                  widget.viewModel.drip.value = val;
-                  widget.viewModel.coffee.drip = val;
-                },
-              ),
+          builder: (context, Drip value, _) => DripListTile(
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.drip.value = val;
+              widget.viewModel.coffee.drip = val;
+            },
+          ),
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.roast,
-          builder: (context, Roast value, _) =>
-              RoastListTile(
-                value: value,
-                onChanged: (val) {
-                  widget.viewModel.roast.value = val;
-                  widget.viewModel.coffee.roast = val;
-                },
-              ),
+          builder: (context, Roast value, _) => RoastListTile(
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.roast.value = val;
+              widget.viewModel.coffee.roast = val;
+            },
+          ),
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.drinkDay,
@@ -133,6 +129,12 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
           onTap: () async {
             final bean =
             await BeanDaoImpl().fetchByUid(widget.viewModel.coffee.beanId);
+
+            if (bean == null) {
+              await Fluttertoast.showToast(msg: 'その豆は削除されました');
+              return;
+            }
+
             await Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(

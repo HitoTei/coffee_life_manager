@@ -10,6 +10,7 @@ import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget/rate_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../detail_page.dart';
 
@@ -61,28 +62,26 @@ class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
       detailList: [
         ValueListenableBuilder(
           valueListenable: widget.viewModel.price,
-          builder: (context, int value, _) =>
-              IntListTile(
-                title: const Text('値段'),
-                unit: '円',
-                value: value,
-                onChanged: (val) {
-                  widget.viewModel.price.value = val;
-                  widget.viewModel.coffee.price = val;
-                },
-              ),
+          builder: (context, int value, _) => IntListTile(
+            title: const Text('値段'),
+            unit: '円',
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.price.value = val;
+              widget.viewModel.coffee.price = val;
+            },
+          ),
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.drinkDay,
-          builder: (context, DateTime value, _) =>
-              DateTimeListTile(
-                title: const Text('飲んだ日'),
-                value: value,
-                onChanged: (val) {
-                  widget.viewModel.drinkDay.value = value;
-                  widget.viewModel.coffee.drinkDay = value;
-                },
-              ),
+          builder: (context, DateTime value, _) => DateTimeListTile(
+            title: const Text('飲んだ日'),
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.drinkDay.value = value;
+              widget.viewModel.coffee.drinkDay = value;
+            },
+          ),
         ),
       ],
       rate: RateWidget(
@@ -93,7 +92,11 @@ class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
           title: const Text('カフェ'),
           onTap: () async {
             final cafe =
-            await CafeDaoImpl().fetchByUid(widget.viewModel.coffee.cafeId);
+                await CafeDaoImpl().fetchByUid(widget.viewModel.coffee.cafeId);
+            if (cafe == null) {
+              await Fluttertoast.showToast(msg: 'そのカフェは削除されました');
+              return;
+            }
             await Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(

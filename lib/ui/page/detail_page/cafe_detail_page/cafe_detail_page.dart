@@ -86,14 +86,10 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
             toTitle: const Text('終業時間'),
             timeStep: 10,
             timeBlock: 10,
-            backgroundColor: Theme
-                .of(context)
-                .canvasColor,
+            backgroundColor: Theme.of(context).canvasColor,
             activeTextStyle: TextStyle(
               color:
-              (Theme
-                  .of(context)
-                  .primaryColorBrightness == Brightness.dark)
+                  (Theme.of(context).primaryColorBrightness == Brightness.dark)
                       ? Colors.white
                       : Colors.black,
             ),
@@ -124,15 +120,14 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.mapUrl,
-          builder: (context, String value, _) =>
-              MapListTile(
-                title: const Text('場所'),
-                value: value,
-                onChanged: (val) {
-                  widget.viewModel.mapUrl.value = val;
-                  widget.viewModel.cafe.mapUrl = val;
-                },
-              ),
+          builder: (context, String value, _) => MapListTile(
+            title: const Text('場所'),
+            value: value,
+            onChanged: (val) {
+              widget.viewModel.mapUrl.value = val;
+              widget.viewModel.cafe.mapUrl = val;
+            },
+          ),
         ),
       ],
       rate: null,
@@ -154,10 +149,6 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
               ),
             );
           },
-        ),
-        ListTile(
-          title: const Text('購入したコーヒー豆'),
-          onTap: () {},
         ),
       ],
       memo: Container(),
