@@ -91,6 +91,7 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
             unit: 'g',
             value: value,
             onChanged: widget.viewModel.oneCupPerGramChanged,
+            digit: 2,
           ),
         ),
         ValueListenableBuilder(
