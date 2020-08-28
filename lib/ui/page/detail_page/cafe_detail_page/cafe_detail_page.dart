@@ -47,10 +47,7 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
             valueListenable: widget.viewModel.isFavorite,
             builder: (context, bool value, _) => FavButton(
               value: value,
-              onChanged: (val) {
-                widget.viewModel.isFavorite.value = val;
-                widget.viewModel.cafe.isFavorite = val;
-              },
+              onChanged: widget.viewModel.isFavoriteChanged,
             ),
           ),
           IconButton(
@@ -93,15 +90,7 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
                       ? Colors.white
                       : Colors.black,
             ),
-            onRangeCompleted: (res) {
-              widget.viewModel.cafe.startTime = res.start;
-              widget.viewModel.cafe.endTime = res.end;
-              if (widget.viewModel.cafe.startTime
-                  .after(widget.viewModel.cafe.endTime)) {
-                widget.viewModel.cafe.endTime = widget.viewModel.cafe.startTime;
-                widget.viewModel.cafe.endTime.add(minutes: 10);
-              }
-            },
+            onRangeCompleted: widget.viewModel.onRangeCompleted,
           ),
         ),
         const Divider(),
@@ -111,10 +100,7 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
             return DayOfTheWeekListTile(
               title: const Text('定休日'),
               value: value,
-              onChanged: (val) {
-                widget.viewModel.regularHoliday.value = val;
-                widget.viewModel.cafe.regularHoliday = val;
-              },
+              onChanged: widget.viewModel.regularHolidayChanged,
             );
           },
         ),
@@ -123,10 +109,7 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
           builder: (context, String value, _) => MapListTile(
             title: const Text('場所'),
             value: value,
-            onChanged: (val) {
-              widget.viewModel.mapUrl.value = val;
-              widget.viewModel.cafe.mapUrl = val;
-            },
+            onChanged: widget.viewModel.mapUrlChanged,
           ),
         ),
       ],

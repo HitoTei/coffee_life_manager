@@ -34,5 +34,32 @@ class HouseCoffeeDetailPageViewModel {
   final ValueNotifier<Grind> grind;
   final ValueNotifier<Drip> drip;
 
+  void isFavoriteChanged(bool val) {
+    isFavorite.value = val;
+    coffee.isFavorite = val;
+  }
+
+  void drinkDayChanged(DateTime val) {}
+
+  void numOfCupsChanged(int val) {
+    numOfCups.value = val;
+    coffee.numOfCups = val;
+  }
+
+  void roastChanged(Roast val) {
+    roast.value = val;
+    coffee.roast = val;
+  }
+
+  void grindChanged(Grind val) {
+    grind.value = val;
+    coffee.grind = val;
+  }
+
+  void dripChanged(Drip val) {
+    drip.value = val;
+    coffee.drip = val;
+  }
+
   void share() {}
 }

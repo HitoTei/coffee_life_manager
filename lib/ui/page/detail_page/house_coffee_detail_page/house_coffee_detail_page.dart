@@ -52,10 +52,7 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
             valueListenable: widget.viewModel.isFavorite,
             builder: (context, bool value, _) => FavButton(
               value: value,
-              onChanged: (val) {
-                widget.viewModel.isFavorite.value = val;
-                widget.viewModel.coffee.isFavorite = val;
-              },
+              onChanged: widget.viewModel.isFavoriteChanged,
             ),
           ),
           IconButton(
@@ -71,40 +68,26 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
             title: const Text('淹れた量'),
             unit: '杯',
             value: value,
-            onChanged: (val) {
-              widget.viewModel.numOfCups.value = val;
-              widget.viewModel.coffee.numOfCups = val;
-            },
+            onChanged: widget.viewModel.numOfCupsChanged,
           ),
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.grind,
           builder: (context, Grind value, _) => GrindListTile(
             value: value,
-            onChanged: (val) {
-              widget.viewModel.grind.value = val;
-              widget.viewModel.coffee.grind = val;
-            },
+            onChanged: widget.viewModel.grindChanged,
           ),
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.drip,
           builder: (context, Drip value, _) => DripListTile(
-            value: value,
-            onChanged: (val) {
-              widget.viewModel.drip.value = val;
-              widget.viewModel.coffee.drip = val;
-            },
-          ),
+              value: value, onChanged: widget.viewModel.dripChanged),
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.roast,
           builder: (context, Roast value, _) => RoastListTile(
             value: value,
-            onChanged: (val) {
-              widget.viewModel.roast.value = val;
-              widget.viewModel.coffee.roast = val;
-            },
+            onChanged: widget.viewModel.roastChanged,
           ),
         ),
         ValueListenableBuilder(
@@ -113,10 +96,7 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
               DateTimeListTile(
                 title: const Text('淹れた日'),
                 value: value,
-                onChanged: (val) {
-                  widget.viewModel.drinkDay.value = val;
-                  widget.viewModel.coffee.drinkDay = val;
-                },
+                onChanged: widget.viewModel.drinkDayChanged,
               ),
         ),
       ],

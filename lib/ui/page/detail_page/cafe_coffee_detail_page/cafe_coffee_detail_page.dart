@@ -47,10 +47,7 @@ class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
             valueListenable: widget.viewModel.isFavorite,
             builder: (context, bool value, _) => FavButton(
               value: value,
-              onChanged: (val) {
-                widget.viewModel.isFavorite.value = val;
-                widget.viewModel.coffee.isFavorite = val;
-              },
+              onChanged: widget.viewModel.isFavoriteChanged,
             ),
           ),
           IconButton(
@@ -66,10 +63,7 @@ class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
             title: const Text('値段'),
             unit: '円',
             value: value,
-            onChanged: (val) {
-              widget.viewModel.price.value = val;
-              widget.viewModel.coffee.price = val;
-            },
+            onChanged: widget.viewModel.priceChanged,
           ),
         ),
         ValueListenableBuilder(
@@ -77,10 +71,7 @@ class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
           builder: (context, DateTime value, _) => DateTimeListTile(
             title: const Text('飲んだ日'),
             value: value,
-            onChanged: (val) {
-              widget.viewModel.drinkDay.value = value;
-              widget.viewModel.coffee.drinkDay = value;
-            },
+            onChanged: widget.viewModel.drinkDayChanged,
           ),
         ),
       ],

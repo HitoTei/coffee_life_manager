@@ -50,10 +50,7 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
             valueListenable: widget.viewModel.isFavorite,
             builder: (context, bool value, _) => FavButton(
               value: value,
-              onChanged: (val) {
-                widget.viewModel.isFavorite.value = val;
-                widget.viewModel.bean.isFavorite = val;
-              },
+              onChanged: widget.viewModel.isFavoriteChanged,
             ),
           ),
           IconButton(
@@ -84,10 +81,7 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
             title: const Text('残量'),
             unit: 'g',
             value: value,
-            onChanged: (val) {
-              widget.viewModel.remainingAmount.value = val;
-              widget.viewModel.bean.remainingAmount = val;
-            },
+            onChanged: widget.viewModel.remainingAmountChanged,
           ),
         ),
         ValueListenableBuilder(
@@ -96,10 +90,7 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
             title: const Text('一杯当たり'),
             unit: 'g',
             value: value,
-            onChanged: (val) {
-              widget.viewModel.oneCupPerGram.value = val;
-              widget.viewModel.bean.oneCupPerGram = val;
-            },
+            onChanged: widget.viewModel.oneCupPerGramChanged,
           ),
         ),
         ValueListenableBuilder(
@@ -108,20 +99,14 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
             title: const Text('値段'),
             unit: '円',
             value: value,
-            onChanged: (val) {
-              widget.viewModel.price.value = val;
-              widget.viewModel.bean.price = val;
-            },
+            onChanged: widget.viewModel.priceChanged,
           ),
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.roast,
           builder: (context, Roast value, _) => RoastListTile(
             value: value,
-            onChanged: (val) {
-              widget.viewModel.roast.value = val;
-              widget.viewModel.bean.roast = val;
-            },
+            onChanged: widget.viewModel.roastChanged,
           ),
         ),
         ValueListenableBuilder(
@@ -129,10 +114,7 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
           builder: (context, DateTime value, _) => DateTimeListTile(
             title: const Text('賞味期限'),
             value: value,
-            onChanged: (val) {
-              widget.viewModel.freshnessDate.value = val;
-              widget.viewModel.bean.freshnessDate = val;
-            },
+            onChanged: widget.viewModel.freshnessDateChanged,
           ),
         ),
         ValueListenableBuilder(
@@ -140,10 +122,7 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
           builder: (context, DateTime value, _) => DateTimeListTile(
             title: const Text('開封日時'),
             value: value,
-            onChanged: (val) {
-              widget.viewModel.openTime.value = val;
-              widget.viewModel.bean.openTime = val;
-            },
+            onChanged: widget.viewModel.openTimeChanged,
           ),
         ),
       ],
