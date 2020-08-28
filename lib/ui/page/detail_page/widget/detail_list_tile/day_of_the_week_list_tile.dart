@@ -43,7 +43,10 @@ class DayOfTheWeekListTile extends StatelessWidget {
           builder: (_) {
             return AlertDialog(
               title: title,
-              content: _DayOfTheWeekAlertDialogContent(checkList),
+              content: SizedBox(
+                width: 70,
+                child: _DayOfTheWeekAlertDialogContent(checkList),
+              ),
               actions: [
                 FlatButton(
                   child: const Text('Cancel'),
