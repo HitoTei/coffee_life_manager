@@ -6,7 +6,7 @@ import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail_page/cafe_de
 import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/datetime_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/int_list_tile.dart';
-import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/image_card_widget.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/detail_header.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget/rate_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

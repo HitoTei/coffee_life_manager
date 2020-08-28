@@ -9,7 +9,7 @@ import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/datetime_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/int_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/roast_list_tile.dart';
-import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/image_card_widget.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/detail_header.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget/rate_widget.dart';
 import 'package:coffee_life_manager/ui/page/list_page/house_coffee_list_page/house_coffee_list_page.dart';
 import 'package:coffee_life_manager/ui/page/page_to_make/make_house_coffee_page.dart';

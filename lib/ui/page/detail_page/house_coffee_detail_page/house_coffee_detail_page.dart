@@ -12,7 +12,7 @@ import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/grind_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/int_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/roast_list_tile.dart';
-import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/image_card_widget.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/detail_header.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget/rate_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -92,12 +92,11 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
         ),
         ValueListenableBuilder(
           valueListenable: widget.viewModel.drinkDay,
-          builder: (context, DateTime value, _) =>
-              DateTimeListTile(
-                title: const Text('淹れた日'),
-                value: value,
-                onChanged: widget.viewModel.drinkDayChanged,
-              ),
+          builder: (context, DateTime value, _) => DateTimeListTile(
+            title: const Text('淹れた日'),
+            value: value,
+            onChanged: widget.viewModel.drinkDayChanged,
+          ),
         ),
       ],
       rate: RateWidget(
@@ -108,7 +107,7 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
           title: const Text('使用した豆'),
           onTap: () async {
             final bean =
-            await BeanDaoImpl().fetchByUid(widget.viewModel.coffee.beanId);
+                await BeanDaoImpl().fetchByUid(widget.viewModel.coffee.beanId);
 
             if (bean == null) {
               await Fluttertoast.showToast(msg: 'その豆は削除されました');

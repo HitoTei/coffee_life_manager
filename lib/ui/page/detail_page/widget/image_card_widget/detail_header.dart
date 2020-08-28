@@ -22,20 +22,25 @@ class DetailHeader extends StatelessWidget {
     _editingController.addListener(
       () => viewModel.information.setTitle(_editingController.text),
     );
+    final backgroundColor = Theme.of(context).primaryColor.withAlpha(60);
 
     return SliverAppBar(
       elevation: 5,
       expandedHeight: 250,
-      actions: actions,
+      actions: [
+        for (final action in actions)
+          Container(
+            color: backgroundColor,
+            child: action,
+          )
+      ],
       pinned: true,
-      title: SizedBox(
-        child: TextField(
-          decoration:
-              const InputDecoration(fillColor: Colors.white30, filled: true),
-          controller: _editingController,
-        ),
+      title: TextField(
+        decoration: InputDecoration(filled: true, fillColor: backgroundColor),
+        controller: _editingController,
       ),
       flexibleSpace: FlexibleSpaceBar(
+        centerTitle: true,
         background: Provider.value(
           value: viewModel,
           child: ChangeableImage(),
