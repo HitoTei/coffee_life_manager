@@ -9,11 +9,11 @@ import 'package:coffee_life_manager/ui/page/detail_page/detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/day_of_the_week_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/map_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/time_of_day_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/image_card_widget/detail_header.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_coffee_list_page/cafe_coffee_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:time_range/time_range.dart';
 
 class CafeDetailPage extends StatefulWidget {
   CafeDetailPage(Cafe cafe)
@@ -72,25 +72,20 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
         ],
       ),
       detailList: [
-        ListTile(
-          title: const Text('営業時間'),
-          subtitle: TimeRange(
-            initialRange: TimeRangeResult(
-                widget.viewModel.cafe.startTime, widget.viewModel.cafe.endTime),
-            firstTime: const TimeOfDay(hour: 0, minute: 0),
-            lastTime: const TimeOfDay(hour: 24, minute: 0),
-            fromTitle: const Text('始業時間'),
-            toTitle: const Text('終業時間'),
-            timeStep: 10,
-            timeBlock: 10,
-            backgroundColor: Theme.of(context).canvasColor,
-            activeTextStyle: TextStyle(
-              color:
-                  (Theme.of(context).primaryColorBrightness == Brightness.dark)
-                      ? Colors.white
-                      : Colors.black,
-            ),
-            onRangeCompleted: widget.viewModel.onRangeCompleted,
+        ValueListenableBuilder(
+          valueListenable: widget.viewModel.startTime,
+          builder: (context, TimeOfDay value, _) => TimeOfDayListTile(
+            title: '始業時間',
+            value: value,
+            onChanged: widget.viewModel.startTimeChanged,
+          ),
+        ),
+        ValueListenableBuilder(
+          valueListenable: widget.viewModel.endTime,
+          builder: (context, TimeOfDay value, _) => TimeOfDayListTile(
+            title: '終業時間',
+            value: value,
+            onChanged: widget.viewModel.endTimeChanged,
           ),
         ),
         const Divider(),
