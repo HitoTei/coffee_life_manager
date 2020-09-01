@@ -9,8 +9,8 @@ import 'package:provider/provider.dart';
 
 class HomeCoffee extends StatefulWidget {
   static const _tab = [
-    Tab(text: '家'),
-    Tab(text: 'カフェ'),
+    Tab(text: '家コーヒー'),
+    Tab(text: 'カフェコーヒー'),
   ];
 
   @override
@@ -25,18 +25,27 @@ class _HomeCoffeeState extends State<HomeCoffee> {
   CafeCoffeeDao _cafeCoffeeDao;
   HouseCoffeeDao _houseCoffeeDao;
 
-  @override
-  void initState() {
-    _cafeCoffeeDao = Provider.of<CafeCoffeeDao>(context, listen: false);
-    _houseCoffeeDao = Provider.of<HouseCoffeeDao>(context, listen: false);
+  void _fetchList() {
+    _cafeCoffeeDao = context.watch();
+    _houseCoffeeDao = context.watch();
+    final favoriteOnly = context.watch<bool>();
 
-    _cafeCoffeeDao.fetchAll().then((value) => cafeCoffeeList.value = value);
-    _houseCoffeeDao.fetchAll().then((value) => houseCoffeeList.value = value);
-    super.initState();
+    if (favoriteOnly) {
+      _cafeCoffeeDao
+          .fetchFavorite()
+          .then((value) => cafeCoffeeList.value = value);
+      _houseCoffeeDao
+          .fetchFavorite()
+          .then((value) => houseCoffeeList.value = value);
+    } else {
+      _cafeCoffeeDao.fetchAll().then((value) => cafeCoffeeList.value = value);
+      _houseCoffeeDao.fetchAll().then((value) => houseCoffeeList.value = value);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    _fetchList();
     return DefaultTabController(
       length: HomeCoffee._tab.length,
       child: Scaffold(

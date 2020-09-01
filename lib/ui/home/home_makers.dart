@@ -29,13 +29,22 @@ class _HomeMakersState extends State<HomeMakers> {
   BeanDao _beanDao;
   CafeDao _cafeDao;
 
+  void _fetchList() {
+    _beanDao = context.watch();
+    _cafeDao = context.watch();
+    final favoriteOnly = context.watch<bool>();
+
+    if (favoriteOnly) {
+      _beanDao.fetchFavorite().then((value) => beanList.value = value);
+      _cafeDao.fetchFavorite().then((value) => cafeList.value = value);
+    } else {
+      _beanDao.fetchAll().then((value) => beanList.value = value);
+      _cafeDao.fetchAll().then((value) => cafeList.value = value);
+    }
+  }
+
   @override
   void initState() {
-    _beanDao = Provider.of(context, listen: false);
-    _cafeDao = Provider.of(context, listen: false);
-
-    _beanDao.fetchAll().then((value) => beanList.value = value);
-    _cafeDao.fetchAll().then((value) => cafeList.value = value);
     final viewModel = Provider.of<HomeViewModel>(context, listen: false);
     subBean = viewModel.beanController.stream.listen((event) {
       beanList.value = [...beanList.value, event];
@@ -55,6 +64,7 @@ class _HomeMakersState extends State<HomeMakers> {
 
   @override
   Widget build(BuildContext context) {
+    _fetchList();
     return DefaultTabController(
       length: HomeMakers._tab.length,
       child: Scaffold(

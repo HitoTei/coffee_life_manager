@@ -23,6 +23,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool isMakers = true;
+  final favoriteOnly = ValueNotifier(false);
   final viewModel = HomeViewModel();
 
   @override
@@ -38,11 +39,21 @@ class _MyHomePageState extends State<MyHomePage> {
       length: MyHomePage._tab.length,
       child: Scaffold(
         body: isMakers
-            ? Provider.value(
-                value: viewModel,
+            ? MultiProvider(
+                providers: [
+                  Provider.value(
+                    value: viewModel,
+                  ),
+                  ValueListenableProvider.value(value: favoriteOnly),
+                ],
                 child: HomeMakers(),
               )
-            : HomeCoffee(),
+            : MultiProvider(
+                providers: [
+                  ValueListenableProvider.value(value: favoriteOnly),
+                ],
+                child: HomeCoffee(),
+              ),
         bottomNavigationBar: BottomAppBar(
           color: Theme.of(context).primaryColor,
           notchMargin: 6,
@@ -140,7 +151,19 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   List<Widget> _moreVertMenuListTileList() {
+    final fav = favoriteOnly.value;
+
     return [
+      ListTile(
+        leading: Icon(fav ? Icons.favorite_border : Icons.favorite),
+        title: Text(fav ? '全て表示する' : 'お気に入りのみ表示する'),
+        onTap: () {
+          setState(() {
+            favoriteOnly.value = !fav;
+          });
+          Navigator.pop(context);
+        },
+      ),
       ListTile(
         leading: const Icon(Icons.compare_arrows),
         title: const Text('リストを変更する'),
