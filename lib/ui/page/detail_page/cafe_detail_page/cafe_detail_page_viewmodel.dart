@@ -19,8 +19,8 @@ class CafeDetailPageViewModel {
     dao.insert(cafe).then((value) => cafe.uid = value);
   }
 
-  void onDispose() {
-    dao.update(cafe);
+  Future<void> onDispose() {
+    return dao.update(cafe);
   }
 
   final ValueNotifier<bool> isFavorite;

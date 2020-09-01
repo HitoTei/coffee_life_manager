@@ -16,8 +16,8 @@ class CafeCoffeeDetailPageViewModel {
     }
   }
 
-  void onDispose() {
-    dao.update(coffee);
+  Future<void> onDispose() {
+    return dao.update(coffee);
   }
 
   final ValueNotifier<bool> isFavorite;

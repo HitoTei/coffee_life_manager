@@ -1,7 +1,7 @@
 import 'package:coffee_life_manager/model/cafe_coffee.dart';
 import 'package:coffee_life_manager/model/house_coffee.dart';
-import 'package:coffee_life_manager/repository/model/dao/cafe_coffee_dao_impl.dart';
-import 'package:coffee_life_manager/repository/model/dao/house_coffee_dao_impl.dart';
+import 'package:coffee_life_manager/repository/model/dao/interface/cafe_coffee_dao.dart';
+import 'package:coffee_life_manager/repository/model/dao/interface/house_coffee_dao.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_coffee_list_page/cafe_coffee_list_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/house_coffee_list_page/house_coffee_list_page.dart';
 import 'package:flutter/material.dart';
@@ -22,14 +22,16 @@ class _HomeCoffeeState extends State<HomeCoffee> {
 
   final houseCoffeeList = ValueNotifier<List<HouseCoffee>>(null);
 
+  CafeCoffeeDao _cafeCoffeeDao;
+  HouseCoffeeDao _houseCoffeeDao;
+
   @override
   void initState() {
-    CafeCoffeeDaoImpl()
-        .fetchAll()
-        .then((value) => cafeCoffeeList.value = value);
-    HouseCoffeeDaoImpl()
-        .fetchAll()
-        .then((value) => houseCoffeeList.value = value);
+    _cafeCoffeeDao = Provider.of<CafeCoffeeDao>(context, listen: false);
+    _houseCoffeeDao = Provider.of<HouseCoffeeDao>(context, listen: false);
+
+    _cafeCoffeeDao.fetchAll().then((value) => cafeCoffeeList.value = value);
+    _houseCoffeeDao.fetchAll().then((value) => houseCoffeeList.value = value);
     super.initState();
   }
 
@@ -51,7 +53,7 @@ class _HomeCoffeeState extends State<HomeCoffee> {
                 ValueListenableProvider.value(value: houseCoffeeList),
                 Provider<Function(dynamic)>.value(
                   value: (dynamic val) {
-                    HouseCoffeeDaoImpl().delete(val as HouseCoffee);
+                    _houseCoffeeDao.delete(val as HouseCoffee);
                     houseCoffeeList.value.remove(val);
                     houseCoffeeList.value = [...houseCoffeeList.value];
                   },
@@ -66,7 +68,7 @@ class _HomeCoffeeState extends State<HomeCoffee> {
                 ),
                 Provider<Function(dynamic)>.value(
                   value: (dynamic val) {
-                    CafeCoffeeDaoImpl().delete(val as CafeCoffee);
+                    _cafeCoffeeDao.delete(val as CafeCoffee);
                     cafeCoffeeList.value.remove(val);
                     cafeCoffeeList.value = [...cafeCoffeeList.value];
                   },

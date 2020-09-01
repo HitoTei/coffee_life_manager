@@ -16,14 +16,14 @@ class BeanDetailPageViewModel {
   final Bean bean;
   final BeanDao dao;
 
-  void onInitState() {
+  Future<void> onInitState() async {
     if (bean.uid == null) {
-      dao.insert(bean).then((value) => bean.uid = value);
+      await dao.insert(bean).then((value) => bean.uid = value);
     }
   }
 
-  void onDispose() {
-    dao.update(bean);
+  Future<void> onDispose() {
+    return dao.update(bean);
   }
 
   bool canDripCoffee() => bean.remainingAmount < bean.oneCupPerGram;

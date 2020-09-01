@@ -42,7 +42,10 @@ class CafeListPage extends StatelessWidget {
                       .call(cafe),
                 );
               },
-              child: CafeListTile(cafe, viewModel),
+              child: Provider.value(
+                value: cafe,
+                child: CafeListTile(viewModel),
+              ),
             ),
         ],
       ),
@@ -51,9 +54,8 @@ class CafeListPage extends StatelessWidget {
 }
 
 class CafeListTile extends StatefulWidget {
-  const CafeListTile(this.cafe, this.viewModel);
+  const CafeListTile(this.viewModel);
 
-  final Cafe cafe;
   final CafeListPageViewModel viewModel;
 
   @override
@@ -65,7 +67,7 @@ class _CafeListTileState extends State<CafeListTile> {
 
   @override
   void initState() {
-    cafe = widget.cafe;
+    cafe = context.read();
     super.initState();
   }
 
@@ -78,23 +80,25 @@ class _CafeListTileState extends State<CafeListTile> {
           onChanged: (val) {
             setState(() {
               cafe.isFavorite = val;
-              widget.viewModel.onFavChanged(widget.cafe);
+              widget.viewModel.onFavChanged(cafe);
             });
           },
         ),
       ],
-
-      // 挙動がおかしかったら、ここを変更する。
-      information: widget.cafe,
+      information: cafe,
       gotoDetailPage: () async {
         await Navigator.push<dynamic>(
           context,
           MaterialPageRoute<dynamic>(
-            builder: (_) => CafeDetailPage(widget.cafe),
+            builder: (_) =>
+                Provider.value(
+                  value: cafe,
+                  child: CafeDetailPage(),
+                ),
           ),
         );
         setState(() {
-          cafe = widget.cafe;
+          cafe = cafe;
         });
       },
     );

@@ -1,6 +1,5 @@
 import 'package:coffee_life_manager/dialog/show_delete_dialog.dart';
 import 'package:coffee_life_manager/model/bean.dart';
-import 'package:coffee_life_manager/repository/model/dao/bean_dao_impl.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/bean_detail_page/bean_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
 import 'package:coffee_life_manager/ui/page/list_page/bean_list_page/bean_list_page_viewmodel.dart';
@@ -12,8 +11,8 @@ import 'package:provider/provider.dart';
 class BeanListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final beanList = Provider.of<List<Bean>>(context);
-    final viewModel = BeanListPageViewModel(BeanDaoImpl());
+    final beanList = context.watch<List<Bean>>();
+    final viewModel = BeanListPageViewModel(context.watch());
 
     if (beanList == null) {
       return const Center(
@@ -42,7 +41,10 @@ class BeanListPage extends StatelessWidget {
                       .call(bean),
                 );
               },
-              child: _BeanListTile(bean, viewModel),
+              child: Provider.value(
+                value: bean,
+                child: _BeanListTile(viewModel),
+              ),
             ),
         ],
       ),
@@ -51,9 +53,8 @@ class BeanListPage extends StatelessWidget {
 }
 
 class _BeanListTile extends StatefulWidget {
-  const _BeanListTile(this.bean, this.viewModel);
+  const _BeanListTile(this.viewModel);
 
-  final Bean bean;
   final BeanListPageViewModel viewModel;
 
   @override
@@ -65,7 +66,7 @@ class __BeanListTileState extends State<_BeanListTile> {
 
   @override
   void initState() {
-    bean = widget.bean;
+    bean = Provider.of(context, listen: false);
     super.initState();
   }
 
@@ -78,22 +79,26 @@ class __BeanListTileState extends State<_BeanListTile> {
           onChanged: (val) {
             setState(() {
               bean.isFavorite = val;
-              widget.viewModel.onFavChanged(widget.bean);
+              widget.viewModel.onFavChanged(bean);
             });
           },
         ),
       ],
       // 挙動がおかしかったら、ここをbeanに変更する。
-      information: widget.bean,
+      information: bean,
       gotoDetailPage: () async {
         await Navigator.push<dynamic>(
           context,
           MaterialPageRoute<dynamic>(
-            builder: (_) => BeanDetailPage(widget.bean),
+            builder: (_) =>
+                Provider.value(
+                  value: bean,
+                  child: BeanDetailPage(),
+                ),
           ),
         );
         setState(() {
-          bean = widget.bean;
+          bean = bean;
         });
       },
     );

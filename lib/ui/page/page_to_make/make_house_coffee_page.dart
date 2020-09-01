@@ -1,8 +1,5 @@
-import 'package:coffee_life_manager/model/bean.dart';
 import 'package:coffee_life_manager/model/enums/drip.dart';
 import 'package:coffee_life_manager/model/enums/grind.dart';
-import 'package:coffee_life_manager/repository/model/dao/bean_dao_impl.dart';
-import 'package:coffee_life_manager/repository/model/dao/house_coffee_dao_impl.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail_page/house_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/drip_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/grind_list_tile.dart';
@@ -12,13 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MakeHouseCoffeePage extends StatelessWidget {
-  MakeHouseCoffeePage(Bean bean)
-      : viewModel = MakeHouseCoffeePageViewModel(
-            bean, BeanDaoImpl(), HouseCoffeeDaoImpl());
-  final MakeHouseCoffeePageViewModel viewModel;
-
   @override
   Widget build(BuildContext context) {
+    final viewModel = MakeHouseCoffeePageViewModel(
+      Provider.of(context, listen: false),
+      Provider.of(context, listen: false),
+      Provider.of(context, listen: false),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(viewModel.bean.beanName),
@@ -55,7 +53,10 @@ class MakeHouseCoffeePage extends StatelessWidget {
                 context,
                 MaterialPageRoute<dynamic>(
                   builder: (_) {
-                    return HouseCoffeeDetailPage(viewModel.coffee);
+                    return Provider.value(
+                      value: viewModel.coffee,
+                      child: HouseCoffeeDetailPage(),
+                    );
                   },
                 ),
               );

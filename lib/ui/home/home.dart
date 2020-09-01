@@ -109,7 +109,10 @@ class _MyHomePageState extends State<MyHomePage> {
           await Navigator.push<dynamic>(
             context,
             MaterialPageRoute<dynamic>(
-              builder: (_) => BeanDetailPage(bean),
+              builder: (_) => Provider.value(
+                value: bean,
+                child: BeanDetailPage(),
+              ),
             ),
           );
           viewModel.beanController.add(bean);
@@ -124,7 +127,11 @@ class _MyHomePageState extends State<MyHomePage> {
           await Navigator.push<dynamic>(
             context,
             MaterialPageRoute<dynamic>(
-              builder: (_) => CafeDetailPage(cafe),
+              builder: (_) =>
+                  Provider.value(
+                    value: cafe,
+                    child: CafeDetailPage(),
+                  ),
             ),
           );
           viewModel.cafeController.add(cafe);

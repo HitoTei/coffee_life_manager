@@ -61,6 +61,7 @@ class ImageCardListTile extends StatelessWidget {
                   Container(
                     child: Text(
                       information.getTitle(),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     width: 200,
                     margin: const EdgeInsets.all(2),

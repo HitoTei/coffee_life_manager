@@ -1,13 +1,30 @@
+import 'package:coffee_life_manager/repository/model/dao/bean_dao_impl.dart';
+import 'package:coffee_life_manager/repository/model/dao/cafe_coffee_dao_impl.dart';
+import 'package:coffee_life_manager/repository/model/dao/cafe_dao_impl.dart';
+import 'package:coffee_life_manager/repository/model/dao/house_coffee_dao_impl.dart';
+import 'package:coffee_life_manager/repository/model/dao/interface/cafe_coffee_dao.dart';
+import 'package:coffee_life_manager/repository/model/dao/interface/house_coffee_dao.dart';
 import 'package:coffee_life_manager/theme_manager.dart';
 import 'package:coffee_life_manager/ui/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'repository/model/dao/interface/bean_dao.dart';
+import 'repository/model/dao/interface/cafe_dao.dart';
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ValueListenableProvider(
-      create: (_) => ThemeManager(),
+    return MultiProvider(
+      providers: [
+        ValueListenableProvider(
+          create: (_) => ThemeManager(),
+        ),
+        Provider<BeanDao>.value(value: BeanDaoImpl()),
+        Provider<CafeDao>.value(value: CafeDaoImpl()),
+        Provider<HouseCoffeeDao>.value(value: HouseCoffeeDaoImpl()),
+        Provider<CafeCoffeeDao>.value(value: CafeCoffeeDaoImpl()),
+      ],
       child: _MyApp(),
     );
   }
