@@ -91,11 +91,10 @@ class _HouseCoffeeListTileState extends State<HouseCoffeeListTile> {
         await Navigator.push<dynamic>(
           context,
           MaterialPageRoute<dynamic>(
-            builder: (_) =>
-                Provider.value(
-                  value: coffee,
-                  child: HouseCoffeeDetailPage(),
-                ),
+            builder: (_) => Provider.value(
+              value: coffee,
+              child: HouseCoffeeDetailPage(),
+            ),
           ),
         );
         setState(() {

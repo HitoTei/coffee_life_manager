@@ -90,11 +90,10 @@ class _CafeListTileState extends State<CafeListTile> {
         await Navigator.push<dynamic>(
           context,
           MaterialPageRoute<dynamic>(
-            builder: (_) =>
-                Provider.value(
-                  value: cafe,
-                  child: CafeDetailPage(),
-                ),
+            builder: (_) => Provider.value(
+              value: cafe,
+              child: CafeDetailPage(),
+            ),
           ),
         );
         setState(() {

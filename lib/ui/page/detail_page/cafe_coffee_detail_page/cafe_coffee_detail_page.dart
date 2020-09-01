@@ -44,11 +44,10 @@ class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
         actions: [
           ValueListenableBuilder(
             valueListenable: viewModel.isFavorite,
-            builder: (context, bool value, _) =>
-                FavButton(
-                  value: value,
-                  onChanged: viewModel.isFavoriteChanged,
-                ),
+            builder: (context, bool value, _) => FavButton(
+              value: value,
+              onChanged: viewModel.isFavoriteChanged,
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.share),

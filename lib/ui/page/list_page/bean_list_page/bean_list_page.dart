@@ -90,11 +90,10 @@ class __BeanListTileState extends State<_BeanListTile> {
         await Navigator.push<dynamic>(
           context,
           MaterialPageRoute<dynamic>(
-            builder: (_) =>
-                Provider.value(
-                  value: bean,
-                  child: BeanDetailPage(),
-                ),
+            builder: (_) => Provider.value(
+              value: bean,
+              child: BeanDetailPage(),
+            ),
           ),
         );
         setState(() {
