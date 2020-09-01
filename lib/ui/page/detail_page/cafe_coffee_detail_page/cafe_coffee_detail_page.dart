@@ -58,13 +58,12 @@ class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
       detailList: [
         ValueListenableBuilder(
           valueListenable: viewModel.price,
-          builder: (context, int value, _) =>
-              IntListTile(
-                title: const Text('値段'),
-                unit: '円',
-                value: value,
-                onChanged: viewModel.priceChanged,
-              ),
+          builder: (context, int value, _) => IntListTile(
+            title: const Text('値段'),
+            unit: '円',
+            value: value,
+            onChanged: viewModel.priceChanged,
+          ),
         ),
         ValueListenableBuilder(
           valueListenable: viewModel.drinkDay,

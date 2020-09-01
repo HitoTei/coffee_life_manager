@@ -59,11 +59,10 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
               Navigator.pushReplacement<dynamic, dynamic>(
                 context,
                 MaterialPageRoute<dynamic>(
-                  builder: (_) =>
-                      Provider.value(
-                        value: coffee,
-                        child: CafeCoffeeDetailPage(),
-                      ),
+                  builder: (_) => Provider.value(
+                    value: coffee,
+                    child: CafeCoffeeDetailPage(),
+                  ),
                 ),
               );
             },

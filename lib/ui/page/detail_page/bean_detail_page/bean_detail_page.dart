@@ -63,11 +63,10 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
               Navigator.pushReplacement<dynamic, dynamic>(
                 context,
                 MaterialPageRoute<dynamic>(
-                  builder: (_) =>
-                      Provider.value(
-                        value: viewModel.bean,
-                        child: MakeHouseCoffeePage(),
-                      ),
+                  builder: (_) => Provider.value(
+                    value: viewModel.bean,
+                    child: MakeHouseCoffeePage(),
+                  ),
                 ),
               );
             },
