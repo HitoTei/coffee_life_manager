@@ -24,7 +24,7 @@ class ThemeManager extends ValueNotifier<ThemeData> {
       primaryColorBrightness: Brightness.dark,
       primaryColorDark: Colors.brown[800],
       primaryColorLight: Colors.brown[300],
-      accentColor: const Color(0xff486c79),
+      accentColor: Colors.deepOrange,
       accentColorBrightness: Brightness.dark,
       visualDensity: VisualDensity.adaptivePlatformDensity,
     ),

@@ -23,6 +23,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool isMakers = true;
+  final favoriteOnly = ValueNotifier(false);
   final viewModel = HomeViewModel();
 
   @override
@@ -38,11 +39,23 @@ class _MyHomePageState extends State<MyHomePage> {
       length: MyHomePage._tab.length,
       child: Scaffold(
         body: isMakers
-            ? MultiProvider(providers: [
-                Provider.value(value: viewModel),
-              ], child: HomeMakers())
-            : HomeCoffee(),
+            ? MultiProvider(
+                providers: [
+                  Provider.value(
+                    value: viewModel,
+                  ),
+                  ValueListenableProvider.value(value: favoriteOnly),
+                ],
+                child: HomeMakers(),
+              )
+            : MultiProvider(
+                providers: [
+                  ValueListenableProvider.value(value: favoriteOnly),
+                ],
+                child: HomeCoffee(),
+              ),
         bottomNavigationBar: BottomAppBar(
+          color: Theme.of(context).primaryColor,
           notchMargin: 6,
           shape: const AutomaticNotchedShape(
             RoundedRectangleBorder(),
@@ -62,34 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         context: context,
                         builder: (_) => Column(
                           mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ListTile(
-                              leading: const Icon(Icons.compare_arrows),
-                              title: const Text('リストを変更する'),
-                              subtitle: Text(
-                                '変更後: ${isMakers ? 'コーヒー' : 'カフェ・豆'}',
-                              ),
-                              onTap: () {
-                                setState(() => isMakers = !isMakers);
-                                Navigator.pop(context);
-                              },
-                            ),
-                            ListTile(
-                              leading: const Icon(Icons.apps),
-                              title: const Text('テーマを変更する'),
-                              onTap: () async {
-                                await Navigator.push<dynamic>(
-                                  context,
-                                  MaterialPageRoute<dynamic>(
-                                    builder: (_) {
-                                      return ThemeSelectorPage();
-                                    },
-                                  ),
-                                );
-                                Navigator.pop(context);
-                              },
-                            )
-                          ],
+                          children: _moreVertMenuListTileList(),
                         ),
                       );
                     },
@@ -110,38 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (_) {
                       return Column(
                         mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            leading: const Icon(Icons.local_cafe),
-                            title: const Text('豆を追加'),
-                            onTap: () async {
-                              Navigator.pop(context);
-                              final bean = Bean();
-                              await Navigator.push<dynamic>(
-                                context,
-                                MaterialPageRoute<dynamic>(
-                                  builder: (_) => BeanDetailPage(bean),
-                                ),
-                              );
-                              viewModel.beanController.add(bean);
-                            },
-                          ),
-                          ListTile(
-                            leading: const Icon(Icons.store),
-                            title: const Text('カフェを追加'),
-                            onTap: () async {
-                              Navigator.pop(context);
-                              final cafe = Cafe();
-                              await Navigator.push<dynamic>(
-                                context,
-                                MaterialPageRoute<dynamic>(
-                                  builder: (_) => CafeDetailPage(cafe),
-                                ),
-                              );
-                              viewModel.cafeController.add(cafe);
-                            },
-                          ),
-                        ],
+                        children: _addMenuListTileList(),
                       );
                     },
                   );
@@ -152,5 +107,89 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  List<Widget> _addMenuListTileList() {
+    return [
+      ListTile(
+        leading: const Icon(Icons.local_cafe),
+        title: const Text('豆を追加'),
+        onTap: () async {
+          Navigator.pop(context);
+          final bean = Bean();
+          await Navigator.push<dynamic>(
+            context,
+            MaterialPageRoute<dynamic>(
+              builder: (_) => Provider.value(
+                value: bean,
+                child: BeanDetailPage(),
+              ),
+            ),
+          );
+          viewModel.beanController.add(bean);
+        },
+      ),
+      ListTile(
+        leading: const Icon(Icons.store),
+        title: const Text('カフェを追加'),
+        onTap: () async {
+          Navigator.pop(context);
+          final cafe = Cafe();
+          await Navigator.push<dynamic>(
+            context,
+            MaterialPageRoute<dynamic>(
+              builder: (_) => Provider.value(
+                value: cafe,
+                child: CafeDetailPage(),
+              ),
+            ),
+          );
+          viewModel.cafeController.add(cafe);
+        },
+      ),
+    ];
+  }
+
+  List<Widget> _moreVertMenuListTileList() {
+    final fav = favoriteOnly.value;
+
+    return [
+      ListTile(
+        leading: Icon(fav ? Icons.favorite_border : Icons.favorite),
+        title: Text(fav ? '全て表示する' : 'お気に入りのみ表示する'),
+        onTap: () {
+          setState(() {
+            favoriteOnly.value = !fav;
+          });
+          Navigator.pop(context);
+        },
+      ),
+      ListTile(
+        leading: const Icon(Icons.compare_arrows),
+        title: const Text('リストを変更する'),
+        subtitle: Text(
+          '変更後: ${isMakers ? 'コーヒー' : 'カフェ・豆'}',
+        ),
+        onTap: () {
+          setState(() => isMakers = !isMakers);
+          Navigator.pop(context);
+        },
+      ),
+      ListTile(
+        leading: const Icon(Icons.apps),
+        title: const Text('テーマを変更する'),
+        onTap: () async {
+          await Navigator.push<dynamic>(
+            context,
+            MaterialPageRoute<dynamic>(
+              builder: (_) {
+                return ThemeSelectorPage();
+              },
+            ),
+          );
+          Navigator.pop(context);
+        },
+      ),
+    ];
   }
 }

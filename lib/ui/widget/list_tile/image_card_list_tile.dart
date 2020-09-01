@@ -46,7 +46,9 @@ class ImageCardListTile extends StatelessWidget {
                           color: Colors.black54,
                           child: Text(
                             information.getMessage(),
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -56,11 +58,13 @@ class ImageCardListTile extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
+                  Container(
                     child: Text(
                       information.getTitle(),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     width: 200,
+                    margin: const EdgeInsets.all(2),
                   ),
                   Row(
                     children: actions,

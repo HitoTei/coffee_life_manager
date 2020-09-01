@@ -1,6 +1,5 @@
 import 'package:coffee_life_manager/dialog/show_delete_dialog.dart';
 import 'package:coffee_life_manager/model/house_coffee.dart';
-import 'package:coffee_life_manager/repository/model/dao/house_coffee_dao_impl.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail_page/house_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
 import 'package:coffee_life_manager/ui/widget/list_tile/image_card_list_tile.dart';
@@ -13,8 +12,10 @@ import 'house_coffee_list_page_viewmodel.dart';
 class HouseCoffeeListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final coffeeList = Provider.of<List<HouseCoffee>>(context);
-    final viewModel = HouseCoffeeListPageViewModel(HouseCoffeeDaoImpl());
+    final coffeeList = context.watch<List<HouseCoffee>>();
+    final viewModel = HouseCoffeeListPageViewModel(
+      Provider.of(context, listen: false),
+    );
 
     if (coffeeList == null) {
       return const Center(
@@ -42,7 +43,10 @@ class HouseCoffeeListPage extends StatelessWidget {
                       .call(coffee),
                 );
               },
-              child: HouseCoffeeListTile(coffee, viewModel),
+              child: Provider.value(
+                value: coffee,
+                child: HouseCoffeeListTile(viewModel),
+              ),
             ),
         ],
       ),
@@ -51,9 +55,8 @@ class HouseCoffeeListPage extends StatelessWidget {
 }
 
 class HouseCoffeeListTile extends StatefulWidget {
-  const HouseCoffeeListTile(this.coffee, this.viewModel);
+  const HouseCoffeeListTile(this.viewModel);
 
-  final HouseCoffee coffee;
   final HouseCoffeeListPageViewModel viewModel;
 
   @override
@@ -65,7 +68,7 @@ class _HouseCoffeeListTileState extends State<HouseCoffeeListTile> {
 
   @override
   void initState() {
-    coffee = widget.coffee;
+    coffee = context.read();
     super.initState();
   }
 
@@ -78,21 +81,24 @@ class _HouseCoffeeListTileState extends State<HouseCoffeeListTile> {
           onChanged: (val) {
             setState(() {
               coffee.isFavorite = val;
-              widget.viewModel.onFavChanged(widget.coffee);
+              widget.viewModel.onFavChanged(coffee);
             });
           },
         ),
       ],
-      information: widget.coffee,
+      information: coffee,
       gotoDetailPage: () async {
         await Navigator.push<dynamic>(
           context,
           MaterialPageRoute<dynamic>(
-            builder: (_) => HouseCoffeeDetailPage(widget.coffee),
+            builder: (_) => Provider.value(
+              value: coffee,
+              child: HouseCoffeeDetailPage(),
+            ),
           ),
         );
         setState(() {
-          coffee = widget.coffee;
+          coffee = coffee;
         });
       },
     );

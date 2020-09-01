@@ -60,11 +60,9 @@ class __RateItemState extends State<_RateItem> {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<RateWidgetViewModel>(context);
-    return Column(
-      children: [
-        Text(widget._title),
-        rateIcons(viewModel),
-      ],
+    return ListTile(
+      title: Text(widget._title),
+      subtitle: rateIcons(viewModel),
     );
   }
 
@@ -72,14 +70,16 @@ class __RateItemState extends State<_RateItem> {
     return Row(
       children: [
         for (int i = 0; i < 5; i++)
-          IconButton(
-            icon: (i <= viewModel.rate.values[widget._rateKey])
-                ? const Icon(Icons.star)
-                : const Icon(Icons.star_border),
-            onPressed: () => setState(
-              () => viewModel.setValue(widget._rateKey, i),
+          Expanded(
+            child: IconButton(
+              icon: (i <= viewModel.rate.values[widget._rateKey])
+                  ? const Icon(Icons.star)
+                  : const Icon(Icons.star_border),
+              onPressed: () => setState(
+                () => viewModel.setValue(widget._rateKey, i),
+              ),
+              key: Key('${widget._rateKey}$i'),
             ),
-            key: Key('${widget._rateKey}$i'),
           ),
       ],
     );

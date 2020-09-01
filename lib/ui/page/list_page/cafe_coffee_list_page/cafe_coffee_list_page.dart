@@ -1,6 +1,5 @@
 import 'package:coffee_life_manager/dialog/show_delete_dialog.dart';
 import 'package:coffee_life_manager/model/cafe_coffee.dart';
-import 'package:coffee_life_manager/repository/model/dao/cafe_coffee_dao_impl.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_coffee_detail_page/cafe_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/button/fav_button.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_coffee_list_page/cafe_coffee_list_page_viewmodel.dart';
@@ -12,8 +11,10 @@ import 'package:provider/provider.dart';
 class CafeCoffeeListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final coffeeList = Provider.of<List<CafeCoffee>>(context);
-    final viewModel = CafeCoffeeListPageViewModel(CafeCoffeeDaoImpl());
+    final coffeeList = context.watch<List<CafeCoffee>>();
+    final viewModel = CafeCoffeeListPageViewModel(
+      Provider.of(context, listen: false),
+    );
 
     if (coffeeList == null) {
       return const Center(
@@ -41,7 +42,10 @@ class CafeCoffeeListPage extends StatelessWidget {
                       .call(coffee),
                 );
               },
-              child: _CafeCoffeeListTile(coffee, viewModel),
+              child: Provider.value(
+                value: coffee,
+                child: _CafeCoffeeListTile(viewModel),
+              ),
             ),
         ],
       ),
@@ -50,9 +54,8 @@ class CafeCoffeeListPage extends StatelessWidget {
 }
 
 class _CafeCoffeeListTile extends StatefulWidget {
-  const _CafeCoffeeListTile(this.coffee, this.viewModel);
+  const _CafeCoffeeListTile(this.viewModel);
 
-  final CafeCoffee coffee;
   final CafeCoffeeListPageViewModel viewModel;
 
   @override
@@ -64,7 +67,7 @@ class _CafeCoffeeListTileState extends State<_CafeCoffeeListTile> {
 
   @override
   void initState() {
-    coffee = widget.coffee;
+    coffee = context.read();
     super.initState();
   }
 
@@ -77,7 +80,7 @@ class _CafeCoffeeListTileState extends State<_CafeCoffeeListTile> {
           onChanged: (val) {
             setState(() {
               coffee.isFavorite = val;
-              widget.viewModel.onFavChanged(widget.coffee);
+              widget.viewModel.onFavChanged(coffee);
             });
           },
         ),
@@ -88,11 +91,14 @@ class _CafeCoffeeListTileState extends State<_CafeCoffeeListTile> {
         await Navigator.push<dynamic>(
           context,
           MaterialPageRoute<dynamic>(
-            builder: (_) => CafeCoffeeDetailPage(widget.coffee),
+            builder: (_) => Provider.value(
+              value: coffee,
+              child: CafeCoffeeDetailPage(),
+            ),
           ),
         );
         setState(() {
-          coffee = widget.coffee;
+          coffee = coffee;
         });
       },
     );

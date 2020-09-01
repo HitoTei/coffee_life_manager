@@ -7,6 +7,7 @@ class IntListTile extends StatelessWidget {
     @required this.unit,
     @required this.value,
     @required this.onChanged,
+    this.digit = 7,
   }) : _editingController = TextEditingController()..text = value.toString();
 
   final Widget title;
@@ -14,6 +15,8 @@ class IntListTile extends StatelessWidget {
   final int value;
   final Function(int) onChanged;
   final TextEditingController _editingController;
+
+  final int digit;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +32,7 @@ class IntListTile extends StatelessWidget {
               content: TextField(
                 controller: _editingController,
                 keyboardType: TextInputType.number,
+                maxLength: digit,
                 inputFormatters: <TextInputFormatter>[
                   WhitelistingTextInputFormatter.digitsOnly
                 ],
