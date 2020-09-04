@@ -1,6 +1,7 @@
 import 'package:coffee_life_manager/function/int_bool_parse.dart';
 import 'package:coffee_life_manager/model/interface/image_card_information.dart';
 import 'package:coffee_life_manager/model/rate.dart';
+import 'package:intl/intl.dart';
 
 import '../constant_string.dart';
 import 'enums/drip.dart';
@@ -70,5 +71,5 @@ class HouseCoffee implements ImageCardInformation {
   void setTitle(String value) => beanName = value;
 
   @override
-  String getMessage() => drinkDay.toLocal().toString();
+  String getMessage() => DateFormat.yMMMMEEEEd().format(drinkDay);
 }

@@ -54,6 +54,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
                 child: HomeCoffee(),
               ),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () {
+            showModalBottomSheet<dynamic>(
+              context: context,
+              builder: (_) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: _addMenuListTileList(),
+                );
+              },
+            );
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         bottomNavigationBar: BottomAppBar(
           color: Theme.of(context).primaryColor,
           notchMargin: 6,
@@ -64,44 +79,25 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.more_vert),
-                    onPressed: () {
-                      showModalBottomSheet<dynamic>(
-                        context: context,
-                        builder: (_) => Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: _moreVertMenuListTileList(),
-                        ),
-                      );
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.sort),
-                    onPressed: () {
-                      // ここもbottom sheetで
-                    },
-                  ),
-                ],
-              ),
               IconButton(
-                icon: const Icon(Icons.add),
+                icon: const Icon(Icons.more_vert),
                 onPressed: () {
                   showModalBottomSheet<dynamic>(
                     context: context,
-                    builder: (_) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: _addMenuListTileList(),
-                      );
-                    },
+                    builder: (_) => Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: _moreVertMenuListTileList(),
+                    ),
                   );
                 },
-              )
+              ),
+              IconButton(
+                icon: const Icon(Icons.sort),
+                onPressed: () {
+                  // ここもbottom sheetで
+                },
+              ),
             ],
           ),
         ),

@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DateTimeListTile extends StatelessWidget {
   const DateTimeListTile({
@@ -16,7 +16,9 @@ class DateTimeListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: title,
-      subtitle: Text('$value'),
+      subtitle: Text(
+        DateFormat.yMMMMEEEEd().format(value),
+      ),
       onTap: () async {
         final date = await showDatePicker(
           context: context,
