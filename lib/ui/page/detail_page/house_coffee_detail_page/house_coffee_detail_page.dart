@@ -72,11 +72,10 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
         ),
         ValueListenableBuilder(
           valueListenable: viewModel.grind,
-          builder: (context, Grind value, _) =>
-              GrindListTile(
-                value: value,
-                onChanged: viewModel.grindChanged,
-              ),
+          builder: (context, Grind value, _) => GrindListTile(
+            value: value,
+            onChanged: viewModel.grindChanged,
+          ),
         ),
         ValueListenableBuilder(
           valueListenable: viewModel.drip,
