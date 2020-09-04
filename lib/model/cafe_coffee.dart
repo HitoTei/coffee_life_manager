@@ -1,6 +1,7 @@
 import 'package:coffee_life_manager/function/int_bool_parse.dart';
 import 'package:coffee_life_manager/model/interface/image_card_information.dart';
 import 'package:coffee_life_manager/model/rate.dart';
+import 'package:intl/intl.dart';
 
 import '../constant_string.dart';
 
@@ -57,5 +58,5 @@ class CafeCoffee implements ImageCardInformation {
   void setTitle(String value) => productName = value;
 
   @override
-  String getMessage() => drinkDay.toLocal().toString();
+  String getMessage() => DateFormat.yMMMMEEEEd().format(drinkDay);
 }

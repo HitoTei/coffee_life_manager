@@ -13,7 +13,7 @@ class TimeOfDayListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(title),
-      subtitle: Text(value.toString()),
+      subtitle: Text(value.format(context)),
       onTap: () async {
         final nextVal = await showTimePicker(
           helpText: title,
