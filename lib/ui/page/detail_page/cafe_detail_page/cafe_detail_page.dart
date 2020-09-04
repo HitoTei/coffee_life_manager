@@ -76,12 +76,11 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
       detailList: [
         ValueListenableBuilder(
           valueListenable: viewModel.startTime,
-          builder: (context, TimeOfDay value, _) =>
-              TimeOfDayListTile(
-                title: '始業時間',
-                value: value,
-                onChanged: viewModel.startTimeChanged,
-              ),
+          builder: (context, TimeOfDay value, _) => TimeOfDayListTile(
+            title: '始業時間',
+            value: value,
+            onChanged: viewModel.startTimeChanged,
+          ),
         ),
         ValueListenableBuilder(
           valueListenable: viewModel.endTime,
