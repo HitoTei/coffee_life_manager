@@ -99,13 +99,12 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
         ),
         ValueListenableBuilder(
           valueListenable: viewModel.price,
-          builder: (context, int value, _) =>
-              IntListTile(
-                title: const Text('値段'),
-                unit: '円',
-                value: value,
-                onChanged: viewModel.priceChanged,
-              ),
+          builder: (context, int value, _) => IntListTile(
+            title: const Text('値段'),
+            unit: '円',
+            value: value,
+            onChanged: viewModel.priceChanged,
+          ),
         ),
         ValueListenableBuilder(
           valueListenable: viewModel.roast,

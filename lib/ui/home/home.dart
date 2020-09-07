@@ -5,7 +5,7 @@ import 'package:coffee_life_manager/ui/home/home_makers.dart';
 import 'package:coffee_life_manager/ui/home/home_viewmodel.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/bean_detail_page/bean_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail_page/cafe_detail_page.dart';
-import 'package:coffee_life_manager/ui/page/theme_selector/theme_selector_page.dart';
+import 'package:coffee_life_manager/ui/page/setting_page/setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -186,7 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
             context,
             MaterialPageRoute<dynamic>(
               builder: (_) {
-                return ThemeSelectorPage();
+                return SettingPage();
               },
             ),
           );

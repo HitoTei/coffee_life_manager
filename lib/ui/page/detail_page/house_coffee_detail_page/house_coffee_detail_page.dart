@@ -91,12 +91,11 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
         ),
         ValueListenableBuilder(
           valueListenable: viewModel.drinkDay,
-          builder: (context, DateTime value, _) =>
-              DateTimeListTile(
-                title: const Text('淹れた日'),
-                value: value,
-                onChanged: viewModel.drinkDayChanged,
-              ),
+          builder: (context, DateTime value, _) => DateTimeListTile(
+            title: const Text('淹れた日'),
+            value: value,
+            onChanged: viewModel.drinkDayChanged,
+          ),
         ),
       ],
       rate: RateWidget(

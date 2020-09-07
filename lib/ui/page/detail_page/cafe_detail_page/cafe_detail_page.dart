@@ -103,12 +103,11 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
         ),
         ValueListenableBuilder(
           valueListenable: viewModel.mapUrl,
-          builder: (context, String value, _) =>
-              MapListTile(
-                title: const Text('場所'),
-                value: value,
-                onChanged: viewModel.mapUrlChanged,
-              ),
+          builder: (context, String value, _) => MapListTile(
+            title: const Text('場所'),
+            value: value,
+            onChanged: viewModel.mapUrlChanged,
+          ),
         ),
       ],
       rate: null,
