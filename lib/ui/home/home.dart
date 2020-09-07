@@ -5,8 +5,9 @@ import 'package:coffee_life_manager/ui/home/home_makers.dart';
 import 'package:coffee_life_manager/ui/home/home_viewmodel.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/bean_detail_page/bean_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail_page/cafe_detail_page.dart';
-import 'package:coffee_life_manager/ui/page/theme_selector/theme_selector_page.dart';
+import 'package:coffee_life_manager/ui/page/setting_page/setting_page.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -158,28 +159,34 @@ class _MyHomePageState extends State<MyHomePage> {
             favoriteOnly.value = !fav;
           });
           Navigator.pop(context);
+          Fluttertoast.showToast(
+            msg: fav ? '全て表示しています' : 'お気に入りのみ表示しています',
+          );
         },
       ),
       ListTile(
         leading: const Icon(Icons.compare_arrows),
         title: const Text('リストを変更する'),
         subtitle: Text(
-          '変更後: ${isMakers ? 'コーヒー' : 'カフェ・豆'}',
+          '${isMakers ? 'コーヒー' : 'カフェ・豆'}のリストを表示する',
         ),
         onTap: () {
           setState(() => isMakers = !isMakers);
           Navigator.pop(context);
+          Fluttertoast.showToast(
+            msg: '${isMakers ? 'カフェ・豆' : 'コーヒー'}のリストを表示しています',
+          );
         },
       ),
       ListTile(
-        leading: const Icon(Icons.apps),
-        title: const Text('テーマを変更する'),
+        leading: const Icon(Icons.settings),
+        title: const Text('設定'),
         onTap: () async {
           await Navigator.push<dynamic>(
             context,
             MaterialPageRoute<dynamic>(
               builder: (_) {
-                return ThemeSelectorPage();
+                return SettingPage();
               },
             ),
           );
