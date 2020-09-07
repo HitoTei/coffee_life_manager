@@ -24,23 +24,24 @@ class ListPage extends StatelessWidget {
         ),
       );
     }
+    final children = [
+      for (final item in list)
+        InkWell(
+          key: UniqueKey(),
+          onLongPress: () {
+            showDeleteDialog(
+              context,
+              () => Provider.of<Function(dynamic)>(context, listen: false)
+                  .call(item),
+            );
+          },
+          child: tile(item),
+        ),
+    ];
 
     return Scaffold(
       body: ListView(
-        children: [
-          for (final item in list)
-            InkWell(
-              key: UniqueKey(),
-              onLongPress: () {
-                showDeleteDialog(
-                  context,
-                  () => Provider.of<Function(dynamic)>(context, listen: false)
-                      .call(item),
-                );
-              },
-              child: tile(item),
-            ),
-        ],
+        children: children,
       ),
     );
   }

@@ -23,62 +23,94 @@ class ImageCardListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final image = ValueNotifier<File>(null);
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+
     _getLocalFile(image);
 
-    return SizedBox(
-      height: 180,
-      child: InkWell(
-        key: UniqueKey(),
-        onTap: gotoDetailPage,
-        onLongPress: () {
-          showDeleteDialog(
-            context,
-            () => Provider.of<Function(dynamic)>(context, listen: false)
-                .call(viewModel.getItem()),
-          );
-        },
-        child: Card(
-          child: Column(
-            children: [
-              _image(image),
-              _info(),
-            ],
-          ),
-        ),
+    return InkWell(
+      key: UniqueKey(),
+      onTap: gotoDetailPage,
+      onLongPress: () {
+        showDeleteDialog(
+          context,
+          () => Provider.of<Function(dynamic)>(context, listen: false)
+              .call(viewModel.getItem()),
+        );
+      },
+      child: Card(
+        child: isPortrait
+            ? Column(
+                children: [
+                  Stack(
+                    children: [
+                      _image(image, isPortrait),
+                      _message(isPortrait),
+                    ],
+                  ),
+                  _info(context),
+                ],
+              )
+            : Row(
+                children: [
+                  _image(image, isPortrait),
+                  Container(
+                    margin: const EdgeInsets.only(left: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _info(context),
+                        _message(isPortrait),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
       ),
     );
   }
 
-  Widget _image(ValueNotifier<File> image) {
+  Widget _image(ValueNotifier<File> image, bool isPortrait) {
     return ConstrainedBox(
-      constraints: const BoxConstraints.expand(height: 120),
-      child: Stack(
-        children: [
-          ValueListenableProvider<File>.value(
-            value: image,
-            child: LocalImage(),
-          ),
-          if (information.getMessage() != null)
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                margin: const EdgeInsets.all(2),
-                color: Colors.black54,
-                child: Text(
-                  information.getMessage(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
+      constraints: BoxConstraints.expand(
+        height: 120,
+        width: !isPortrait ? 200 : null,
+      ),
+      child: ValueListenableProvider<File>.value(
+        value: image,
+        child: LocalImage(),
+      ),
+    );
+  }
+
+  Widget _message(bool isPortrait) {
+    if (information.getMessage() != null) {
+      if (isPortrait) {
+        return Align(
+          alignment: Alignment.bottomRight,
+          child: Container(
+            padding: const EdgeInsets.all(4),
+            margin: const EdgeInsets.all(2),
+            color: Colors.black54,
+            child: Text(
+              information.getMessage(),
+              style: const TextStyle(
+                color: Colors.white,
               ),
             ),
-        ],
-      ),
-    );
+          ),
+        );
+      } else {
+        return Text(
+          information.getMessage(),
+        );
+      }
+    } else {
+      return Container();
+    }
   }
 
-  Widget _info() {
+  Widget _info(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -87,7 +119,7 @@ class ImageCardListTile extends StatelessWidget {
             information.getTitle(),
             overflow: TextOverflow.ellipsis,
           ),
-          width: 200,
+          width: MediaQuery.of(context).size.width - 280,
           margin: const EdgeInsets.all(2),
         ),
         ValueListenableBuilder(
