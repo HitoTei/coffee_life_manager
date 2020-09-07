@@ -47,10 +47,10 @@ class _HomeMakersState extends State<HomeMakers> {
   void initState() {
     final viewModel = Provider.of<HomeViewModel>(context, listen: false);
     subBean = viewModel.beanController.stream.listen((event) {
-      beanList.value = [...beanList.value, event];
+      beanList.value = [event, ...beanList.value];
     });
     subCafe = viewModel.cafeController.stream.listen((event) {
-      cafeList.value = [...cafeList.value, event];
+      cafeList.value = [event, ...cafeList.value];
     });
     super.initState();
   }

@@ -15,7 +15,8 @@ class CafeDaoImpl implements CafeDao {
     final list = await db.query(
       _table,
     );
-    return list.map((e) => Cafe.fromMap(e)).toList();
+    return list.map((e) => Cafe.fromMap(e)).toList()
+      ..sort((a, b) => b.uid - a.uid);
   }
 
   @override
@@ -25,7 +26,8 @@ class CafeDaoImpl implements CafeDao {
       _table,
       where: '$isFavoriteKey = 1',
     );
-    return list.map((e) => Cafe.fromMap(e)).toList();
+    return list.map((e) => Cafe.fromMap(e)).toList()
+      ..sort((a, b) => b.uid - a.uid);
   }
 
   @override

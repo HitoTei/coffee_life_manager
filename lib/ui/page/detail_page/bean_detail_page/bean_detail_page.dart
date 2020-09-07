@@ -108,29 +108,26 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
         ),
         ValueListenableBuilder(
           valueListenable: viewModel.roast,
-          builder: (context, Roast value, _) =>
-              RoastListTile(
-                value: value,
-                onChanged: viewModel.roastChanged,
-              ),
+          builder: (context, Roast value, _) => RoastListTile(
+            value: value,
+            onChanged: viewModel.roastChanged,
+          ),
         ),
         ValueListenableBuilder(
           valueListenable: viewModel.freshnessDate,
-          builder: (context, DateTime value, _) =>
-              DateTimeListTile(
-                title: const Text('賞味期限'),
-                value: value,
-                onChanged: viewModel.freshnessDateChanged,
-              ),
+          builder: (context, DateTime value, _) => DateTimeListTile(
+            title: const Text('賞味期限'),
+            value: value,
+            onChanged: viewModel.freshnessDateChanged,
+          ),
         ),
         ValueListenableBuilder(
           valueListenable: viewModel.openTime,
-          builder: (context, DateTime value, _) =>
-              DateTimeListTile(
-                title: const Text('開封日時'),
-                value: value,
-                onChanged: viewModel.openTimeChanged,
-              ),
+          builder: (context, DateTime value, _) => DateTimeListTile(
+            title: const Text('開封日時'),
+            value: value,
+            onChanged: viewModel.openTimeChanged,
+          ),
         ),
       ],
       rate: RateWidget(viewModel.bean.rate),
@@ -145,11 +142,10 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
             await Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
-                builder: (_) =>
-                    ValueListenableProvider.value(
-                      value: list,
-                      child: HouseCoffeeListPage(),
-                    ),
+                builder: (_) => ValueListenableProvider.value(
+                  value: list,
+                  child: HouseCoffeeListPage(),
+                ),
               ),
             );
           },

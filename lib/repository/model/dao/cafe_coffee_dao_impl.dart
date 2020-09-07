@@ -15,7 +15,8 @@ class CafeCoffeeDaoImpl implements CafeCoffeeDao {
     final list = await db.query(
       _table,
     );
-    return list.map((e) => CafeCoffee.fromMap(e)).toList();
+    return list.map((e) => CafeCoffee.fromMap(e)).toList()
+      ..sort((a, b) => b.uid - a.uid);
   }
 
   @override
@@ -29,7 +30,19 @@ class CafeCoffeeDaoImpl implements CafeCoffeeDao {
         cafeId,
       ],
     );
-    return list.map((e) => CafeCoffee.fromMap(e)).toList();
+    return list.map((e) => CafeCoffee.fromMap(e)).toList()
+      ..sort((a, b) => b.uid - a.uid);
+  }
+
+  @override
+  Future<List<CafeCoffee>> fetchFavorite() async {
+    final db = await _db;
+    final list = await db.query(
+      _table,
+      where: '$isFavoriteKey = 1',
+    );
+    return list.map((e) => CafeCoffee.fromMap(e)).toList()
+      ..sort((a, b) => b.uid - a.uid);
   }
 
   @override
@@ -44,16 +57,6 @@ class CafeCoffeeDaoImpl implements CafeCoffeeDao {
     );
     final list = mapList.map((e) => CafeCoffee.fromMap(e)).toList();
     return (list.isNotEmpty) ? list[0] : null;
-  }
-
-  @override
-  Future<List<CafeCoffee>> fetchFavorite() async {
-    final db = await _db;
-    final list = await db.query(
-      _table,
-      where: '$isFavoriteKey = 1',
-    );
-    return list.map((e) => CafeCoffee.fromMap(e)).toList();
   }
 
   @override

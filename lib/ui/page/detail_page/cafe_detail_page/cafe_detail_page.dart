@@ -124,11 +124,10 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
             await Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
-                builder: (_) =>
-                    ValueListenableProvider.value(
-                      value: list,
-                      child: CafeCoffeeListPage(),
-                    ),
+                builder: (_) => ValueListenableProvider.value(
+                  value: list,
+                  child: CafeCoffeeListPage(),
+                ),
               ),
             );
           },
