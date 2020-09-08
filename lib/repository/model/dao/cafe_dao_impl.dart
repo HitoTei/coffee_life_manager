@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:coffee_life_manager/function/get_file.dart';
 import 'package:coffee_life_manager/model/cafe.dart';
 import 'package:coffee_life_manager/repository/model/dao/interface/cafe_dao.dart';
 import 'package:coffee_life_manager/repository/sql_database.dart';
@@ -56,6 +59,13 @@ class CafeDaoImpl implements CafeDao {
 
   @override
   Future<int> delete(Cafe cafe) async {
+    if (cafe.imageUri != null) {
+      try {
+        (await getLocalFile(cafe.imageUri)).deleteSync();
+      } catch (e) {
+        log('Catch exception when deleting image: $e');
+      }
+    }
     final db = await _db;
     return db.delete(
       _table,

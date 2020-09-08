@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:coffee_life_manager/function/get_file.dart';
 import 'package:coffee_life_manager/model/house_coffee.dart';
 import 'package:coffee_life_manager/repository/model/dao/interface/house_coffee_dao.dart';
 import 'package:sqflite/sqflite.dart';
@@ -70,6 +73,13 @@ class HouseCoffeeDaoImpl implements HouseCoffeeDao {
 
   @override
   Future<int> delete(HouseCoffee coffee) async {
+    if (coffee.imageUri != null) {
+      try {
+        (await getLocalFile(coffee.imageUri)).deleteSync();
+      } catch (e) {
+        log('Catch exception when deleting image: $e');
+      }
+    }
     final db = await _db;
     return db.delete(
       _table,
