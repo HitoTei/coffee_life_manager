@@ -14,7 +14,6 @@ class MakeHouseCoffeePage extends StatelessWidget {
     final viewModel = MakeHouseCoffeePageViewModel(
       Provider.of(context, listen: false),
       Provider.of(context, listen: false),
-      Provider.of(context, listen: false),
     );
 
     return Scaffold(

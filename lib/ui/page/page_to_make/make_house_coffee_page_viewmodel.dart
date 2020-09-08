@@ -3,11 +3,10 @@ import 'package:coffee_life_manager/model/enums/drip.dart';
 import 'package:coffee_life_manager/model/enums/grind.dart';
 import 'package:coffee_life_manager/model/house_coffee.dart';
 import 'package:coffee_life_manager/repository/model/dao/interface/bean_dao.dart';
-import 'package:coffee_life_manager/repository/model/dao/interface/house_coffee_dao.dart';
 import 'package:flutter/cupertino.dart';
 
 class MakeHouseCoffeePageViewModel {
-  MakeHouseCoffeePageViewModel(this.bean, this.beanDao, this.coffeeDao)
+  MakeHouseCoffeePageViewModel(this.bean, this.beanDao)
       : coffee = HouseCoffee()
           ..roast = bean.roast
           ..beanName = bean.beanName
@@ -20,7 +19,6 @@ class MakeHouseCoffeePageViewModel {
   final HouseCoffee coffee;
 
   final BeanDao beanDao;
-  final HouseCoffeeDao coffeeDao;
 
   final ValueNotifier<Drip> drip;
   final ValueNotifier<Grind> grind;
@@ -62,6 +60,5 @@ class MakeHouseCoffeePageViewModel {
   void save() {
     bean.remainingAmount -= coffee.numOfCups * bean.oneCupPerGram;
     beanDao.update(bean);
-    coffeeDao.insert(coffee).then((value) => coffee.uid = value);
   }
 }
