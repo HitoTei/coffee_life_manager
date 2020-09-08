@@ -15,7 +15,8 @@ class BeanDaoImpl implements BeanDao {
     final list = await db.query(
       _table,
     );
-    return list.map((e) => Bean.fromMap(e)).toList();
+    return list.map((e) => Bean.fromMap(e)).toList()
+      ..sort((a, b) => b.uid - a.uid);
   }
 
   @override
@@ -25,7 +26,8 @@ class BeanDaoImpl implements BeanDao {
       _table,
       where: '$isFavoriteKey = 1',
     );
-    return list.map((e) => Bean.fromMap(e)).toList();
+    return list.map((e) => Bean.fromMap(e)).toList()
+      ..sort((a, b) => b.uid - a.uid);
   }
 
   @override
@@ -38,7 +40,8 @@ class BeanDaoImpl implements BeanDao {
         cafeId,
       ],
     );
-    return list.map((e) => Bean.fromMap(e)).toList();
+    return list.map((e) => Bean.fromMap(e)).toList()
+      ..sort((a, b) => b.uid - a.uid);
   }
 
   @override

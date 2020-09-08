@@ -121,15 +121,15 @@ class _CafeDetailPageState extends State<CafeDetailPage> {
                   .read<CafeCoffeeDao>()
                   .fetchByCafeId(viewModel.cafe.uid);
 
-            await Navigator.push<dynamic>(
+            await Navigator.pushAndRemoveUntil<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
-                builder: (_) =>
-                    ValueListenableProvider.value(
-                      value: list,
-                      child: CafeCoffeeListPage(),
-                    ),
+                builder: (_) => ValueListenableProvider.value(
+                  value: list,
+                  child: CafeCoffeeListPage(),
+                ),
               ),
+              (route) => route.isFirst,
             );
           },
         ),

@@ -91,7 +91,7 @@ class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
               await Fluttertoast.showToast(msg: 'そのカフェは削除されました');
               return;
             }
-            await Navigator.push<dynamic>(
+            await Navigator.pushAndRemoveUntil<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
                 builder: (_) => Provider.value(
@@ -99,6 +99,7 @@ class _CafeCoffeeDetailPageState extends State<CafeCoffeeDetailPage> {
                   child: CafeDetailPage(),
                 ),
               ),
+              (route) => route.isFirst,
             );
           },
         ),

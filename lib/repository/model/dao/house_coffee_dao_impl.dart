@@ -15,7 +15,8 @@ class HouseCoffeeDaoImpl implements HouseCoffeeDao {
     final list = await db.query(
       _table,
     );
-    return list.map((e) => HouseCoffee.fromMap(e)).toList();
+    return list.map((e) => HouseCoffee.fromMap(e)).toList()
+      ..sort((a, b) => b.uid - a.uid);
   }
 
   @override
@@ -28,7 +29,19 @@ class HouseCoffeeDaoImpl implements HouseCoffeeDao {
         id,
       ],
     );
-    return list.map((e) => HouseCoffee.fromMap(e)).toList();
+    return list.map((e) => HouseCoffee.fromMap(e)).toList()
+      ..sort((a, b) => b.uid - a.uid);
+  }
+
+  @override
+  Future<List<HouseCoffee>> fetchFavorite() async {
+    final db = await _db;
+    final list = await db.query(
+      _table,
+      where: '$isFavoriteKey = 1',
+    );
+    return list.map((e) => HouseCoffee.fromMap(e)).toList()
+      ..sort((a, b) => b.uid - a.uid);
   }
 
   @override
@@ -43,16 +56,6 @@ class HouseCoffeeDaoImpl implements HouseCoffeeDao {
     );
     final list = mapList.map((e) => HouseCoffee.fromMap(e)).toList();
     return (list.isNotEmpty) ? list[0] : null;
-  }
-
-  @override
-  Future<List<HouseCoffee>> fetchFavorite() async {
-    final db = await _db;
-    final list = await db.query(
-      _table,
-      where: '$isFavoriteKey = 1',
-    );
-    return list.map((e) => HouseCoffee.fromMap(e)).toList();
   }
 
   @override

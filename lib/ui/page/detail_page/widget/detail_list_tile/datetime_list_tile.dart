@@ -17,7 +17,7 @@ class DateTimeListTile extends StatelessWidget {
     return ListTile(
       title: title,
       subtitle: Text(
-        DateFormat.yMMMMEEEEd().format(value),
+        (value != null) ? DateFormat.yMMMMEEEEd().format(value) : '未設定',
       ),
       onTap: () async {
         final date = await showDatePicker(
