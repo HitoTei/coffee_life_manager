@@ -115,7 +115,7 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
               return;
             }
 
-            await Navigator.push<dynamic>(
+            await Navigator.pushAndRemoveUntil<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
                 builder: (_) => Provider.value(
@@ -123,6 +123,7 @@ class _HouseCoffeeDetailPageState extends State<HouseCoffeeDetailPage> {
                   child: BeanDetailPage(),
                 ),
               ),
+              (route) => route.isFirst,
             );
           },
         ),

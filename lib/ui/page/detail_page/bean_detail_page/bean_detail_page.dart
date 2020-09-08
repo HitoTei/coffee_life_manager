@@ -139,7 +139,7 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
             final list = ValueNotifier<List<HouseCoffee>>(null)
               ..value = await _dao.fetchByBeanId(viewModel.bean.uid);
 
-            await Navigator.push<dynamic>(
+            await Navigator.pushAndRemoveUntil<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
                 builder: (_) => ValueListenableProvider.value(
@@ -147,6 +147,7 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
                   child: HouseCoffeeListPage(),
                 ),
               ),
+              (route) => route.isFirst,
             );
           },
         ),
