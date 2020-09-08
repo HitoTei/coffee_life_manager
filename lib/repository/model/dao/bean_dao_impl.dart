@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:coffee_life_manager/constant_string.dart';
+import 'package:coffee_life_manager/function/get_file.dart';
 import 'package:coffee_life_manager/model/bean.dart';
 import 'package:coffee_life_manager/repository/model/dao/interface/bean_dao.dart';
 import 'package:sqflite/sqflite.dart';
@@ -70,6 +73,14 @@ class BeanDaoImpl implements BeanDao {
 
   @override
   Future<int> delete(Bean bean) async {
+    if (bean.imageUri != null) {
+      try {
+        (await getLocalFile(bean.imageUri)).deleteSync();
+      } catch (e) {
+        log('Catch exception when deleting image: $e');
+      }
+    }
+
     final db = await _db;
     return db.delete(
       _table,

@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:coffee_life_manager/function/get_file.dart';
 import 'package:coffee_life_manager/model/cafe_coffee.dart';
 import 'package:coffee_life_manager/repository/model/dao/interface/cafe_coffee_dao.dart';
 import 'package:sqflite/sqflite.dart';
@@ -60,36 +63,43 @@ class CafeCoffeeDaoImpl implements CafeCoffeeDao {
   }
 
   @override
-  Future<int> insert(CafeCoffee cafe) async {
+  Future<int> insert(CafeCoffee coffee) async {
     final db = await _db;
     return db.insert(
       _table,
-      cafe.toMap(),
+      coffee.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
   @override
-  Future<int> delete(CafeCoffee cafe) async {
+  Future<int> delete(CafeCoffee coffee) async {
+    if (coffee.imageUri != null) {
+      try {
+        (await getLocalFile(coffee.imageUri)).deleteSync();
+      } catch (e) {
+        log('Catch exception when deleting image: $e');
+      }
+    }
     final db = await _db;
     return db.delete(
       _table,
       where: '$uidKey = ?',
       whereArgs: <dynamic>[
-        cafe.uid,
+        coffee.uid,
       ],
     );
   }
 
   @override
-  Future<int> update(CafeCoffee cafe) async {
+  Future<int> update(CafeCoffee coffee) async {
     final db = await _db;
     return db.update(
       _table,
-      cafe.toMap(),
+      coffee.toMap(),
       where: '$uidKey = ?',
       whereArgs: <dynamic>[
-        cafe.uid,
+        coffee.uid,
       ],
     );
   }
