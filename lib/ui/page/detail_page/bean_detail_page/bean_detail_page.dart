@@ -60,7 +60,7 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
                 Fluttertoast.showToast(msg: 'コーヒーの残量が足りません');
                 return;
               }
-              Navigator.pushReplacement<dynamic, dynamic>(
+              Navigator.push<dynamic>(
                 context,
                 MaterialPageRoute<dynamic>(
                   builder: (_) => Provider.value(
@@ -68,7 +68,8 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
                     child: MakeHouseCoffeePage(),
                   ),
                 ),
-              );
+              ).then((dynamic _) => viewModel
+                  .remainingAmountChanged(viewModel.bean.remainingAmount));
             },
           ),
           IconButton(

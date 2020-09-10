@@ -74,48 +74,52 @@ class _BeanAmountWidget extends StatelessWidget {
     final cup = Provider.of<int>(context);
 
     final beanAmount = cup * viewModel.bean.oneCupPerGram;
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          child: IconButton(
-            icon: const Icon(Icons.arrow_drop_up),
-            onPressed: viewModel.cupIncrement,
-          ),
-        ),
-        Expanded(
-          flex: 3,
-          child: IntListTile(
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '使用できる豆の量 ${viewModel.bean.remainingAmount}g',
-                ),
-                Text(
-                  '使用する豆の量 $beanAmount g ',
-                ),
-              ],
+        Row(
+          children: [
+            Expanded(
+              child: IconButton(
+                icon: const Icon(Icons.arrow_drop_up),
+                onPressed: viewModel.cupIncrement,
+              ),
             ),
-            unit: '杯',
-            value: cup,
-            onChanged: (val) {
-              if (!viewModel.cupChanged(val)) {
-                Scaffold.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      '豆の量が足りません',
-                    ),
-                  ),
-                );
-              }
-            },
-          ),
+            Expanded(
+              flex: 3,
+              child: ListTile(
+                title: Text(
+                  '使用できる豆の量 ${viewModel.bean.remainingAmount} g ',
+                ),
+                subtitle: Text('使用する豆の量 $beanAmount'),
+              ),
+            ),
+            Expanded(
+              child: IconButton(
+                icon: const Icon(Icons.arrow_drop_down),
+                onPressed: viewModel.cupDecrement,
+              ),
+            ),
+          ],
         ),
-        Expanded(
-          child: IconButton(
-            icon: const Icon(Icons.arrow_drop_down),
-            onPressed: viewModel.cupDecrement,
+        IntListTile(
+          title: Text(
+            '淹れる量 $cup杯',
           ),
+          unit: '杯',
+          hintText:
+              '最大: ${(viewModel.bean.remainingAmount / viewModel.bean.oneCupPerGram).toInt()}杯',
+          value: cup,
+          onChanged: (val) {
+            if (!viewModel.cupChanged(val)) {
+              Scaffold.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    '豆の量が足りません',
+                  ),
+                ),
+              );
+            }
+          },
         ),
       ],
     );

@@ -7,6 +7,7 @@ class IntListTile extends StatelessWidget {
     @required this.unit,
     @required this.value,
     @required this.onChanged,
+    this.hintText = '',
     this.digit = 7,
   }) : _editingController = TextEditingController()..text = value.toString();
 
@@ -14,6 +15,7 @@ class IntListTile extends StatelessWidget {
   final String unit;
   final int value;
   final Function(int) onChanged;
+  final String hintText;
   final TextEditingController _editingController;
 
   final int digit;
@@ -36,8 +38,8 @@ class IntListTile extends StatelessWidget {
                 inputFormatters: <TextInputFormatter>[
                   WhitelistingTextInputFormatter.digitsOnly
                 ],
-                decoration: const InputDecoration(
-                  hintText: '正の整数を入力してください',
+                decoration: InputDecoration(
+                  hintText: hintText,
                 ),
               ),
               actions: [

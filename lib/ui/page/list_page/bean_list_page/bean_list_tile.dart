@@ -1,4 +1,5 @@
-import 'package:coffee_life_manager/repository/model/dao/interface/bean_dao.dart';
+import 'dart:developer';
+
 import 'package:coffee_life_manager/ui/page/detail_page/bean_detail_page/bean_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/bean_list_page/bean_list_tile_viewmodel.dart';
 import 'package:coffee_life_manager/ui/page/list_page/list_tile/image_card_list_tile.dart';
@@ -37,12 +38,12 @@ class _BeanListTileState extends State<BeanListTile> {
             ),
           ),
         );
-        final bean =
-            await context.read<BeanDao>().fetchByUid(viewModel.bean.uid);
+
         setState(() {
+          log(viewModel.bean.toMap().toString());
           viewModel
-            ..bean = bean
-            ..onFavChanged(bean.isFavorite);
+            ..bean = viewModel.bean
+            ..onFavChanged(viewModel.bean.isFavorite);
         });
       },
     );
