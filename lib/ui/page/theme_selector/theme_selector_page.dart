@@ -9,15 +9,16 @@ class ThemeSelectorPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('テーマを選択'),
       ),
-      body: ListView(
+      body: GridView.count(
+        crossAxisCount: 4,
         children: [
           for (var theme in ThemeManager.themes)
             Container(
               color: theme.primaryColor,
               child: ListTile(
-                title: Text(
-                  'これ',
-                  style: theme.textTheme.bodyText1,
+                leading: Icon(
+                  Icons.adjust,
+                  color: theme.accentColor,
                 ),
                 onTap: () {
                   ThemeManager().setTheme(theme);

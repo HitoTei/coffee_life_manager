@@ -16,17 +16,30 @@ class ThemeManager extends ValueNotifier<ThemeData> {
   static final _cache = ThemeManager._internal();
   final _pref = SharedPreferences.getInstance();
   static const _key = 'CoffeeLifeManagerThemeData';
-  static final themes = [
+  static final themes = <ThemeData>[
     ThemeData.dark(),
     ThemeData.light(),
     ThemeData(
-      primaryColor: Colors.brown,
-      primaryColorBrightness: Brightness.dark,
-      primaryColorDark: Colors.brown[800],
-      primaryColorLight: Colors.brown[300],
+      primarySwatch: Colors.brown,
+      primaryColor: const Color(0xFF795548),
+      accentColor: const Color(0xFFbc2a11),
+      canvasColor: const Color(0xFFfafafa),
+      fontFamily: 'Merriweather',
+    ),
+    ThemeData(
+      primarySwatch: Colors.brown,
+      primaryColor: const Color(0xFF795548),
       accentColor: Colors.deepOrange,
-      accentColorBrightness: Brightness.dark,
-      visualDensity: VisualDensity.adaptivePlatformDensity,
+      canvasColor: const Color(0xFFdcccc5),
+      buttonColor: Colors.white70,
+    ),
+    ThemeData(
+      brightness: Brightness.dark,
+      primarySwatch: Colors.blueGrey,
+      primaryColor: const Color(0xFF212121),
+      accentColor: Colors.redAccent,
+      canvasColor: Colors.brown[800],
+      fontFamily: 'Merriweather',
     ),
   ];
 

@@ -57,17 +57,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 providers: [
                   Provider.value(
                     value: viewModel,
-            ),
-            ValueListenableProvider.value(value: favoriteOnly),
-          ],
-          child: HomeMakers(),
-        )
+                  ),
+                  ValueListenableProvider.value(value: favoriteOnly),
+                ],
+                child: HomeMakers(),
+              )
             : MultiProvider(
-          providers: [
-            ValueListenableProvider.value(value: favoriteOnly),
-          ],
-          child: HomeCoffee(),
-        ),
+                providers: [
+                  ValueListenableProvider.value(value: favoriteOnly),
+                ],
+                child: HomeCoffee(),
+              ),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
