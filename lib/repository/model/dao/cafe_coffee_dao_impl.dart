@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:coffee_life_manager/function/get_file.dart';
+import 'package:coffee_life_manager/function/sort_compare.dart';
 import 'package:coffee_life_manager/model/cafe_coffee.dart';
 import 'package:coffee_life_manager/repository/model/dao/interface/cafe_coffee_dao.dart';
 import 'package:sqflite/sqflite.dart';
@@ -19,7 +20,7 @@ class CafeCoffeeDaoImpl implements CafeCoffeeDao {
       _table,
     );
     return list.map((e) => CafeCoffee.fromMap(e)).toList()
-      ..sort((a, b) => b.uid - a.uid);
+      ..sort((a, b) => sortCompare(a.uid, b.uid));
   }
 
   @override
@@ -34,7 +35,7 @@ class CafeCoffeeDaoImpl implements CafeCoffeeDao {
       ],
     );
     return list.map((e) => CafeCoffee.fromMap(e)).toList()
-      ..sort((a, b) => b.uid - a.uid);
+      ..sort((a, b) => sortCompare(a.uid, b.uid));
   }
 
   @override
@@ -45,7 +46,7 @@ class CafeCoffeeDaoImpl implements CafeCoffeeDao {
       where: '$isFavoriteKey = 1',
     );
     return list.map((e) => CafeCoffee.fromMap(e)).toList()
-      ..sort((a, b) => b.uid - a.uid);
+      ..sort((a, b) => sortCompare(a.uid, b.uid));
   }
 
   @override

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:coffee_life_manager/constant_string.dart';
 import 'package:coffee_life_manager/function/get_file.dart';
+import 'package:coffee_life_manager/function/sort_compare.dart';
 import 'package:coffee_life_manager/model/bean.dart';
 import 'package:coffee_life_manager/repository/model/dao/interface/bean_dao.dart';
 import 'package:sqflite/sqflite.dart';
@@ -19,7 +20,7 @@ class BeanDaoImpl implements BeanDao {
       _table,
     );
     return list.map((e) => Bean.fromMap(e)).toList()
-      ..sort((a, b) => b.uid - a.uid);
+      ..sort((a, b) => sortCompare(a.uid, b.uid));
   }
 
   @override
@@ -30,7 +31,7 @@ class BeanDaoImpl implements BeanDao {
       where: '$isFavoriteKey = 1',
     );
     return list.map((e) => Bean.fromMap(e)).toList()
-      ..sort((a, b) => b.uid - a.uid);
+      ..sort((a, b) => sortCompare(a.uid, b.uid));
   }
 
   @override
@@ -44,7 +45,7 @@ class BeanDaoImpl implements BeanDao {
       ],
     );
     return list.map((e) => Bean.fromMap(e)).toList()
-      ..sort((a, b) => b.uid - a.uid);
+      ..sort((a, b) => sortCompare(a.uid, b.uid));
   }
 
   @override

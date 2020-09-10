@@ -29,7 +29,6 @@ class MakeHouseCoffeePage extends StatelessWidget {
             ],
             child: _BeanAmountWidget(),
           ),
-          const Divider(),
           ValueListenableBuilder(
             valueListenable: viewModel.drip,
             builder: (context, Drip value, _) => DripListTile(
@@ -101,6 +100,7 @@ class _BeanAmountWidget extends StatelessWidget {
             ),
           ],
         ),
+        const Divider(),
         IntListTile(
           title: Text(
             '淹れる量 $cup杯',

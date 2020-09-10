@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:coffee_life_manager/function/get_file.dart';
+import 'package:coffee_life_manager/function/sort_compare.dart';
 import 'package:coffee_life_manager/model/cafe.dart';
 import 'package:coffee_life_manager/repository/model/dao/interface/cafe_dao.dart';
 import 'package:coffee_life_manager/repository/sql_database.dart';
@@ -19,7 +20,7 @@ class CafeDaoImpl implements CafeDao {
       _table,
     );
     return list.map((e) => Cafe.fromMap(e)).toList()
-      ..sort((a, b) => b.uid - a.uid);
+      ..sort((a, b) => sortCompare(a.uid, b.uid));
   }
 
   @override
@@ -30,7 +31,7 @@ class CafeDaoImpl implements CafeDao {
       where: '$isFavoriteKey = 1',
     );
     return list.map((e) => Cafe.fromMap(e)).toList()
-      ..sort((a, b) => b.uid - a.uid);
+      ..sort((a, b) => sortCompare(a.uid, b.uid));
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:coffee_life_manager/function/sort_compare.dart';
 import 'package:coffee_life_manager/model/bean.dart';
 import 'package:coffee_life_manager/model/cafe.dart';
 import 'package:coffee_life_manager/ui/home/home_coffee.dart';
@@ -9,6 +10,7 @@ import 'package:coffee_life_manager/ui/page/setting_page/setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
   static const _tab = [
@@ -31,7 +33,18 @@ class _MyHomePageState extends State<MyHomePage> {
   void dispose() {
     viewModel.beanController.close();
     viewModel.cafeController.close();
+    SharedPreferences.getInstance().then(
+      (value) => value.setBool('isAsc', isAsc),
+    );
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    SharedPreferences.getInstance().then(
+      (value) => setState(() => isAsc = value.getBool('isAsc') ?? true),
+    );
+    super.initState();
   }
 
   @override
@@ -44,17 +57,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 providers: [
                   Provider.value(
                     value: viewModel,
-                  ),
-                  ValueListenableProvider.value(value: favoriteOnly),
-                ],
-                child: HomeMakers(),
-              )
+            ),
+            ValueListenableProvider.value(value: favoriteOnly),
+          ],
+          child: HomeMakers(),
+        )
             : MultiProvider(
-                providers: [
-                  ValueListenableProvider.value(value: favoriteOnly),
-                ],
-                child: HomeCoffee(),
-              ),
+          providers: [
+            ValueListenableProvider.value(value: favoriteOnly),
+          ],
+          child: HomeCoffee(),
+        ),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
@@ -96,7 +109,14 @@ class _MyHomePageState extends State<MyHomePage> {
               IconButton(
                 icon: const Icon(Icons.sort),
                 onPressed: () {
-                  // ここもbottom sheetで
+                  showModalBottomSheet<dynamic>(
+                    context: context,
+                    builder: (_) =>
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: _sortMenuListTileList(),
+                        ),
+                  );
                 },
               ),
             ],
@@ -104,6 +124,33 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  List<Widget> _sortMenuListTileList() {
+    return [
+      ListTile(
+        title: const Text('新しく追加した順'),
+        onTap: () {
+          setState(() {
+            isAsc = true;
+            Navigator.pop(context);
+          });
+        },
+        enabled: !isAsc,
+      ),
+      ListTile(
+        title: const Text('古く追加した順'),
+        onTap: () {
+          setState(
+                () {
+              isAsc = false;
+              Navigator.pop(context);
+            },
+          );
+        },
+        enabled: isAsc,
+      )
+    ];
   }
 
   List<Widget> _addMenuListTileList() {
