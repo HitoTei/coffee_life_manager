@@ -1,3 +1,4 @@
+import 'package:coffee_life_manager/repository/model/dao/interface/house_coffee_dao.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail_page/house_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/house_coffee_list_page/house_coffee_list_tile_viewmodel.dart';
 import 'package:coffee_life_manager/ui/page/list_page/list_tile/image_card_list_tile.dart';
@@ -36,10 +37,15 @@ class _HouseCoffeeListTileState extends State<HouseCoffeeListTile> {
             ),
           ),
         );
+
+        final coffee = await context
+            .read<HouseCoffeeDao>()
+            .fetchByUid(viewModel.coffee.uid);
+
         setState(() {
           viewModel
-            ..coffee = viewModel.coffee
-            ..onFavChanged(viewModel.coffee.isFavorite);
+            ..coffee = coffee
+            ..onFavChanged(coffee.isFavorite);
         });
       },
     );

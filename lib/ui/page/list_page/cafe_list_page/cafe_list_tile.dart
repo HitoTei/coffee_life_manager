@@ -1,3 +1,4 @@
+import 'package:coffee_life_manager/repository/model/dao/interface/cafe_dao.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail_page/cafe_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_list_page/cafe_list_tile_viewmodel.dart';
 import 'package:coffee_life_manager/ui/page/list_page/list_tile/image_card_list_tile.dart';
@@ -36,10 +37,14 @@ class _CafeListTileState extends State<CafeListTile> {
             ),
           ),
         );
+
+        final cafe =
+            await context.read<CafeDao>().fetchByUid(viewModel.cafe.uid);
+
         setState(() {
           viewModel
-            ..cafe = viewModel.cafe
-            ..onFavChanged(viewModel.cafe.isFavorite);
+            ..cafe = cafe
+            ..onFavChanged(cafe.isFavorite);
         });
       },
     );
