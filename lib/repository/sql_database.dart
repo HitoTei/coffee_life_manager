@@ -95,7 +95,8 @@ class SqlDatabase {
       $cafeIdKey INTEGER,
       $memoKey TEXT,
       $imageUriKey TEXT,
-      $isFavoriteKey INTEGER
+      $isFavoriteKey INTEGER,
+      $firstAmountKey INTEGER
     );
     ''');
   }

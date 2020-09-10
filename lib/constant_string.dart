@@ -22,3 +22,4 @@ const uidKey = 'uidKey';
 const imageUriKey = 'imageUriKey';
 const startTimeKey = 'startTimeKey';
 const endTimeKey = 'endTimeKey';
+const firstAmountKey = 'firstAmountKey';

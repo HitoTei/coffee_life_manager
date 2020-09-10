@@ -79,6 +79,16 @@ class _BeanDetailPageState extends State<BeanDetailPage> {
       ),
       detailList: [
         ValueListenableBuilder(
+          valueListenable: viewModel.firstAmount,
+          builder: (context, int value, _) => IntListTile(
+            title: const Text('総量'),
+            unit: 'g',
+            value: value,
+            onChanged: viewModel.firstAmountChanged,
+            digit: 2,
+          ),
+        ),
+        ValueListenableBuilder(
           valueListenable: viewModel.remainingAmount,
           builder: (context, int value, _) => IntListTile(
             title: const Text('残量'),

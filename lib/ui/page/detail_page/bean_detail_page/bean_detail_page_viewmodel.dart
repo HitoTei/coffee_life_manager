@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 class BeanDetailPageViewModel {
   BeanDetailPageViewModel(this.bean, this.dao)
       : isFavorite = ValueNotifier(bean.isFavorite),
+        firstAmount = ValueNotifier(bean.firstAmount),
         remainingAmount = ValueNotifier(bean.remainingAmount),
         oneCupPerGram = ValueNotifier(bean.oneCupPerGram),
         price = ValueNotifier(bean.price),
@@ -29,6 +30,7 @@ class BeanDetailPageViewModel {
   bool canDripCoffee() => bean.remainingAmount < bean.oneCupPerGram;
 
   final ValueNotifier<bool> isFavorite;
+  final ValueNotifier<int> firstAmount;
   final ValueNotifier<int> remainingAmount;
   final ValueNotifier<int> oneCupPerGram;
   final ValueNotifier<int> price;
@@ -39,6 +41,11 @@ class BeanDetailPageViewModel {
   void isFavoriteChanged(bool val) {
     isFavorite.value = val;
     bean.isFavorite = val;
+  }
+
+  void firstAmountChanged(int val) {
+    firstAmount.value = val;
+    bean.firstAmount = val;
   }
 
   void remainingAmountChanged(int val) {
