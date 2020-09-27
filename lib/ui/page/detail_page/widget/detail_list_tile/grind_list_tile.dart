@@ -1,4 +1,4 @@
-import 'package:coffee_life_manager/model/enums/grind.dart';
+import 'package:coffee_life_manager/entity/enums/grind.dart';
 import 'package:flutter/material.dart';
 
 class GrindListTile extends StatelessWidget {

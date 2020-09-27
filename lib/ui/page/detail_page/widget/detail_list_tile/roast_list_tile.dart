@@ -1,4 +1,4 @@
-import 'package:coffee_life_manager/model/enums/roast.dart';
+import 'package:coffee_life_manager/entity/enums/roast.dart';
 import 'package:flutter/material.dart';
 
 class RoastListTile extends StatelessWidget {

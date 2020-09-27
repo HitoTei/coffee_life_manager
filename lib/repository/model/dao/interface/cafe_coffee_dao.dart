@@ -1,4 +1,4 @@
-import 'package:coffee_life_manager/model/cafe_coffee.dart';
+import 'package:coffee_life_manager/entity/cafe_coffee.dart';
 
 abstract class CafeCoffeeDao {
   Future<List<CafeCoffee>> fetchAll();

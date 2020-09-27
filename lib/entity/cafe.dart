@@ -1,11 +1,9 @@
 import 'package:coffee_life_manager/function/int_bool_parse.dart';
-import 'package:coffee_life_manager/model/enums/day_of_the_week.dart';
-import 'package:coffee_life_manager/model/interface/image_card_information.dart';
 import 'package:flutter/material.dart';
 
 import '../constant_string.dart';
 
-class Cafe implements ImageCardInformation {
+class Cafe {
   Cafe();
 
   Cafe.fromMap(Map<String, dynamic> map) {

@@ -1,4 +1,4 @@
-import 'package:coffee_life_manager/model/enums/day_of_the_week.dart';
+import 'package:coffee_life_manager/entity/enums/day_of_the_week.dart';
 import 'package:flutter/material.dart';
 
 class DayOfTheWeekListTile extends StatelessWidget {

@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:coffee_life_manager/constant_string.dart';
+import 'package:coffee_life_manager/entity/bean.dart';
 import 'package:coffee_life_manager/function/get_file.dart';
 import 'package:coffee_life_manager/function/sort_compare.dart';
-import 'package:coffee_life_manager/model/bean.dart';
 import 'package:coffee_life_manager/repository/model/dao/interface/bean_dao.dart';
 import 'package:sqflite/sqflite.dart';
 

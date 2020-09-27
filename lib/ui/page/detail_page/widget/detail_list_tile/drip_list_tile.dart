@@ -1,4 +1,4 @@
-import 'package:coffee_life_manager/model/enums/drip.dart';
+import 'package:coffee_life_manager/entity/enums/drip.dart';
 import 'package:flutter/material.dart';
 
 class DripListTile extends StatelessWidget {

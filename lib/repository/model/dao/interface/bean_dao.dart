@@ -1,4 +1,4 @@
-import 'package:coffee_life_manager/model/bean.dart';
+import 'package:coffee_life_manager/entity/bean.dart';
 
 abstract class BeanDao {
   Future<List<Bean>> fetchAll();
