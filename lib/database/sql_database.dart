@@ -1,6 +1,9 @@
 import 'package:coffee_life_manager/constant_string.dart';
 import 'package:path/path.dart';
+import 'package:riverpod/all.dart';
 import 'package:sqflite/sqflite.dart';
+
+final sqlDatabase = Provider((_) => SqlDatabase());
 
 class SqlDatabase {
   factory SqlDatabase() => _cache ??= SqlDatabase._internal();
@@ -22,10 +25,10 @@ class SqlDatabase {
       join(await getDatabasesPath(), 'coffee_life_manager.db'),
       version: 1,
       onCreate: (Database db, int version) async {
-        _createCafeTable(db, version);
-        _createCafeCoffeeTable(db, version);
-        _createHouseCoffeeTable(db, version);
-        _createBeanTable(db, version);
+        await _createCafeTable(db, version);
+        await _createCafeCoffeeTable(db, version);
+        await _createHouseCoffeeTable(db, version);
+        await _createBeanTable(db, version);
       },
     );
   }

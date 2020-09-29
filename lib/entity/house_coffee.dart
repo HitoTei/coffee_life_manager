@@ -1,75 +1,29 @@
-import 'package:coffee_life_manager/function/int_bool_parse.dart';
-import 'package:coffee_life_manager/model/interface/image_card_information.dart';
-import 'package:coffee_life_manager/model/rate.dart';
-import 'package:intl/intl.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../constant_string.dart';
 import 'enums/drip.dart';
 import 'enums/grind.dart';
 import 'enums/roast.dart';
 
-class HouseCoffee implements ImageCardInformation {
-  HouseCoffee();
+part 'house_coffee.freezed.dart';
+part 'house_coffee.g.dart';
 
-  HouseCoffee.fromMap(Map<String, dynamic> map) {
-    uid = map[uidKey] as int;
-    beanName = map[beanNameKey] as String;
-    numOfCups = map[numOfCupsKey] as int;
-    beanId = map[beanIdKey] as int;
-    memo = map[memoKey] as String;
-    imageUri = map[imageUriKey] as String;
+@freezed
+abstract class HouseCoffee with _$HouseCoffee {
+  const factory HouseCoffee({
+    @nullable int uid,
+    @Default('') String beanName,
+    @Default(1) int numOfCups,
+    @Default(Grind.middleGrind) Grind grind,
+    @Default(Drip.paperDrip) Drip drip,
+    @Default(Roast.mediumRoast) Roast roast,
+    @nullable DateTime drinkDay,
+    @Default([0, 0, 0, 0, 0]) List<int> rate, // 評価
+    @nullable int beanId,
+    @Default('') String memo,
+    @Default('') String imageUri,
+    @Default(false) bool isFavorite,
+  }) = _HouseCoffee;
 
-    grind = Grind.values[map[grindKey] as int];
-    drip = Drip.values[map[dripKey] as int];
-    roast = Roast.values[map[roastKey] as int];
-    drinkDay = DateTime.parse(map[drinkDayKey] as String);
-    rate = Rate.fromJsonStr(map[rateKey] as String);
-    isFavorite = intToBool(map[isFavoriteKey] as int);
-  }
-
-  int uid;
-  String beanName = '';
-  int numOfCups = 1;
-  Grind grind = Grind.values[0];
-  Drip drip = Drip.values[0];
-  Roast roast = Roast.values[0];
-  DateTime drinkDay;
-  Rate rate = Rate();
-  int beanId;
-  String memo = '';
-  String imageUri;
-  bool isFavorite = false;
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      uidKey: uid,
-      beanNameKey: beanName,
-      numOfCupsKey: numOfCups,
-      beanIdKey: beanId,
-      memoKey: memo,
-      imageUriKey: imageUri,
-      // Sqliteで扱えないので扱える型にする
-      grindKey: grind.index,
-      dripKey: drip.index,
-      roastKey: roast.index,
-      drinkDayKey: drinkDay.toString(),
-      rateKey: rate.toJsonStr(),
-      isFavoriteKey: boolToInt(isFavorite),
-    };
-  }
-
-  @override
-  String getImageUri() => imageUri;
-
-  @override
-  void setImageUri(String value) => imageUri = value;
-
-  @override
-  String getTitle() => beanName;
-
-  @override
-  void setTitle(String value) => beanName = value;
-
-  @override
-  String getMessage() => DateFormat.yMMMMEEEEd().format(drinkDay);
+  factory HouseCoffee.fromJson(Map<String, dynamic> json) =>
+      _$HouseCoffeeFromJson(json);
 }
