@@ -234,7 +234,8 @@ class EntityRepository {
 
   Future<int> insert(String table, Map<String, dynamic> json) async {
     final db = await read(sqlDatabase).database;
-    return db.insert(table, instanceToSql(json));
+    final insert = instanceToSql(json);
+    return db.insert(table, insert);
   }
 
   Future<int> delete(String table, Map<String, dynamic> json) async {
@@ -264,17 +265,23 @@ Map<String, dynamic> sqlToInstance(Map<String, dynamic> e) {
   final map = <String, dynamic>{};
   e.forEach((key, dynamic value) {
     if ([roastKey].contains(key)) {
-      map[key] = Roast.values[value as int];
+      map[key] = Roast.values[value as int].toString().substring(6);
     } else if ([grindKey].contains(key)) {
-      map[key] = Grind.values[value as int];
+      map[key] = Grind.values[value as int].toString().substring(6);
     } else if ([dripKey].contains(key)) {
-      map[key] = Drip.values[value as int];
+      map[key] = Drip.values[value as int].toString().substring(5);
     } else if ([freshnessDateKey, openTimeKey].contains(key)) {
-      map[key] = DateTime.parse(value as String);
+      if (value == null || (value as String) == 'null') {
+        map[key] = null;
+      } else {
+        map[key] = DateTime.parse(value as String);
+      }
     } else if ([rateKey, startTimeKey, endTimeKey].contains(key)) {
-      map[key] = (value as String).split(',').map(int.parse);
+      map[key] = (value as String).split(',').map(int.parse).toList();
     } else if ([dayOfTheWeekStr].contains(key)) {
       map[key] = jsonStrToDayOfTheWeekList(value as String);
+    } else if ([isFavoriteKey].contains(key)) {
+      map[key] = (value as int) == 1;
     } else {
       map[key] = value;
     }
@@ -286,22 +293,33 @@ Map<String, dynamic> instanceToSql(Map<String, dynamic> e) {
   final map = <String, dynamic>{};
   e.forEach((key, dynamic value) {
     if ([roastKey].contains(key)) {
-      map[key] = Roast.values.indexOf(value as Roast);
+      map[key] = Roast.values
+          .map((e) => e.toString().substring(6))
+          .toList()
+          .indexOf(value as String);
     } else if ([grindKey].contains(key)) {
-      map[key] = Grind.values.indexOf(value as Grind);
+      map[key] = Grind.values
+          .map((e) => e.toString().substring(6))
+          .toList()
+          .indexOf(value as String);
     } else if ([dripKey].contains(key)) {
-      map[key] = Drip.values.indexOf(value as Drip);
+      map[key] = Drip.values
+          .map((e) => e.toString().substring(5))
+          .toList()
+          .indexOf(value as String);
     } else if ([freshnessDateKey, openTimeKey].contains(key)) {
       map[key] = (value as DateTime).toString();
     } else if ([rateKey, startTimeKey, endTimeKey].contains(key)) {
       final buffer = StringBuffer();
       for (var i = 0; i < (value as List<int>).length; i++) {
-        if (i != 0) buffer.write('+');
+        if (i != 0) buffer.write(',');
         buffer.write((value as List<int>)[i].toString());
       }
       map[key] = buffer.toString();
     } else if ([dayOfTheWeekStr].contains(key)) {
       map[key] = dayOfTheWeekListToJsonStr(value as List<DayOfTheWeek>);
+    } else if ([isFavoriteKey].contains(key)) {
+      map[key] = (value as bool) ? 1 : 0;
     } else {
       map[key] = value;
     }
