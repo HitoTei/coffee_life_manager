@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:coffee_life_manager/constant_string.dart';
 import 'package:coffee_life_manager/database/sql_database.dart';
 import 'package:coffee_life_manager/entity/bean.dart';
@@ -10,8 +8,9 @@ import 'package:coffee_life_manager/entity/enums/drip.dart';
 import 'package:coffee_life_manager/entity/enums/grind.dart';
 import 'package:coffee_life_manager/entity/enums/roast.dart';
 import 'package:coffee_life_manager/entity/house_coffee.dart';
-import 'package:coffee_life_manager/function/get_file.dart';
+import 'package:coffee_life_manager/function/files.dart';
 import 'package:riverpod/all.dart';
+import 'package:sqflite/sqflite.dart';
 
 final beanRepository = Provider.autoDispose(
   (ref) => BeanRepository(ref.read),
@@ -240,13 +239,7 @@ class EntityRepository {
 
   Future<int> delete(String table, Map<String, dynamic> json) async {
     final imageUri = json[imageUriKey] as String;
-    if (imageUri != null) {
-      try {
-        (await getLocalFile(imageUri)).deleteSync();
-      } catch (e) {
-        log('Catch exception when deleting image: $e');
-      }
-    }
+    await deleteFile(imageUri);
     final db = await read(sqlDatabase).database;
     return db.delete(
       table,
@@ -257,7 +250,15 @@ class EntityRepository {
 
   Future<int> update(String table, Map<String, dynamic> json) async {
     final db = await read(sqlDatabase).database;
-    return db.update(table, instanceToSql(json));
+    return db.update(
+      table,
+      instanceToSql(json),
+      where: '$uidKey = ?',
+      whereArgs: <dynamic>[
+        json[uidKey],
+      ],
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 }
 
