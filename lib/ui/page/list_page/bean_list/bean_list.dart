@@ -42,6 +42,14 @@ class BeanListController {
     read(_beanList).state = await read(beanRepository).fetchByCafeId(cafeId);
   }
 
+  Future<void> initState() async {
+    // 並び順とかの取得
+  }
+
+  Future<void> dispose() async {
+    read(_beanList).state = null;
+  }
+
   Future<void> add(Bean bean) async {
     final id = await read(beanRepository).insert(bean);
 

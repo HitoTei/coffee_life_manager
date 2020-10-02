@@ -7,13 +7,27 @@ import 'package:flutter_riverpod/all.dart';
 
 class BeanListPage extends StatelessWidget {
   const BeanListPage();
+  static const routeName = '/beanListPage';
   @override
   Widget build(BuildContext context) {
-    context.read(beanListController).fetchAll();
-    return Scaffold(
-      appBar: AppBar(),
-      body: const BeanListBody(),
-      floatingActionButton: const BeanListFab(),
+    context.read(beanListController).initState();
+    final cafeId = ModalRoute.of(context).settings.arguments as int;
+    if (cafeId == null) {
+      context.read(beanListController).fetchAll();
+    } else {
+      context.read(beanListController).fetchByCafeId(cafeId);
+    }
+
+    return WillPopScope(
+      onWillPop: () async {
+        await context.read(beanListController).dispose();
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(),
+        body: const BeanListBody(),
+        floatingActionButton: const BeanListFab(),
+      ),
     );
   }
 }
@@ -71,7 +85,6 @@ class BeanListTile extends ConsumerWidget {
   Widget build(BuildContext context,
       T Function<T>(ProviderBase<Object, T> provider) watch) {
     final state = watch(currentBean);
-    final controller = context.read(beanListController);
 
     return Card(
       child: Column(
@@ -87,9 +100,9 @@ class BeanListTile extends ConsumerWidget {
                   (state.isFavorite) ? Icons.favorite : Icons.favorite_border,
                 ),
                 onPressed: () {
-                  controller.update(
-                    state.copyWith(isFavorite: !state.isFavorite),
-                  );
+                  context.read(beanListController).update(
+                        state.copyWith(isFavorite: !state.isFavorite),
+                      );
                 },
               ),
             ),
