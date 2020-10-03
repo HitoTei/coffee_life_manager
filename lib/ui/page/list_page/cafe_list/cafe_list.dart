@@ -57,13 +57,13 @@ class CafeListController {
     read(_cafeList).state = list;
   }
 
-  void removeOnlyContentsOfList(Cafe cafe) {
+  void removeFromList(Cafe cafe) {
     final list = read(_cafeList).state;
     list.remove(cafe);
     read(_cafeList).state = list;
   }
 
-  void removeContentsOfRepository(Cafe cafe) {
+  void removeFromRepository(Cafe cafe) {
     read(cafeRepository).delete(cafe);
   }
 

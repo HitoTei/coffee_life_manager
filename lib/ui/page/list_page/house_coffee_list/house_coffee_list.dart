@@ -60,13 +60,13 @@ class HouseCoffeeListController {
     read(_houseCoffeeList).state = list;
   }
 
-  void removeOnlyContentsOfList(HouseCoffee houseCoffee) {
+  void removeFromList(HouseCoffee houseCoffee) {
     final list = read(_houseCoffeeList).state;
     list.remove(houseCoffee);
     read(_houseCoffeeList).state = list;
   }
 
-  void removeContentsOfRepository(HouseCoffee houseCoffee) {
+  void removeFromRepository(HouseCoffee houseCoffee) {
     read(houseCoffeeRepository).delete(houseCoffee);
   }
 

@@ -3,7 +3,7 @@ import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_coffee_detail/cafe_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail/cafe_detail.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_coffee_list/cafe_coffee_list_page.dart';
-import 'package:coffee_life_manager/ui/page/list_page/cafe_list/cafe_list_page.dart';
+import 'package:coffee_life_manager/ui/page/list_page/tile/tiles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -140,7 +140,7 @@ class CafeDetailTop extends ConsumerWidget {
         child: const CafeListTile(),
         overrides: [
           currentCafe.overrideWithValue(state),
-          currentCafeController.overrideWithValue(
+          currentCafeUpdater.overrideWithValue(
             context.read(cafeDetailController).update,
           ),
         ],

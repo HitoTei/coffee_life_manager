@@ -2,7 +2,7 @@ import 'package:coffee_life_manager/constant_string.dart';
 import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail/house_coffee_detail.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget.dart';
-import 'package:coffee_life_manager/ui/page/list_page/house_coffee_list/house_coffee_list_page.dart';
+import 'package:coffee_life_manager/ui/page/list_page/tile/tiles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -132,7 +132,7 @@ class HouseCoffeeDetailTop extends ConsumerWidget {
         child: const HouseCoffeeListTile(),
         overrides: [
           currentHouseCoffee.overrideWithValue(state),
-          currentHouseCoffeeController.overrideWithValue(
+          currentHouseCoffeeUpdater.overrideWithValue(
             context.read(houseCoffeeDetailController).update,
           ),
         ],

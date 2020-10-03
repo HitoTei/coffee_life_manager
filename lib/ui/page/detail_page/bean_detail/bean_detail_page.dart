@@ -6,8 +6,8 @@ import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/int_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/roast_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget.dart';
-import 'package:coffee_life_manager/ui/page/list_page/bean_list/bean_list_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/house_coffee_list/house_coffee_list_page.dart';
+import 'package:coffee_life_manager/ui/page/list_page/tile/tiles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -144,6 +144,9 @@ class BeanDetailTop extends ConsumerWidget {
         child: const BeanListTile(),
         overrides: [
           currentBean.overrideWithValue(state),
+          currentBeanUpdater.overrideWithValue(
+            context.read(beanDetailController).update,
+          ),
         ],
       ),
     );
