@@ -59,12 +59,14 @@ class HouseCoffeeListController {
     read(_houseCoffeeList).state = list;
   }
 
-  void remove(HouseCoffee houseCoffee) {
-    read(houseCoffeeRepository).delete(houseCoffee);
-
+  void removeOnlyContentsOfList(HouseCoffee houseCoffee) {
     final list = read(_houseCoffeeList).state;
     list.remove(houseCoffee);
     read(_houseCoffeeList).state = list;
+  }
+
+  void removeContentsOfRepository(HouseCoffee houseCoffee) {
+    read(houseCoffeeRepository).delete(houseCoffee);
   }
 
   // ignore: use_setters_to_change_properties

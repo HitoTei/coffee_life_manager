@@ -14,7 +14,12 @@ class BeanDetailController {
   const BeanDetailController(this.read);
   final Reader read;
   Future<void> init(int uid) async {
-    read(beanDetail).state = await read(beanRepository).fetchByUid(uid);
+    if (uid != null) {
+      read(beanDetail).state = await read(beanRepository).fetchByUid(uid);
+    } else {
+      final id = await read(beanRepository).insert(const Bean());
+      read(beanDetail).state = Bean(uid: id);
+    }
   }
 
   Future<void> update(Bean bean) async {

@@ -1,4 +1,5 @@
 import 'package:coffee_life_manager/entity/enums/grind.dart';
+import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:flutter/material.dart';
 
 class GrindListTile extends StatelessWidget {
@@ -16,6 +17,7 @@ class GrindListTile extends StatelessWidget {
       title: const Text('挽き方'),
       subtitle: Text('${grindStr[value.index]}'),
       onTap: () async {
+        removeFocus(context);
         final next = await showMenu<Grind>(
           context: context,
           position: RelativeRect.fill,

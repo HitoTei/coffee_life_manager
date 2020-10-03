@@ -24,6 +24,9 @@ class _MyApp extends StatelessWidget {
       routes: {
         BeanListPage.routeName: (_) => const BeanListPage(),
         BeanDetailPage.routeName: (_) => const BeanDetailPage(),
+        BeanDetailPage.routeNameWithNoLinks: (_) => const BeanDetailPage(
+              hasLink: false,
+            ),
       },
 
       // TODO: replace

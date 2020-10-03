@@ -1,3 +1,4 @@
+import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,7 @@ class TimeOfDayListTile extends StatelessWidget {
       title: Text(title),
       subtitle: Text(value.format(context)),
       onTap: () async {
+        removeFocus(context);
         final nextVal = await showTimePicker(
           helpText: title,
           context: context,

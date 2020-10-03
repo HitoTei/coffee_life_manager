@@ -55,12 +55,14 @@ class CafeListController {
     read(_cafeList).state = list;
   }
 
-  void remove(Cafe cafe) {
-    read(cafeRepository).delete(cafe);
-
+  void removeOnlyContentsOfList(Cafe cafe) {
     final list = read(_cafeList).state;
     list.remove(cafe);
     read(_cafeList).state = list;
+  }
+
+  void removeContentsOfRepository(Cafe cafe) {
+    read(cafeRepository).delete(cafe);
   }
 
   // ignore: use_setters_to_change_properties

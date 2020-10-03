@@ -1,3 +1,4 @@
+import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:flutter/material.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
@@ -19,6 +20,7 @@ class MapListTile extends StatelessWidget {
       title: title,
       subtitle: Text('$value'),
       onTap: () {
+        removeFocus(context);
         showDialog<void>(
             context: context,
             builder: (_) {

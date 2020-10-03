@@ -12,7 +12,7 @@ Future<File> getLocalFile(String fileName) async {
 Future<void> deleteFile(String imageUri) async {
   if (imageUri != null) {
     try {
-      (await getLocalFile(imageUri)).deleteSync();
+      (await getLocalFile(imageUri))?.deleteSync();
     } catch (e) {
       log('Catch exception when deleting image: $e');
     }

@@ -1,3 +1,4 @@
+import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,7 +12,7 @@ class IntListTile extends StatelessWidget {
     this.digit = 7,
   });
 
-  final Widget title;
+  final Text title;
   final Widget subtitle;
   final int value;
   final Function(int) onChanged;
@@ -26,11 +27,11 @@ class IntListTile extends StatelessWidget {
       title: title,
       subtitle: subtitle,
       onTap: () {
+        removeFocus(context);
         showDialog<void>(
           context: context,
           builder: (_) {
             return AlertDialog(
-              title: title,
               content: TextField(
                 controller: _editingController,
                 keyboardType: TextInputType.number,
@@ -39,7 +40,7 @@ class IntListTile extends StatelessWidget {
                   WhitelistingTextInputFormatter.digitsOnly
                 ],
                 decoration: InputDecoration(
-                  hintText: hintText,
+                  labelText: title.data,
                 ),
               ),
               actions: [

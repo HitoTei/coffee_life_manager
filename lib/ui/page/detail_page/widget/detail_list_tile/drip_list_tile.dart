@@ -1,4 +1,5 @@
 import 'package:coffee_life_manager/entity/enums/drip.dart';
+import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:flutter/material.dart';
 
 class DripListTile extends StatelessWidget {
@@ -16,6 +17,7 @@ class DripListTile extends StatelessWidget {
       title: const Text('淹れ方'),
       subtitle: Text('${dripStr[value.index]}'),
       onTap: () async {
+        removeFocus(context);
         final next = await showMenu<Drip>(
           context: context,
           position: RelativeRect.fill,

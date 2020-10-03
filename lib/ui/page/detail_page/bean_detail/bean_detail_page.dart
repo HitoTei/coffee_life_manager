@@ -1,3 +1,4 @@
+import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/bean_detail/bean_detail.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/datetime_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/int_list_tile.dart';
@@ -11,9 +12,10 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:image_picker/image_picker.dart';
 
 class BeanDetailPage extends StatelessWidget {
-  const BeanDetailPage();
+  const BeanDetailPage({this.hasLink = true});
   static const routeName = '/beanDetailPage';
-
+  static const routeNameWithNoLinks = '/beanDetailPageWithNoLinks';
+  final bool hasLink;
   @override
   Widget build(BuildContext context) {
     final uid = ModalRoute.of(context).settings.arguments as int;
@@ -28,9 +30,7 @@ class BeanDetailPage extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        appBar: AppBar(
-          actions: const [],
-        ),
+        bottomNavigationBar: const BeanDetailPageBottomAppBar(),
         body: ListView(
           children: const [
             BeanDetailTop(),
@@ -62,6 +62,7 @@ class BeanDetailTop extends ConsumerWidget {
           caption: '画像を変更',
           icon: Icons.image,
           onTap: () async {
+            removeFocus(context);
             final image = await await showDialog<Future<PickedFile>>(
               context: context,
               child: SimpleDialog(
@@ -96,6 +97,7 @@ class BeanDetailTop extends ConsumerWidget {
           caption: '豆の名前を変更',
           icon: Icons.text_fields,
           onTap: () async {
+            removeFocus(context);
             final textEditor = TextEditingController()..text = state.beanName;
             await showDialog<void>(
               context: context,
@@ -151,6 +153,7 @@ class BeanDetailBody extends ConsumerWidget {
         child: CircularProgressIndicator(),
       );
     }
+
     return Column(
       children: [
         IntListTile(
@@ -212,8 +215,56 @@ class BeanDetailBody extends ConsumerWidget {
           initialValue: state.memo,
           onChanged: (val) => controller.update(state.copyWith(memo: val)),
           maxLines: null,
+          decoration: const InputDecoration(
+            labelText: 'メモ',
+          ),
         ),
       ],
+    );
+  }
+}
+
+class BeanDetailPageBottomAppBar extends StatelessWidget {
+  const BeanDetailPageBottomAppBar();
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      color: Theme.of(context).accentColor,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Theme.of(context).accentIconTheme.color,
+            ),
+            onPressed: () {
+              Navigator.pop(
+                context,
+                context.read(beanDetail).state,
+              );
+            },
+          ),
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.local_cafe,
+                  color: Theme.of(context).accentIconTheme.color,
+                ),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.share,
+                  color: Theme.of(context).accentIconTheme.color,
+                ),
+                onPressed: () {},
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:coffee_life_manager/entity/enums/day_of_the_week.dart';
+import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:flutter/material.dart';
 
 class DayOfTheWeekListTile extends StatelessWidget {
@@ -38,6 +39,7 @@ class DayOfTheWeekListTile extends StatelessWidget {
       title: title,
       subtitle: Text(subTitle),
       onTap: () {
+        removeFocus(context);
         showDialog<void>(
           context: context,
           builder: (_) {
