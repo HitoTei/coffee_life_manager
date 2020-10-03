@@ -1,4 +1,5 @@
 import 'package:coffee_life_manager/l10n/l10n.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/bean_detail/bean_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/bean_list/bean_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -19,7 +20,12 @@ class _MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData.light(),
-      home: BeanListPage(),
+      initialRoute: BeanListPage.routeName,
+      routes: {
+        BeanListPage.routeName: (_) => const BeanListPage(),
+        BeanDetailPage.routeName: (_) => const BeanDetailPage(),
+      },
+
       // TODO: replace
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

@@ -67,12 +67,14 @@ class BeanListController {
     read(_beanList).state = list;
   }
 
-  void remove(Bean bean) {
-    read(beanRepository).delete(bean);
-
+  void removeOnlyContentsOfList(Bean bean) {
     final list = read(_beanList).state;
     list.remove(bean);
     read(_beanList).state = list;
+  }
+
+  void removeContentsOfRepository(Bean bean) {
+    read(beanRepository).delete(bean);
   }
 
   // ignore: use_setters_to_change_properties

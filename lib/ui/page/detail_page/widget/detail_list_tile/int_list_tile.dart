@@ -2,29 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class IntListTile extends StatelessWidget {
-  IntListTile({
+  const IntListTile({
     @required this.title,
-    @required this.unit,
+    @required this.subtitle,
     @required this.value,
     @required this.onChanged,
     this.hintText = '',
     this.digit = 7,
-  }) : _editingController = TextEditingController()..text = value.toString();
+  });
 
   final Widget title;
-  final String unit;
+  final Widget subtitle;
   final int value;
   final Function(int) onChanged;
   final String hintText;
-  final TextEditingController _editingController;
 
   final int digit;
 
   @override
   Widget build(BuildContext context) {
+    final _editingController = TextEditingController()..text = value.toString();
     return ListTile(
       title: title,
-      subtitle: Text('$value$unit'),
+      subtitle: subtitle,
       onTap: () {
         showDialog<void>(
           context: context,

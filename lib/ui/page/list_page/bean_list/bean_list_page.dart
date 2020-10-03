@@ -1,4 +1,5 @@
 import 'package:coffee_life_manager/entity/bean.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/bean_detail/bean_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/bean_list/bean_list.dart';
 import 'package:coffee_life_manager/ui/widget/future_image.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,7 @@ import 'package:flutter_riverpod/all.dart';
 
 class BeanListPage extends StatelessWidget {
   const BeanListPage();
-  static const routeName = '/beanListPage';
+  static const routeName = '/';
   @override
   Widget build(BuildContext context) {
     context.read(beanListController).initState();
@@ -49,11 +50,54 @@ class BeanListBody extends ConsumerWidget {
       // updateのたびに順番が逆になる。
       itemCount: state.length,
       itemBuilder: (context, index) {
-        return ProviderScope(
-          overrides: [
-            currentBean.overrideWithValue(state[index]),
-          ],
-          child: const BeanListTile(),
+        return InkWell(
+          onTap: () async {
+            final bean = await Navigator.pushNamed(
+              context,
+              BeanDetailPage.routeName,
+              arguments: state[index].uid,
+            );
+            context
+                .read(beanListController)
+                .update(bean as Bean ?? state[index]);
+          },
+          child: Dismissible(
+            key: ObjectKey(state[index]),
+            onDismissed: (_) {
+              final bean = state[index];
+              context.read(beanListController).removeOnlyContentsOfList(bean);
+              Scaffold.of(context)
+                ..removeCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    content: const Text('削除しました'),
+                    action: SnackBarAction(
+                      label: '元に戻す',
+                      onPressed: () {
+                        context.read(beanListController).add(bean);
+                      },
+                    ),
+                  ),
+                ).closed.then(
+                  (value) {
+                    if (value != SnackBarClosedReason.action) {
+                      context
+                          .read(beanListController)
+                          .removeContentsOfRepository(bean);
+                    }
+                  },
+                );
+            },
+            child: ProviderScope(
+              overrides: [
+                currentBean.overrideWithValue(state[index]),
+                currentBeanController.overrideWithValue(
+                  context.read(beanListController).update,
+                ),
+              ],
+              child: const BeanListTile(),
+            ),
+          ),
         );
       },
       separatorBuilder: (_, __) => const Divider(),
@@ -70,13 +114,14 @@ class BeanListFab extends StatelessWidget {
       child: const Icon(Icons.add),
       onPressed: () {
         // bean を追加
-        context.read(beanListController).add(Bean());
+        context.read(beanListController).add(const Bean());
       },
     );
   }
 }
 
 final currentBean = ScopedProvider<Bean>((_) => null);
+final currentBeanController = ScopedProvider<Function(Bean)>((_) => null);
 
 class BeanListTile extends ConsumerWidget {
   const BeanListTile();
@@ -85,29 +130,37 @@ class BeanListTile extends ConsumerWidget {
   Widget build(BuildContext context,
       T Function<T>(ProviderBase<Object, T> provider) watch) {
     final state = watch(currentBean);
-
-    return Card(
-      child: Column(
-        children: [
-          SizedBox(height: 100, child: ImageByUri(state.imageUri)),
-          Container(
-            margin: const EdgeInsets.all(10),
-            child: ListTile(
-              title: Text(state.beanName),
-              subtitle: Text('残り${state.remainingAmount}g'),
-              leading: IconButton(
-                icon: Icon(
-                  (state.isFavorite) ? Icons.favorite : Icons.favorite_border,
+    final update = watch(currentBeanController);
+    if (state == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    return Hero(
+      tag: state.uid,
+      child: Card(
+        child: Column(
+          children: [
+            SizedBox(height: 100, child: ImageByUri(state.imageUri)),
+            Container(
+              margin: const EdgeInsets.all(10),
+              child: ListTile(
+                title: Text(state.beanName),
+                subtitle: Text('残り${state.remainingAmount}g'),
+                leading: IconButton(
+                  icon: Icon(
+                    (state.isFavorite) ? Icons.favorite : Icons.favorite_border,
+                  ),
+                  onPressed: () {
+                    update(
+                      state.copyWith(isFavorite: !state.isFavorite),
+                    );
+                  },
                 ),
-                onPressed: () {
-                  context.read(beanListController).update(
-                        state.copyWith(isFavorite: !state.isFavorite),
-                      );
-                },
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
 class MapListTile extends StatelessWidget {
-  MapListTile({
+  const MapListTile({
     @required this.title,
     @required this.value,
     @required this.onChanged,
-  }) : _editingController = TextEditingController()..text = value;
+  });
 
   final Widget title;
   final String value;
   final void Function(String) onChanged;
 
-  final TextEditingController _editingController;
-
   @override
   Widget build(BuildContext context) {
+    final editingController = TextEditingController()..text = value;
     return ListTile(
       title: title,
       subtitle: Text('$value'),
@@ -27,7 +26,8 @@ class MapListTile extends StatelessWidget {
                 children: [
                   FlatButton(
                     child: const Text('場所を編集'),
-                    onPressed: () => _showEditTextDialog(context),
+                    onPressed: () =>
+                        _showEditTextDialog(context, editingController),
                   ),
                   FlatButton(
                     child: const Text('マップへ移動'),
@@ -43,14 +43,15 @@ class MapListTile extends StatelessWidget {
     );
   }
 
-  Future<void> _showEditTextDialog(BuildContext context) {
+  Future<void> _showEditTextDialog(
+      BuildContext context, TextEditingController editingController) {
     return showDialog<void>(
       context: context,
       builder: (_) {
         return AlertDialog(
           title: title,
           content: TextField(
-            controller: _editingController,
+            controller: editingController,
             decoration: const InputDecoration(
               hintText: '地名を入力',
             ),
@@ -59,14 +60,14 @@ class MapListTile extends StatelessWidget {
             FlatButton(
               child: const Text('Cancel'),
               onPressed: () {
-                _editingController.text = value.toString();
+                editingController.text = value.toString();
                 Navigator.pop(context);
               },
             ),
             FlatButton(
               child: const Text('Ok'),
               onPressed: () {
-                onChanged(_editingController.text);
+                onChanged(editingController.text);
                 Navigator.pop(context);
               },
             ),

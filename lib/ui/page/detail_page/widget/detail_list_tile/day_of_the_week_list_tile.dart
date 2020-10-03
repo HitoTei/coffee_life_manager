@@ -2,20 +2,17 @@ import 'package:coffee_life_manager/entity/enums/day_of_the_week.dart';
 import 'package:flutter/material.dart';
 
 class DayOfTheWeekListTile extends StatelessWidget {
-  DayOfTheWeekListTile({
+  const DayOfTheWeekListTile({
     @required this.title,
     @required this.value,
     @required this.onChanged,
-  }) : checkList = [
-          for (final day in DayOfTheWeek.values) value.contains(day),
-        ];
+  });
 
   final Widget title;
   final List<DayOfTheWeek> value;
   final Function(List<DayOfTheWeek>) onChanged;
-  final List<bool> checkList;
 
-  String makeTitleStr() {
+  String makeTitleStr(List<bool> checkList) {
     if (!checkList.contains(true)) return '無し';
 
     var cnt = 0;
@@ -32,7 +29,10 @@ class DayOfTheWeekListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subTitle = makeTitleStr();
+    final checkList = [
+      for (final day in DayOfTheWeek.values) value.contains(day),
+    ];
+    final subTitle = makeTitleStr(checkList);
 
     return ListTile(
       title: title,

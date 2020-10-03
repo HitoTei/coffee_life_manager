@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+
 class Rate {
   Rate()
-      : values = {
+      : values = <String, int>{
           bitternessKey: 0,
           sournessKey: 0,
           fragranceKey: 0,
@@ -12,6 +14,13 @@ class Rate {
 
   Rate.fromJsonStr(String json)
       : values = (jsonDecode(json) as Map<String, dynamic>).cast<String, int>();
+
+  Rate copyWith({
+    @required String rateKey,
+    @required int value,
+  }) {
+    return this..values[rateKey] = value;
+  }
 
   final Map<String, int> values;
 

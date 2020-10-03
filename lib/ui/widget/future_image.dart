@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:coffee_life_manager/function/files.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ImageByUri extends StatelessWidget {
@@ -28,7 +27,10 @@ class ImageByUri extends StatelessWidget {
           );
         }
         final file = snapshot.data;
-        return Image.file(file);
+        return Image.file(
+          file,
+          fit: BoxFit.fitWidth,
+        );
       },
     );
   }

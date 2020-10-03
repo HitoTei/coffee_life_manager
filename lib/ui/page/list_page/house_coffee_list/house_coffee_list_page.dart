@@ -99,8 +99,8 @@ class HouseCoffeeListTile extends ConsumerWidget {
                 ),
                 onPressed: () {
                   context.read(houseCoffeeListController).update(
-                    state.copyWith(isFavorite: !state.isFavorite),
-                  );
+                        state.copyWith(isFavorite: !state.isFavorite),
+                      );
                 },
               ),
             ),

@@ -225,7 +225,7 @@ class EntityRepository {
     final db = await read(sqlDatabase).database;
     final mapList = await db.query(
       table,
-      where: '$uidKey',
+      where: '$uidKey = ?',
       whereArgs: <dynamic>[uid],
     );
     return sqlToInstance(mapList[0]);
@@ -234,7 +234,11 @@ class EntityRepository {
   Future<int> insert(String table, Map<String, dynamic> json) async {
     final db = await read(sqlDatabase).database;
     final insert = instanceToSql(json);
-    return db.insert(table, insert);
+    return db.insert(
+      table,
+      insert,
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   Future<int> delete(String table, Map<String, dynamic> json) async {
@@ -275,7 +279,7 @@ Map<String, dynamic> sqlToInstance(Map<String, dynamic> e) {
       if (value == null || (value as String) == 'null') {
         map[key] = null;
       } else {
-        map[key] = DateTime.parse(value as String);
+        map[key] = (value as String);
       }
     } else if ([rateKey, startTimeKey, endTimeKey].contains(key)) {
       map[key] = (value as String).split(',').map(int.parse).toList();
@@ -309,7 +313,7 @@ Map<String, dynamic> instanceToSql(Map<String, dynamic> e) {
           .toList()
           .indexOf(value as String);
     } else if ([freshnessDateKey, openTimeKey].contains(key)) {
-      map[key] = (value as DateTime).toString();
+      map[key] = (value as String).toString();
     } else if ([rateKey, startTimeKey, endTimeKey].contains(key)) {
       final buffer = StringBuffer();
       for (var i = 0; i < (value as List<int>).length; i++) {
