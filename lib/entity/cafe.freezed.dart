@@ -25,7 +25,8 @@ class _$CafeTearOff {
       List<DayOfTheWeek> regularHoliday = const <DayOfTheWeek>[],
       List<int> startTime = const [0, 0],
       List<int> endTime = const [0, 0],
-      bool isFavorite = false}) {
+      bool isFavorite = false,
+      String memo = ''}) {
     return _Cafe(
       uid: uid,
       cafeName: cafeName,
@@ -35,6 +36,7 @@ class _$CafeTearOff {
       startTime: startTime,
       endTime: endTime,
       isFavorite: isFavorite,
+      memo: memo,
     );
   }
 
@@ -59,6 +61,7 @@ mixin _$Cafe {
   List<int> get startTime;
   List<int> get endTime; // 営業時間
   bool get isFavorite;
+  String get memo;
 
   Map<String, dynamic> toJson();
   $CafeCopyWith<Cafe> get copyWith;
@@ -76,7 +79,8 @@ abstract class $CafeCopyWith<$Res> {
       List<DayOfTheWeek> regularHoliday,
       List<int> startTime,
       List<int> endTime,
-      bool isFavorite});
+      bool isFavorite,
+      String memo});
 }
 
 /// @nodoc
@@ -97,6 +101,7 @@ class _$CafeCopyWithImpl<$Res> implements $CafeCopyWith<$Res> {
     Object startTime = freezed,
     Object endTime = freezed,
     Object isFavorite = freezed,
+    Object memo = freezed,
   }) {
     return _then(_value.copyWith(
       uid: uid == freezed ? _value.uid : uid as int,
@@ -111,6 +116,7 @@ class _$CafeCopyWithImpl<$Res> implements $CafeCopyWith<$Res> {
       endTime: endTime == freezed ? _value.endTime : endTime as List<int>,
       isFavorite:
           isFavorite == freezed ? _value.isFavorite : isFavorite as bool,
+      memo: memo == freezed ? _value.memo : memo as String,
     ));
   }
 }
@@ -128,7 +134,8 @@ abstract class _$CafeCopyWith<$Res> implements $CafeCopyWith<$Res> {
       List<DayOfTheWeek> regularHoliday,
       List<int> startTime,
       List<int> endTime,
-      bool isFavorite});
+      bool isFavorite,
+      String memo});
 }
 
 /// @nodoc
@@ -150,6 +157,7 @@ class __$CafeCopyWithImpl<$Res> extends _$CafeCopyWithImpl<$Res>
     Object startTime = freezed,
     Object endTime = freezed,
     Object isFavorite = freezed,
+    Object memo = freezed,
   }) {
     return _then(_Cafe(
       uid: uid == freezed ? _value.uid : uid as int,
@@ -164,6 +172,7 @@ class __$CafeCopyWithImpl<$Res> extends _$CafeCopyWithImpl<$Res>
       endTime: endTime == freezed ? _value.endTime : endTime as List<int>,
       isFavorite:
           isFavorite == freezed ? _value.isFavorite : isFavorite as bool,
+      memo: memo == freezed ? _value.memo : memo as String,
     ));
   }
 }
@@ -180,14 +189,16 @@ class _$_Cafe implements _Cafe {
       this.regularHoliday = const <DayOfTheWeek>[],
       this.startTime = const [0, 0],
       this.endTime = const [0, 0],
-      this.isFavorite = false})
+      this.isFavorite = false,
+      this.memo = ''})
       : assert(cafeName != null),
         assert(mapUrl != null),
         assert(imageUri != null),
         assert(regularHoliday != null),
         assert(startTime != null),
         assert(endTime != null),
-        assert(isFavorite != null);
+        assert(isFavorite != null),
+        assert(memo != null);
 
   factory _$_Cafe.fromJson(Map<String, dynamic> json) =>
       _$_$_CafeFromJson(json);
@@ -216,10 +227,13 @@ class _$_Cafe implements _Cafe {
   @JsonKey(defaultValue: false)
   @override // 営業時間
   final bool isFavorite;
+  @JsonKey(defaultValue: '')
+  @override
+  final String memo;
 
   @override
   String toString() {
-    return 'Cafe(uid: $uid, cafeName: $cafeName, mapUrl: $mapUrl, imageUri: $imageUri, regularHoliday: $regularHoliday, startTime: $startTime, endTime: $endTime, isFavorite: $isFavorite)';
+    return 'Cafe(uid: $uid, cafeName: $cafeName, mapUrl: $mapUrl, imageUri: $imageUri, regularHoliday: $regularHoliday, startTime: $startTime, endTime: $endTime, isFavorite: $isFavorite, memo: $memo)';
   }
 
   @override
@@ -247,7 +261,9 @@ class _$_Cafe implements _Cafe {
                     .equals(other.endTime, endTime)) &&
             (identical(other.isFavorite, isFavorite) ||
                 const DeepCollectionEquality()
-                    .equals(other.isFavorite, isFavorite)));
+                    .equals(other.isFavorite, isFavorite)) &&
+            (identical(other.memo, memo) ||
+                const DeepCollectionEquality().equals(other.memo, memo)));
   }
 
   @override
@@ -260,7 +276,8 @@ class _$_Cafe implements _Cafe {
       const DeepCollectionEquality().hash(regularHoliday) ^
       const DeepCollectionEquality().hash(startTime) ^
       const DeepCollectionEquality().hash(endTime) ^
-      const DeepCollectionEquality().hash(isFavorite);
+      const DeepCollectionEquality().hash(isFavorite) ^
+      const DeepCollectionEquality().hash(memo);
 
   @override
   _$CafeCopyWith<_Cafe> get copyWith =>
@@ -281,7 +298,8 @@ abstract class _Cafe implements Cafe {
       List<DayOfTheWeek> regularHoliday,
       List<int> startTime,
       List<int> endTime,
-      bool isFavorite}) = _$_Cafe;
+      bool isFavorite,
+      String memo}) = _$_Cafe;
 
   factory _Cafe.fromJson(Map<String, dynamic> json) = _$_Cafe.fromJson;
 
@@ -302,6 +320,8 @@ abstract class _Cafe implements Cafe {
   List<int> get endTime;
   @override // 営業時間
   bool get isFavorite;
+  @override
+  String get memo;
   @override
   _$CafeCopyWith<_Cafe> get copyWith;
 }

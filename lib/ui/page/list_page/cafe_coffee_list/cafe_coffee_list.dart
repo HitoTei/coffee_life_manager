@@ -27,7 +27,7 @@ final cafeCoffeeList = StateProvider<List<CafeCoffee>>(
 );
 
 final cafeCoffeeListController =
-    Provider((ref) => CafeCoffeeListController(ref.read));
+    Provider.autoDispose((ref) => CafeCoffeeListController(ref.read));
 final _cafeCoffeeList = StateProvider<List<CafeCoffee>>((ref) => null);
 final _cafeCoffeeSortOrder =
     StateProvider((ref) => CafeCoffeeListSortOrder.ascByUid);

@@ -1,4 +1,5 @@
 import 'package:coffee_life_manager/entity/cafe_coffee.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/cafe_coffee_detail/cafe_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_coffee_list/cafe_coffee_list.dart';
 import 'package:coffee_life_manager/ui/widget/future_image.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,6 @@ class CafeCoffeeListPage extends StatelessWidget {
           padding: EdgeInsets.all(8.0),
           child: CafeCoffeeListBody(),
         ),
-        floatingActionButton: const CafeCoffeeListFab(),
       ),
     );
   }
@@ -61,16 +61,14 @@ class CafeCoffeeListBody extends ConsumerWidget {
         return InkWell(
           onTap: () async {
             final cafeId = ModalRoute.of(context).settings.arguments as int;
-            // final cafeCoffee = await Navigator.pushNamed(
-            //   context,
-            //   cafeId == null
-            //      ? CafeCoffeeDetailPage.routeName
-            //      : CafeCoffeeDetailPage.routeNameWithNoLinks,
-            //   arguments: state[index].uid,
-            // );
-            // context
-            //     .read(cafeCoffeeListController)
-            //     .update(cafeCoffee as CafeCoffee ?? state[index]);
+            final cafeCoffee = await Navigator.pushNamed(
+              context,
+              CafeCoffeeDetailPage.routeName,
+              arguments: state[index].uid,
+            );
+            context
+                .read(cafeCoffeeListController)
+                .update(cafeCoffee as CafeCoffee ?? state[index]);
           },
           child: Slidable(
             key: ObjectKey(state[index]),
@@ -124,27 +122,6 @@ class CafeCoffeeListBody extends ConsumerWidget {
         );
       },
       separatorBuilder: (_, __) => const Divider(),
-    );
-  }
-}
-
-class CafeCoffeeListFab extends StatelessWidget {
-  const CafeCoffeeListFab();
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      child: const Icon(Icons.add),
-      onPressed: () async {
-        final cafeId = ModalRoute.of(context).settings.arguments as int;
-        // final cafeCoffee = await Navigator.pushNamed(
-        //   context,
-        //   cafeId == null
-        //       ? CafeCoffeeDetailPage.routeName
-        //       : CafeCoffeeDetailPage.routeNameWithNoLinks,
-        // );
-        // await context.read(cafeCoffeeListController).add(cafeCoffee as CafeCoffee);
-      },
     );
   }
 }

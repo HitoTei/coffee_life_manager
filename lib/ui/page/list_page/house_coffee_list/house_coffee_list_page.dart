@@ -1,4 +1,6 @@
+import 'package:coffee_life_manager/constant_string.dart';
 import 'package:coffee_life_manager/entity/house_coffee.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail/house_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/house_coffee_list/house_coffee_list.dart';
 import 'package:coffee_life_manager/ui/widget/future_image.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +31,6 @@ class HouseCoffeeListPage extends StatelessWidget {
           padding: EdgeInsets.all(8.0),
           child: HouseCoffeeListBody(),
         ),
-        floatingActionButton: const HouseCoffeeListFab(),
       ),
     );
   }
@@ -59,14 +60,14 @@ class HouseCoffeeListBody extends ConsumerWidget {
         }
         return InkWell(
           onTap: () async {
-            // final houseCoffee = await Navigator.pushNamed(
-            //   context,
-            //   HouseCoffeeDetailPage.routeName,
-            //   arguments: state[index].uid,
-            // );
-            // context
-            //     .read(houseCoffeeListController)
-            //     .update(houseCoffee as HouseCoffee ?? state[index]);
+            final houseCoffee = await Navigator.pushNamed(
+              context,
+              HouseCoffeeDetailPage.routeName,
+              arguments: {uidKey: state[index].uid},
+            );
+            context
+                .read(houseCoffeeListController)
+                .update(houseCoffee as HouseCoffee ?? state[index]);
           },
           child: Slidable(
             key: ObjectKey(state[index]),
@@ -124,27 +125,6 @@ class HouseCoffeeListBody extends ConsumerWidget {
   }
 }
 
-class HouseCoffeeListFab extends StatelessWidget {
-  const HouseCoffeeListFab();
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      child: const Icon(Icons.add),
-      onPressed: () async {
-        final beanId = ModalRoute.of(context).settings.arguments as int;
-        // final houseCoffee = await Navigator.pushNamed(
-        //   context,
-        //   beanId == null
-        //       ? HouseCoffeeDetailPage.routeName
-        //       : HouseCoffeeDetailPage.routeNameWithNoLinks,
-        // );
-        // await context.read(houseCoffeeListController).add(houseCoffee as HouseCoffee);
-      },
-    );
-  }
-}
-
 final currentHouseCoffee = ScopedProvider<HouseCoffee>((_) => null);
 final currentHouseCoffeeController =
     ScopedProvider<Function(HouseCoffee)>((_) => null);
@@ -172,7 +152,7 @@ class HouseCoffeeListTile extends ConsumerWidget {
               margin: const EdgeInsets.all(10),
               child: ListTile(
                 title: Text(state.beanName),
-                subtitle: Text('${state.drinkDay}'),
+                subtitle: Text('${state.drinkDay ?? '未設定'}'),
                 trailing: IconButton(
                   icon: Icon(
                     (state.isFavorite) ? Icons.favorite : Icons.favorite_border,

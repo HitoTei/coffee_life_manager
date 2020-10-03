@@ -15,7 +15,7 @@ class ImageByUri extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
         if (!snapshot.hasData) {
           return const Center(
-            child: Text('None data'),
+            child: Text('None'),
           );
         }
         if (snapshot.hasError) {

@@ -23,6 +23,7 @@ _$_Cafe _$_$_CafeFromJson(Map<String, dynamic> json) {
         (json['endTime'] as List)?.map((dynamic e) => e as int)?.toList() ??
             [0, 0],
     isFavorite: json['isFavorite'] as bool ?? false,
+    memo: json['memo'] as String ?? '',
   );
 }
 
@@ -37,6 +38,7 @@ Map<String, dynamic> _$_$_CafeToJson(_$_Cafe instance) => <String, dynamic>{
       'startTime': instance.startTime,
       'endTime': instance.endTime,
       'isFavorite': instance.isFavorite,
+      'memo': instance.memo,
     };
 
 T _$enumDecode<T>(

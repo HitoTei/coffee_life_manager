@@ -64,9 +64,7 @@ class BeanListBody extends ConsumerWidget {
             final cafeId = ModalRoute.of(context).settings.arguments as int;
             final bean = await Navigator.pushNamed(
               context,
-              cafeId == null
-                  ? BeanDetailPage.routeName
-                  : BeanDetailPage.routeNameWithNoLinks,
+              BeanDetailPage.routeName,
               arguments: state[index].uid,
             );
             context
@@ -135,13 +133,8 @@ class BeanListFab extends StatelessWidget {
     return FloatingActionButton(
       child: const Icon(Icons.add),
       onPressed: () async {
-        final cafeId = ModalRoute.of(context).settings.arguments as int;
-        final bean = await Navigator.pushNamed(
-          context,
-          cafeId == null
-              ? BeanDetailPage.routeName
-              : BeanDetailPage.routeNameWithNoLinks,
-        );
+        final bean =
+            await Navigator.pushNamed(context, BeanDetailPage.routeName);
         await context.read(beanListController).add(bean as Bean);
       },
     );

@@ -17,6 +17,7 @@ abstract class Cafe with _$Cafe {
     @Default([0, 0]) List<int> startTime,
     @Default([0, 0]) List<int> endTime, // 営業時間
     @Default(false) bool isFavorite,
+    @Default('') String memo,
   }) = _Cafe;
 
   factory Cafe.fromJson(Map<String, dynamic> json) => _$CafeFromJson(json);

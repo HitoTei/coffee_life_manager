@@ -25,17 +25,19 @@ final houseCoffeeRepository = Provider.autoDispose(
   (ref) => HouseCoffeeRepository(ref.read),
 );
 
-class BeanRepository {
+class BeanRepository implements EntityRepository<Bean> {
   BeanRepository(this.read);
 
   final Reader read;
   static const _table = SqlDatabase.beanTable;
 
+  @override
   Future<List<Bean>> fetchAll() async {
     final list = await read(_entityRepository).fetchAll(_table);
     return list.map((e) => Bean.fromJson(e)).toList();
   }
 
+  @override
   Future<List<Bean>> fetchFavorite() async {
     final list = await read(_entityRepository).fetchFavorite(_table);
     return list.map((e) => Bean.fromJson(e)).toList();
@@ -46,69 +48,79 @@ class BeanRepository {
     return list.map((e) => Bean.fromJson(e)).toList();
   }
 
+  @override
   Future<Bean> fetchByUid(int uid) async {
     final map = await read(_entityRepository).fetchByUid(_table, uid);
     return Bean.fromJson(map);
   }
 
+  @override
   Future<int> insert(Bean bean) async {
     return read(_entityRepository).insert(_table, bean.toJson());
   }
 
+  @override
   Future<int> delete(Bean bean) async {
     return read(_entityRepository).delete(_table, bean.toJson());
   }
 
+  @override
   Future<int> update(Bean bean) async {
     return read(_entityRepository).update(_table, bean.toJson());
   }
 }
 
-class CafeRepository {
+class CafeRepository implements EntityRepository<Cafe> {
   CafeRepository(this.read);
 
   final Reader read;
   static const _table = SqlDatabase.cafeTable;
-
+  @override
   Future<List<Cafe>> fetchAll() async {
     final list = await read(_entityRepository).fetchAll(_table);
     return list.map((e) => Cafe.fromJson(e)).toList();
   }
 
+  @override
   Future<List<Cafe>> fetchFavorite() async {
     final list = await read(_entityRepository).fetchFavorite(_table);
     return list.map((e) => Cafe.fromJson(e)).toList();
   }
 
+  @override
   Future<Cafe> fetchByUid(int uid) async {
     final map = await read(_entityRepository).fetchByUid(_table, uid);
     return Cafe.fromJson(map);
   }
 
+  @override
   Future<int> insert(Cafe cafe) async {
     return read(_entityRepository).insert(_table, cafe.toJson());
   }
 
+  @override
   Future<int> delete(Cafe cafe) async {
     return read(_entityRepository).delete(_table, cafe.toJson());
   }
 
+  @override
   Future<int> update(Cafe cafe) async {
     return read(_entityRepository).update(_table, cafe.toJson());
   }
 }
 
-class CafeCoffeeRepository {
+class CafeCoffeeRepository implements EntityRepository<CafeCoffee> {
   CafeCoffeeRepository(this.read);
 
   final Reader read;
   static const _table = SqlDatabase.cafeCoffeeTable;
-
+  @override
   Future<List<CafeCoffee>> fetchAll() async {
     final list = await read(_entityRepository).fetchAll(_table);
     return list.map((e) => CafeCoffee.fromJson(e)).toList();
   }
 
+  @override
   Future<List<CafeCoffee>> fetchFavorite() async {
     final list = await read(_entityRepository).fetchFavorite(_table);
     return list.map((e) => CafeCoffee.fromJson(e)).toList();
@@ -119,35 +131,40 @@ class CafeCoffeeRepository {
     return list.map((e) => CafeCoffee.fromJson(e)).toList();
   }
 
+  @override
   Future<CafeCoffee> fetchByUid(int uid) async {
     final map = await read(_entityRepository).fetchByUid(_table, uid);
     return CafeCoffee.fromJson(map);
   }
 
+  @override
   Future<int> insert(CafeCoffee cafeCoffee) async {
     return read(_entityRepository).insert(_table, cafeCoffee.toJson());
   }
 
+  @override
   Future<int> delete(CafeCoffee cafeCoffee) async {
     return read(_entityRepository).delete(_table, cafeCoffee.toJson());
   }
 
+  @override
   Future<int> update(CafeCoffee cafeCoffee) async {
     return read(_entityRepository).update(_table, cafeCoffee.toJson());
   }
 }
 
-class HouseCoffeeRepository {
+class HouseCoffeeRepository implements EntityRepository<HouseCoffee> {
   HouseCoffeeRepository(this.read);
 
   final Reader read;
   static const _table = SqlDatabase.houseCoffeeTable;
-
+  @override
   Future<List<HouseCoffee>> fetchAll() async {
     final list = await read(_entityRepository).fetchAll(_table);
     return list.map((e) => HouseCoffee.fromJson(e)).toList();
   }
 
+  @override
   Future<List<HouseCoffee>> fetchFavorite() async {
     final list = await read(_entityRepository).fetchFavorite(_table);
     return list.map((e) => HouseCoffee.fromJson(e)).toList();
@@ -158,29 +175,47 @@ class HouseCoffeeRepository {
     return list.map((e) => HouseCoffee.fromJson(e)).toList();
   }
 
+  @override
   Future<HouseCoffee> fetchByUid(int uid) async {
     final map = await read(_entityRepository).fetchByUid(_table, uid);
     return HouseCoffee.fromJson(map);
   }
 
+  @override
   Future<int> insert(HouseCoffee houseCoffee) async {
     return read(_entityRepository).insert(_table, houseCoffee.toJson());
   }
 
+  @override
   Future<int> delete(HouseCoffee houseCoffee) async {
     return read(_entityRepository).delete(_table, houseCoffee.toJson());
   }
 
+  @override
   Future<int> update(HouseCoffee houseCoffee) async {
     return read(_entityRepository).update(_table, houseCoffee.toJson());
   }
 }
 
-final _entityRepository =
-    Provider.autoDispose((ref) => EntityRepository(ref.read));
+abstract class EntityRepository<T> {
+  Future<List<T>> fetchAll();
 
-class EntityRepository {
-  EntityRepository(this.read);
+  Future<List<T>> fetchFavorite();
+
+  Future<T> fetchByUid(int uid);
+
+  Future<int> insert(T val);
+
+  Future<int> delete(T val);
+
+  Future<int> update(T val);
+}
+
+final _entityRepository =
+    Provider.autoDispose((ref) => RawEntityRepository(ref.read));
+
+class RawEntityRepository {
+  RawEntityRepository(this.read);
 
   final Reader read;
 

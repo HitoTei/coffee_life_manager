@@ -43,7 +43,8 @@ class SqlDatabase {
       $imageUriKey TEXT,
       $startTimeKey TEXT,
       $endTimeKey TEXT,
-      $isFavoriteKey INTEGER
+      $isFavoriteKey INTEGER,
+      $memoKey TEXT
     );
     ''');
   }

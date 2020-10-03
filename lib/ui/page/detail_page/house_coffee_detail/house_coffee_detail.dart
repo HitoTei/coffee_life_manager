@@ -13,13 +13,16 @@ final houseCoffeeDetailController =
 class HouseCoffeeDetailController {
   const HouseCoffeeDetailController(this.read);
   final Reader read;
-  Future<void> init(int uid) async {
+  Future<void> init(int uid, {int beanId}) async {
     if (uid != null) {
       read(houseCoffeeDetail).state =
           await read(houseCoffeeRepository).fetchByUid(uid);
     } else {
-      final id = await read(houseCoffeeRepository).insert(const HouseCoffee());
-      read(houseCoffeeDetail).state = HouseCoffee(uid: id);
+      final id = await read(houseCoffeeRepository).insert(
+        HouseCoffee(beanId: beanId),
+      );
+      read(houseCoffeeDetail).state =
+          await read(houseCoffeeRepository).fetchByUid(id);
     }
   }
 

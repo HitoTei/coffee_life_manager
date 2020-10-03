@@ -26,7 +26,8 @@ final beanList = StateProvider<List<Bean>>(
   },
 );
 
-final beanListController = Provider((ref) => BeanListController(ref.read));
+final beanListController =
+    Provider.autoDispose((ref) => BeanListController(ref.read));
 final _beanList = StateProvider<List<Bean>>((ref) => null);
 final _beanSortOrder = StateProvider((ref) => BeanListSortOrder.ascByUid);
 

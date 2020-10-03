@@ -18,7 +18,7 @@ class BeanDetailController {
       read(beanDetail).state = await read(beanRepository).fetchByUid(uid);
     } else {
       final id = await read(beanRepository).insert(const Bean());
-      read(beanDetail).state = Bean(uid: id);
+      read(beanDetail).state = await read(beanRepository).fetchByUid(id);
     }
   }
 

@@ -1,40 +1,43 @@
-import 'package:coffee_life_manager/entity/cafe_coffee.dart';
-import 'package:coffee_life_manager/ui/page/list_page/cafe_coffee_list/cafe_coffee_list.dart';
+import 'package:coffee_life_manager/entity/cafe.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail/cafe_detail_page.dart';
+import 'package:coffee_life_manager/ui/page/list_page/cafe_list/cafe_list.dart';
 import 'package:coffee_life_manager/ui/widget/future_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class CafeCoffeeListPage extends StatelessWidget {
-  const CafeCoffeeListPage();
+class CafeListPage extends StatelessWidget {
+  const CafeListPage();
   static const routeName = '/cafeListPage'; // todo: change name
   @override
   Widget build(BuildContext context) {
-    context.read(cafeCoffeeListController).initState();
+    context.read(cafeListController)
+      ..initState()
+      ..fetchAll();
 
     return WillPopScope(
       onWillPop: () async {
-        await context.read(cafeCoffeeListController).dispose();
+        await context.read(cafeListController).dispose();
         return true;
       },
       child: Scaffold(
         appBar: AppBar(),
         body: const Padding(
           padding: EdgeInsets.all(8.0),
-          child: CafeCoffeeListBody(),
+          child: CafeListBody(),
         ),
-        floatingActionButton: const CafeCoffeeListFab(),
+        floatingActionButton: const CafeListFab(),
       ),
     );
   }
 }
 
-class CafeCoffeeListBody extends ConsumerWidget {
-  const CafeCoffeeListBody();
+class CafeListBody extends ConsumerWidget {
+  const CafeListBody();
   @override
   Widget build(BuildContext context,
       T Function<T>(ProviderBase<Object, T> provider) watch) {
-    final state = watch(cafeCoffeeList).state;
+    final state = watch(cafeList).state;
 
     if (state == null) {
       return const Center(
@@ -53,14 +56,14 @@ class CafeCoffeeListBody extends ConsumerWidget {
         }
         return InkWell(
           onTap: () async {
-            // final cafeCoffee = await Navigator.pushNamed(
-            //   context,
-            //   CafeCoffeeDetailPage.routeName,
-            //   arguments: state[index].uid,
-            // );
-            // context
-            //     .read(cafeCoffeeListController)
-            //     .update(cafeCoffee as CafeCoffee ?? state[index]);
+            final cafe = await Navigator.pushNamed(
+              context,
+              CafeDetailPage.routeName,
+              arguments: state[index].uid,
+            );
+            context
+                .read(cafeListController)
+                .update(cafe as Cafe ?? state[index]);
           },
           child: Slidable(
             key: ObjectKey(state[index]),
@@ -70,10 +73,10 @@ class CafeCoffeeListBody extends ConsumerWidget {
                 caption: '削除する',
                 color: Colors.red,
                 onTap: () {
-                  final cafeCoffee = state[index];
+                  final cafe = state[index];
                   context
-                      .read(cafeCoffeeListController)
-                      .removeOnlyContentsOfList(cafeCoffee);
+                      .read(cafeListController)
+                      .removeOnlyContentsOfList(cafe);
                   Scaffold.of(context)
                     ..removeCurrentSnackBar()
                     ..showSnackBar(
@@ -82,9 +85,7 @@ class CafeCoffeeListBody extends ConsumerWidget {
                         action: SnackBarAction(
                           label: '元に戻す',
                           onPressed: () {
-                            context
-                                .read(cafeCoffeeListController)
-                                .add(cafeCoffee);
+                            context.read(cafeListController).add(cafe);
                           },
                         ),
                       ),
@@ -92,8 +93,8 @@ class CafeCoffeeListBody extends ConsumerWidget {
                       (value) {
                         if (value != SnackBarClosedReason.action) {
                           context
-                              .read(cafeCoffeeListController)
-                              .removeContentsOfRepository(cafeCoffee);
+                              .read(cafeListController)
+                              .removeContentsOfRepository(cafe);
                         }
                       },
                     );
@@ -103,12 +104,12 @@ class CafeCoffeeListBody extends ConsumerWidget {
             actionPane: const SlidableDrawerActionPane(),
             child: ProviderScope(
               overrides: [
-                currentCafeCoffee.overrideWithValue(state[index]),
-                currentCafeCoffeeController.overrideWithValue(
-                  context.read(cafeCoffeeListController).update,
+                currentCafe.overrideWithValue(state[index]),
+                currentCafeController.overrideWithValue(
+                  context.read(cafeListController).update,
                 ),
               ],
-              child: const CafeCoffeeListTile(),
+              child: const CafeListTile(),
             ),
           ),
         );
@@ -118,39 +119,35 @@ class CafeCoffeeListBody extends ConsumerWidget {
   }
 }
 
-class CafeCoffeeListFab extends StatelessWidget {
-  const CafeCoffeeListFab();
+class CafeListFab extends StatelessWidget {
+  const CafeListFab();
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
       child: const Icon(Icons.add),
       onPressed: () async {
-        final cafeId = ModalRoute.of(context).settings.arguments as int;
-        // final cafeCoffee = await Navigator.pushNamed(
-        //   context,
-        //   cafeId == null
-        //       ? CafeCoffeeDetailPage.routeName
-        //       : CafeCoffeeDetailPage.routeNameWithNoLinks,
-        // );
-        // await context.read(cafeCoffeeListController).add(cafeCoffee as CafeCoffee);
+        final cafe = await Navigator.pushNamed(
+          context,
+          CafeDetailPage.routeName,
+        );
+        await context.read(cafeListController).add(cafe as Cafe);
       },
     );
   }
 }
 
-final currentCafeCoffee = ScopedProvider<CafeCoffee>((_) => null);
-final currentCafeCoffeeController =
-    ScopedProvider<Function(CafeCoffee)>((_) => null);
+final currentCafe = ScopedProvider<Cafe>((_) => null);
+final currentCafeController = ScopedProvider<Function(Cafe)>((_) => null);
 
-class CafeCoffeeListTile extends ConsumerWidget {
-  const CafeCoffeeListTile();
+class CafeListTile extends ConsumerWidget {
+  const CafeListTile();
 
   @override
   Widget build(BuildContext context,
       T Function<T>(ProviderBase<Object, T> provider) watch) {
-    final state = watch(currentCafeCoffee);
-    final update = watch(currentCafeCoffeeController);
+    final state = watch(currentCafe);
+    final update = watch(currentCafeController);
     if (state == null) {
       return const Center(
         child: CircularProgressIndicator(),
@@ -165,8 +162,8 @@ class CafeCoffeeListTile extends ConsumerWidget {
             Container(
               margin: const EdgeInsets.all(10),
               child: ListTile(
-                title: Text(state.productName),
-                subtitle: Text('${state.price}円'),
+                title: Text(state.cafeName),
+                subtitle: Text('${state.startTime} ~ ${state.endTime}'),
                 trailing: IconButton(
                   icon: Icon(
                     (state.isFavorite) ? Icons.favorite : Icons.favorite_border,

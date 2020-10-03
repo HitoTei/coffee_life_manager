@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/all.dart';
 final houseCoffeeList = StateProvider<List<HouseCoffee>>((ref) {
   final list = ref.watch(_houseCoffeeList).state;
   final order = ref.watch(_houseCoffeeSortOrder).state;
+  if (list == null) return null;
   switch (order) {
     case HouseCoffeeListSortOrder.ascByUid:
       list.sort((a, b) => (a?.uid ?? 0) - (b?.uid ?? 0));
@@ -16,7 +17,7 @@ final houseCoffeeList = StateProvider<List<HouseCoffee>>((ref) {
   return list;
 });
 final houseCoffeeListController =
-    Provider((ref) => HouseCoffeeListController(ref.read));
+    Provider.autoDispose((ref) => HouseCoffeeListController(ref.read));
 
 final _houseCoffeeList = StateProvider<List<HouseCoffee>>((ref) => null);
 final _houseCoffeeSortOrder =
