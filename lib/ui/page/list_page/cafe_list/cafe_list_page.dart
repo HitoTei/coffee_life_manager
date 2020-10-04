@@ -71,7 +71,7 @@ class CafeListBody extends ConsumerWidget {
             final res = await Navigator.pushNamed(
               context,
               CafeDetailPage.routeName,
-              arguments: cafe,
+              arguments: cafe.uid,
             );
             context.read(cafeListController).update(res as Cafe ?? cafe);
           },

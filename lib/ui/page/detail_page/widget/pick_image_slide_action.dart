@@ -20,18 +20,20 @@ class PickImageSlideAction extends StatelessWidget {
               FlatButton(
                 child: const Text('ギャラリーから画像を選択'),
                 onPressed: () async {
-                  final image = ImagePicker().getImage(
+                  final image = await ImagePicker().getImage(
                     source: ImageSource.gallery,
                   );
+                  if (image != null) setImage(image);
                   Navigator.pop(context, image);
                 },
               ),
               FlatButton(
                 child: const Text('写真を撮影'),
                 onPressed: () async {
-                  final image = ImagePicker().getImage(
+                  final image = await ImagePicker().getImage(
                     source: ImageSource.camera,
                   );
+                  if (image != null) setImage(image);
                   Navigator.pop(context, image);
                 },
               ),

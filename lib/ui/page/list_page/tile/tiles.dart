@@ -34,7 +34,7 @@ class BeanListTile extends ConsumerWidget {
       );
     }
     return Hero(
-      tag: state.uid ?? -1,
+      tag: state,
       child: Card(
         child: Column(
           children: [
@@ -77,7 +77,7 @@ class CafeCoffeeListTile extends ConsumerWidget {
       );
     }
     return Hero(
-      tag: state.uid ?? -1,
+      tag: state,
       child: Card(
         child: Column(
           children: [
@@ -122,7 +122,7 @@ class CafeListTile extends ConsumerWidget {
       );
     }
     return Hero(
-      tag: state.uid ?? -1,
+      tag: state,
       child: Card(
         child: Column(
           children: [
@@ -169,28 +169,37 @@ class HouseCoffeeListTile extends ConsumerWidget {
       );
     }
     return Hero(
-      tag: state.uid ?? -1,
+      tag: state,
       child: Card(
         child: Column(
           children: [
             SizedBox(height: 100, child: ImageByUri(state.imageUri)),
             Container(
               margin: const EdgeInsets.all(10),
-              child: ListTile(
-                title: Text(state.beanName),
-                subtitle: Text(
-                  '${(state?.drinkDay != null) ? DateFormat.yMMMMEEEEd().format(state?.drinkDay) : '未設定'}',
-                ),
-                trailing: IconButton(
-                  icon: Icon(
-                    (state.isFavorite) ? Icons.favorite : Icons.favorite_border,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      Text(state.beanName),
+                      Text(
+                        '${(state?.drinkDay != null) ? DateFormat.yMMMMEEEEd().format(state?.drinkDay) : '未設定'}',
+                      ),
+                    ],
                   ),
-                  onPressed: () {
-                    update(
-                      state.copyWith(isFavorite: !state.isFavorite),
-                    );
-                  },
-                ),
+                  IconButton(
+                    icon: Icon(
+                      (state.isFavorite)
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                    ),
+                    onPressed: () {
+                      update(
+                        state.copyWith(isFavorite: !state.isFavorite),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
           ],

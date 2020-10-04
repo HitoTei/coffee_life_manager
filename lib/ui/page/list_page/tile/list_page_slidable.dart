@@ -58,3 +58,16 @@ class ListPageSlidable extends StatelessWidget {
     );
   }
 }
+
+class ListPageTile extends StatelessWidget {
+  const ListPageTile(this.child, this.gotoDetailPage);
+  final Widget child;
+  final Function() gotoDetailPage;
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: gotoDetailPage,
+      child: child,
+    );
+  }
+}

@@ -1,5 +1,6 @@
 import 'package:coffee_life_manager/constant_string.dart';
 import 'package:coffee_life_manager/entity/cafe.dart';
+import 'package:coffee_life_manager/entity/cafe_coffee.dart';
 import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_coffee_detail/cafe_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail/cafe_detail.dart';
@@ -7,7 +8,8 @@ import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/map_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/time_of_day_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/pick_image_slide_action.dart';
-import 'package:coffee_life_manager/ui/page/list_page/cafe_coffee_list/cafe_coffee_list_page.dart';
+import 'package:coffee_life_manager/ui/page/list_page/cafe_coffee_list/cafe_coffee_list.dart';
+import 'package:coffee_life_manager/ui/page/list_page/tile/list_page_slidable.dart';
 import 'package:coffee_life_manager/ui/page/list_page/tile/tiles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -34,21 +36,59 @@ class CafeDetailPage extends StatelessWidget {
       child: Scaffold(
         bottomNavigationBar: const CafeDetailPageBottomAppBar(),
         body: ListView(
-          children: [
-            const CafeDetailTop(),
-            const CafeDetailBody(),
-            ListTile(
-              title: const Text('飲んだコーヒー'),
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  CafeCoffeeListPage.routeName,
-                  arguments: context.read(cafeDetail).state.uid,
-                );
-              },
-            ),
+          children: const [
+            CafeDetailTop(),
+            CafeDetailBody(),
+            Text('飲んだコーヒー'),
+            CoffeeList(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class CoffeeList extends ConsumerWidget {
+  const CoffeeList();
+  @override
+  Widget build(BuildContext context,
+      T Function<T>(ProviderBase<Object, T> provider) watch) {
+    final state = watch(cafeCoffeeList).state;
+    if (state == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          for (final coffee in state)
+            ListPageTile(
+              ProviderScope(
+                overrides: [
+                  currentCafeCoffee.overrideWithValue(coffee),
+                  currentCafeCoffeeUpdater.overrideWithValue(
+                    context.read(cafeCoffeeListController).update,
+                  ),
+                ],
+                child: const SizedBox(width: 260, child: CafeCoffeeListTile()),
+              ),
+              () async {
+                final res = await Navigator.pushNamed(
+                  context,
+                  CafeCoffeeDetailPage.routeName,
+                  arguments: {
+                    cafeIdKey: context.read(cafeDetail).state.uid,
+                    uidKey: coffee.uid
+                  },
+                );
+                context
+                    .read(cafeCoffeeListController)
+                    .update(res as CafeCoffee);
+              },
+            ),
+        ],
       ),
     );
   }
@@ -175,17 +215,6 @@ class CafeDetailBody extends ConsumerWidget {
           decoration: const InputDecoration(
             labelText: 'メモ',
           ),
-        ),
-        const Divider(),
-        ListTile(
-          title: const Text('飲んだコーヒー'),
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              CafeCoffeeListPage.routeName,
-              arguments: state.uid,
-            );
-          },
         ),
       ],
     );

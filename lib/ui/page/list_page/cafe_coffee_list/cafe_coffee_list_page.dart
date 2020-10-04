@@ -1,3 +1,4 @@
+import 'package:coffee_life_manager/constant_string.dart';
 import 'package:coffee_life_manager/entity/cafe_coffee.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_coffee_detail/cafe_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_coffee_list/cafe_coffee_list.dart';
@@ -75,7 +76,7 @@ class CafeCoffeeListBody extends ConsumerWidget {
             final res = await Navigator.pushNamed(
               context,
               CafeCoffeeDetailPage.routeName,
-              arguments: cafeCoffee.uid,
+              arguments: {uidKey: cafeCoffee.uid},
             );
             context
                 .read(cafeCoffeeListController)

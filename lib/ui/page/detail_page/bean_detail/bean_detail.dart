@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:coffee_life_manager/database/model/repository/entity_repository.dart';
 import 'package:coffee_life_manager/entity/bean.dart';
+import 'package:coffee_life_manager/ui/page/list_page/house_coffee_list/house_coffee_list.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -20,6 +21,8 @@ class BeanDetailController {
       final id = await read(beanRepository).insert(const Bean());
       read(beanDetail).state = await read(beanRepository).fetchByUid(id);
     }
+    await read(houseCoffeeListController)
+        .fetchByBeanId(read(beanDetail).state.uid);
   }
 
   Future<void> update(Bean bean) async {
