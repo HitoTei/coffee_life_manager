@@ -1,14 +1,18 @@
 import 'package:coffee_life_manager/constant_string.dart';
+import 'package:coffee_life_manager/entity/cafe.dart';
 import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_coffee_detail/cafe_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail/cafe_detail.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/day_of_the_week_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/map_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/time_of_day_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/pick_image_slide_action.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_coffee_list/cafe_coffee_list_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/tile/tiles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:image_picker/image_picker.dart';
 
 class CafeDetailPage extends StatelessWidget {
   const CafeDetailPage();
@@ -66,40 +70,8 @@ class CafeDetailTop extends ConsumerWidget {
       actionPane: const SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
       actions: [
-        IconSlideAction(
-          caption: '画像を変更',
-          icon: Icons.image,
-          onTap: () async {
-            removeFocus(context);
-            final image = await await showDialog<Future<PickedFile>>(
-              context: context,
-              child: SimpleDialog(
-                children: [
-                  FlatButton(
-                    child: const Text('ギャラリーから画像を選択'),
-                    onPressed: () async {
-                      final image = ImagePicker().getImage(
-                        source: ImageSource.gallery,
-                      );
-                      Navigator.pop(context, image);
-                    },
-                  ),
-                  FlatButton(
-                    child: const Text('写真を撮影'),
-                    onPressed: () async {
-                      final image = ImagePicker().getImage(
-                        source: ImageSource.camera,
-                      );
-                      Navigator.pop(context, image);
-                    },
-                  ),
-                ],
-              ),
-            );
-            if (image != null) {
-              await context.read(cafeDetailController).setImage(image);
-            }
-          },
+        PickImageSlideAction(
+          context.read(cafeDetailController).setImage,
         ),
         IconSlideAction(
           caption: 'カフェの名前を変更',
@@ -164,7 +136,37 @@ class CafeDetailBody extends ConsumerWidget {
 
     return Column(
       children: [
-        const Divider(),
+        TimeOfDayListTile(
+          title: '始業時間',
+          value: listToTimeOfDay(state.startTime),
+          onChanged: (val) {
+            controller.update(
+              state.copyWith(startTime: [val.hour, val.minute]),
+            );
+          },
+        ),
+        TimeOfDayListTile(
+          title: '終業時間',
+          value: listToTimeOfDay(state.endTime),
+          onChanged: (val) {
+            controller.update(
+              state.copyWith(endTime: [val.hour, val.minute]),
+            );
+          },
+        ),
+        DayOfTheWeekListTile(
+          title: const Text('定休日'),
+          value: state.regularHoliday,
+          onChanged: (val) => controller.update(
+            state.copyWith(regularHoliday: val),
+          ),
+        ),
+        MapListTile(
+          title: const Text('場所'),
+          value: state.mapUrl,
+          onChanged: (val) => controller.update(state.copyWith(mapUrl: val)),
+        ),
+
         const Divider(), // divider
         TextFormField(
           initialValue: state.memo,
@@ -173,6 +175,17 @@ class CafeDetailBody extends ConsumerWidget {
           decoration: const InputDecoration(
             labelText: 'メモ',
           ),
+        ),
+        const Divider(),
+        ListTile(
+          title: const Text('飲んだコーヒー'),
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              CafeCoffeeListPage.routeName,
+              arguments: state.uid,
+            );
+          },
         ),
       ],
     );

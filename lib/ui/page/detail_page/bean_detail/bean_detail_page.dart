@@ -1,10 +1,13 @@
 import 'package:coffee_life_manager/constant_string.dart';
+import 'package:coffee_life_manager/entity/bean.dart';
 import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/bean_detail/bean_detail.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail/add_house_coffee_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail/house_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/datetime_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/int_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/roast_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/pick_image_slide_action.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget.dart';
 import 'package:coffee_life_manager/ui/page/list_page/house_coffee_list/house_coffee_list_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/tile/tiles.dart';
@@ -12,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:image_picker/image_picker.dart';
 
 class BeanDetailPage extends StatelessWidget {
   const BeanDetailPage();
@@ -70,40 +72,8 @@ class BeanDetailTop extends ConsumerWidget {
       actionPane: const SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
       actions: [
-        IconSlideAction(
-          caption: '画像を変更',
-          icon: Icons.image,
-          onTap: () async {
-            removeFocus(context);
-            final image = await await showDialog<Future<PickedFile>>(
-              context: context,
-              child: SimpleDialog(
-                children: [
-                  FlatButton(
-                    child: const Text('ギャラリーから画像を選択'),
-                    onPressed: () async {
-                      final image = ImagePicker().getImage(
-                        source: ImageSource.gallery,
-                      );
-                      Navigator.pop(context, image);
-                    },
-                  ),
-                  FlatButton(
-                    child: const Text('写真を撮影'),
-                    onPressed: () async {
-                      final image = ImagePicker().getImage(
-                        source: ImageSource.camera,
-                      );
-                      Navigator.pop(context, image);
-                    },
-                  ),
-                ],
-              ),
-            );
-            if (image != null) {
-              await context.read(beanDetailController).setImage(image);
-            }
-          },
+        PickImageSlideAction(
+          context.read(beanDetailController).setImage,
         ),
         IconSlideAction(
           caption: '豆の名前を変更',
@@ -264,14 +234,27 @@ class BeanDetailPageBottomAppBar extends StatelessWidget {
                   Icons.local_cafe,
                   color: Theme.of(context).accentIconTheme.color,
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(
+                onPressed: () async {
+                  final map = await Navigator.pushNamed(
                     context,
-                    HouseCoffeeDetailPage.routeName,
+                    AddHouseCoffeePage.routeName,
                     arguments: {
                       beanIdKey: context.read(beanDetail).state.uid,
                     },
                   );
+                  // 値が戻ってきたら、リスト画面に行く。
+                  if (map != null) {
+                    final bean = (map as Map<String, dynamic>)['bean'] as Bean;
+                    Navigator.pop(context, bean);
+                    await Navigator.pushNamed(
+                      context,
+                      HouseCoffeeDetailPage.routeName,
+                      arguments: {
+                        uidKey: (map as Map<String, dynamic>)[uidKey] as int,
+                        beanIdKey: bean.uid,
+                      },
+                    );
+                  }
                 },
               ),
               IconButton(

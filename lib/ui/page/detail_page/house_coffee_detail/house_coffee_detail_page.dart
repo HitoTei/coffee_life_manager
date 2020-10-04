@@ -1,13 +1,18 @@
 import 'package:coffee_life_manager/constant_string.dart';
 import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail/house_coffee_detail.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/datetime_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/drip_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/grind_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/int_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/roast_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/pick_image_slide_action.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget.dart';
 import 'package:coffee_life_manager/ui/page/list_page/tile/tiles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:image_picker/image_picker.dart';
 
 class HouseCoffeeDetailPage extends StatelessWidget {
   const HouseCoffeeDetailPage();
@@ -18,7 +23,8 @@ class HouseCoffeeDetailPage extends StatelessWidget {
     final map = ModalRoute.of(context).settings.arguments as Map<String, int>;
     context.read(houseCoffeeDetailController).init(
           map[uidKey] ?? context.read(houseCoffeeDetail).state?.uid,
-          beanId: map[beanIdKey],
+          beanId:
+              map[beanIdKey] ?? context.read(houseCoffeeDetail).state?.beanId,
         );
 
     return WillPopScope(
@@ -58,40 +64,8 @@ class HouseCoffeeDetailTop extends ConsumerWidget {
       actionPane: const SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
       actions: [
-        IconSlideAction(
-          caption: '画像を変更',
-          icon: Icons.image,
-          onTap: () async {
-            removeFocus(context);
-            final image = await await showDialog<Future<PickedFile>>(
-              context: context,
-              child: SimpleDialog(
-                children: [
-                  FlatButton(
-                    child: const Text('ギャラリーから画像を選択'),
-                    onPressed: () async {
-                      final image = ImagePicker().getImage(
-                        source: ImageSource.gallery,
-                      );
-                      Navigator.pop(context, image);
-                    },
-                  ),
-                  FlatButton(
-                    child: const Text('写真を撮影'),
-                    onPressed: () async {
-                      final image = ImagePicker().getImage(
-                        source: ImageSource.camera,
-                      );
-                      Navigator.pop(context, image);
-                    },
-                  ),
-                ],
-              ),
-            );
-            if (image != null) {
-              await context.read(houseCoffeeDetailController).setImage(image);
-            }
-          },
+        PickImageSlideAction(
+          context.read(houseCoffeeDetailController).setImage,
         ),
         IconSlideAction(
           caption: '商品名を変更',
@@ -147,6 +121,7 @@ class HouseCoffeeDetailBody extends ConsumerWidget {
   Widget build(BuildContext context,
       T Function<T>(ProviderBase<Object, T> provider) watch) {
     final state = watch(houseCoffeeDetail).state;
+    final bean = watch(parentBean).state;
     final controller = context.read(houseCoffeeDetailController);
     if (state == null) {
       return const Center(
@@ -156,6 +131,29 @@ class HouseCoffeeDetailBody extends ConsumerWidget {
 
     return Column(
       children: [
+        IntListTile(
+          title: const Text('淹れた量'),
+          subtitle: Text('${state.numOfCups}杯'),
+          value: state.numOfCups,
+          onChanged: (val) => controller.update(state.copyWith(numOfCups: val)),
+        ),
+        GrindListTile(
+          value: state.grind,
+          onChanged: (val) => controller.update(state.copyWith(grind: val)),
+        ),
+        DripListTile(
+          value: state.drip,
+          onChanged: (val) => controller.update(state.copyWith(drip: val)),
+        ),
+        RoastListTile(
+          value: state.roast,
+          onChanged: (val) => controller.update(state.copyWith(roast: val)),
+        ),
+        DateTimeListTile(
+          title: const Text('飲んだ日'),
+          value: state.drinkDay,
+          onChanged: (val) => controller.update(state.copyWith(drinkDay: val)),
+        ),
         const Divider(),
         ProviderScope(
           overrides: [
@@ -168,7 +166,8 @@ class HouseCoffeeDetailBody extends ConsumerWidget {
           ],
           child: const RateWidget(),
         ),
-        const Divider(), // divider
+
+        const Divider(),
         TextFormField(
           initialValue: state.memo,
           onChanged: (val) => controller.update(state.copyWith(memo: val)),
@@ -177,6 +176,20 @@ class HouseCoffeeDetailBody extends ConsumerWidget {
             labelText: 'メモ',
           ),
         ),
+        const Divider(), //
+        const Text('豆'), // divider
+        if (bean == null)
+          const Center(
+            child: Text('豆は削除されました'),
+          )
+        else
+          ProviderScope(
+            overrides: [
+              currentBean.overrideWithValue(bean),
+              currentBeanUpdater.overrideWithValue((_) {}),
+            ],
+            child: const BeanListTile(),
+          ),
       ],
     );
   }

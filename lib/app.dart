@@ -1,6 +1,7 @@
 import 'package:coffee_life_manager/l10n/l10n.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/bean_detail/bean_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail/cafe_detail_page.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail/add_house_coffee_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail/house_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/bean_list/bean_list_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_list/cafe_list_page.dart';
@@ -37,9 +38,8 @@ class _MyApp extends StatelessWidget {
         CafeCoffeeDetailPage.routeName: (_) => const CafeCoffeeDetailPage(),
         HouseCoffeeListPage.routeName: (_) => const HouseCoffeeListPage(),
         HouseCoffeeDetailPage.routeName: (_) => const HouseCoffeeDetailPage(),
+        AddHouseCoffeePage.routeName: (_) => const AddHouseCoffeePage(),
       },
-
-      // TODO: replace
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

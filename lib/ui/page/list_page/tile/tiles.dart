@@ -5,6 +5,7 @@ import 'package:coffee_life_manager/entity/house_coffee.dart';
 import 'package:coffee_life_manager/ui/widget/future_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
+import 'package:intl/intl.dart';
 
 final currentBean = ScopedProvider<Bean>((_) => null);
 final currentBeanUpdater = ScopedProvider<Function(Bean)>((_) => null);
@@ -85,7 +86,9 @@ class CafeCoffeeListTile extends ConsumerWidget {
               margin: const EdgeInsets.all(10),
               child: ListTile(
                 title: Text(state.productName),
-                subtitle: Text('${state.price}円'),
+                subtitle: Text(
+                  '${(state?.drinkDay != null) ? DateFormat.yMMMMEEEEd().format(state?.drinkDay) : '未設定'}',
+                ),
                 trailing: IconButton(
                   icon: Icon(
                     (state.isFavorite) ? Icons.favorite : Icons.favorite_border,
@@ -128,7 +131,11 @@ class CafeListTile extends ConsumerWidget {
               margin: const EdgeInsets.all(10),
               child: ListTile(
                 title: Text(state.cafeName),
-                subtitle: Text('${state.startTime} ~ ${state.endTime}'),
+                subtitle: Text(
+                  '${listToTimeOfDay(state.startTime).format(context)}'
+                  ' ~ '
+                  '${listToTimeOfDay(state.endTime).format(context)}',
+                ),
                 trailing: IconButton(
                   icon: Icon(
                     (state.isFavorite) ? Icons.favorite : Icons.favorite_border,
@@ -171,7 +178,9 @@ class HouseCoffeeListTile extends ConsumerWidget {
               margin: const EdgeInsets.all(10),
               child: ListTile(
                 title: Text(state.beanName),
-                subtitle: Text('${state.drinkDay ?? '未設定'}'),
+                subtitle: Text(
+                  '${(state?.drinkDay != null) ? DateFormat.yMMMMEEEEd().format(state?.drinkDay) : '未設定'}',
+                ),
                 trailing: IconButton(
                   icon: Icon(
                     (state.isFavorite) ? Icons.favorite : Icons.favorite_border,

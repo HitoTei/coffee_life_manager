@@ -24,10 +24,17 @@ abstract class Cafe with _$Cafe {
 }
 
 extension ParseString on String {
-  TimeOfDay toTimeOfDay(String str) {
-    final list = str.split(' ');
-    final hour = int.parse(list[0]);
-    final minute = int.parse(list[1]);
+  TimeOfDay toTimeOfDay() {
+    return split(',').map(int.parse).toList().toTimeOfDay();
+  }
+}
+
+extension ListToTimeOfDay on List<int> {
+  TimeOfDay toTimeOfDay() {
+    final hour = this[0];
+    final minute = this[1];
     return TimeOfDay(hour: hour, minute: minute);
   }
 }
+
+TimeOfDay listToTimeOfDay(List<int> list) => list.toTimeOfDay();

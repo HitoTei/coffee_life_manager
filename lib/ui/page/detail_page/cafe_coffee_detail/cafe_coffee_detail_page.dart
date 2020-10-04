@@ -1,13 +1,15 @@
 import 'package:coffee_life_manager/constant_string.dart';
 import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_coffee_detail/cafe_coffee_detail.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/datetime_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/int_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/pick_image_slide_action.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget.dart';
 import 'package:coffee_life_manager/ui/page/list_page/tile/tiles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:image_picker/image_picker.dart';
 
 class CafeCoffeeDetailPage extends StatelessWidget {
   const CafeCoffeeDetailPage();
@@ -17,7 +19,7 @@ class CafeCoffeeDetailPage extends StatelessWidget {
     final map = ModalRoute.of(context).settings.arguments as Map<String, int>;
     context.read(cafeCoffeeDetailController).init(
           map[uidKey] ?? context.read(cafeCoffeeDetail).state?.uid,
-          map[cafeIdKey],
+          map[cafeIdKey] ?? context.read(cafeCoffeeDetail).state?.cafeId,
         );
 
     return WillPopScope(
@@ -57,40 +59,8 @@ class CafeCoffeeDetailTop extends ConsumerWidget {
       actionPane: const SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
       actions: [
-        IconSlideAction(
-          caption: '画像を変更',
-          icon: Icons.image,
-          onTap: () async {
-            removeFocus(context);
-            final image = await await showDialog<Future<PickedFile>>(
-              context: context,
-              child: SimpleDialog(
-                children: [
-                  FlatButton(
-                    child: const Text('ギャラリーから画像を選択'),
-                    onPressed: () async {
-                      final image = ImagePicker().getImage(
-                        source: ImageSource.gallery,
-                      );
-                      Navigator.pop(context, image);
-                    },
-                  ),
-                  FlatButton(
-                    child: const Text('写真を撮影'),
-                    onPressed: () async {
-                      final image = ImagePicker().getImage(
-                        source: ImageSource.camera,
-                      );
-                      Navigator.pop(context, image);
-                    },
-                  ),
-                ],
-              ),
-            );
-            if (image != null) {
-              await context.read(cafeCoffeeDetailController).setImage(image);
-            }
-          },
+        PickImageSlideAction(
+          context.read(cafeCoffeeDetailController).setImage,
         ),
         IconSlideAction(
           caption: '商品名を変更',
@@ -147,15 +117,26 @@ class CafeCoffeeDetailBody extends ConsumerWidget {
   Widget build(BuildContext context,
       T Function<T>(ProviderBase<Object, T> provider) watch) {
     final state = watch(cafeCoffeeDetail).state;
+    final cafe = watch(parentCafe).state;
     final controller = context.read(cafeCoffeeDetailController);
     if (state == null) {
       return const Center(
         child: CircularProgressIndicator(),
       );
     }
-
     return Column(
       children: [
+        IntListTile(
+          title: const Text('値段'),
+          subtitle: Text('${state.price}円'),
+          value: state.price,
+          onChanged: (val) => controller.update(state.copyWith(price: val)),
+        ),
+        DateTimeListTile(
+          title: const Text('飲んだ日'),
+          value: state.drinkDay,
+          onChanged: (val) => controller.update(state.copyWith(drinkDay: val)),
+        ),
         const Divider(),
         ProviderScope(
           overrides: [
@@ -177,6 +158,19 @@ class CafeCoffeeDetailBody extends ConsumerWidget {
             labelText: 'メモ',
           ),
         ),
+        const Divider(),
+        const Text('カフェ'),
+        cafe == null
+            ? const Center(
+                child: Text('カフェは削除されました'),
+              )
+            : ProviderScope(
+                overrides: [
+                  currentCafe.overrideWithValue(cafe),
+                  currentCafeUpdater.overrideWithValue((_) {})
+                ],
+                child: const CafeListTile(),
+              ),
       ],
     );
   }
