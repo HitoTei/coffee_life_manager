@@ -27,6 +27,7 @@ class CafeDetailPage extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
+        await context.read(cafeCoffeeListController).dispose();
         Navigator.pop(
           context,
           context.read(cafeDetail).state,

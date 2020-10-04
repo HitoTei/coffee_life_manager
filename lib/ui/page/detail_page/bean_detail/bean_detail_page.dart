@@ -29,6 +29,7 @@ class BeanDetailPage extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
+        await context.read(houseCoffeeListController).dispose();
         Navigator.pop(
           context,
           context.read(beanDetail).state,
