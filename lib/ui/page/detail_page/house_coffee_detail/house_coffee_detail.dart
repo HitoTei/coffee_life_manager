@@ -16,7 +16,8 @@ final houseCoffeeDetailController =
 class HouseCoffeeDetailController {
   const HouseCoffeeDetailController(this.read);
   final Reader read;
-  Future<void> init(int uid, {@required int beanId}) async {
+  Future<void> init(int id, {@required int beanId}) async {
+    final uid = id ?? read(houseCoffeeDetail).state?.uid;
     if (uid != null) {
       read(houseCoffeeDetail).state =
           await read(houseCoffeeRepository).fetchByUid(uid);

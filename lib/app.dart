@@ -1,10 +1,13 @@
 import 'package:coffee_life_manager/l10n/l10n.dart';
+import 'package:coffee_life_manager/theme_manager.dart';
+import 'package:coffee_life_manager/ui/home/home_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/bean_detail/bean_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail/cafe_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail/add_house_coffee_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail/house_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/bean_list/bean_list_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_list/cafe_list_page.dart';
+import 'package:coffee_life_manager/ui/page/theme_selector/theme_selector_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/all.dart';
@@ -22,14 +25,16 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class _MyApp extends StatelessWidget {
+class _MyApp extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,
+      T Function<T>(ProviderBase<Object, T> provider) watch) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData.light(),
-      initialRoute: BeanListPage.routeName,
+      theme: watch(appTheme).state,
+      initialRoute: '/',
       routes: {
+        HomePage.routeName: (_) => const HomePage(),
         BeanListPage.routeName: (_) => const BeanListPage(),
         BeanDetailPage.routeName: (_) => const BeanDetailPage(),
         CafeListPage.routeName: (_) => const CafeListPage(),
@@ -39,6 +44,7 @@ class _MyApp extends StatelessWidget {
         HouseCoffeeListPage.routeName: (_) => const HouseCoffeeListPage(),
         HouseCoffeeDetailPage.routeName: (_) => const HouseCoffeeDetailPage(),
         AddHouseCoffeePage.routeName: (_) => const AddHouseCoffeePage(),
+        ThemeSelectorPage.routeName: (_) => const ThemeSelectorPage(),
       },
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

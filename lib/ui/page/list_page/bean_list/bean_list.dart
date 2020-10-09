@@ -63,7 +63,10 @@ class BeanListController {
   Future<void> add(Bean bean) async {
     final id = await read(beanRepository).insert(bean);
 
-    final list = read(_beanList).state..add(bean.copyWith(uid: id));
+    final list = read(_beanList).state
+      ..add(
+        bean.copyWith(uid: id),
+      );
     read(_beanList).state = list;
   }
 

@@ -1,8 +1,10 @@
 import 'package:coffee_life_manager/theme_manager.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/all.dart';
 
 class ThemeSelectorPage extends StatelessWidget {
+  const ThemeSelectorPage();
+  static const routeName = '/themeSelectorPage';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +23,7 @@ class ThemeSelectorPage extends StatelessWidget {
                   color: theme.accentColor,
                 ),
                 onTap: () {
-                  ThemeManager().setTheme(theme);
+                  context.read(themeManager).setTheme(theme);
                 },
               ),
             ),

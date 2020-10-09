@@ -15,7 +15,8 @@ final cafeCoffeeDetailController =
 class CafeCoffeeDetailController {
   const CafeCoffeeDetailController(this.read);
   final Reader read;
-  Future<void> init(int uid, int cafeId) async {
+  Future<void> init(int id, int cafeId) async {
+    final uid = id ?? read(cafeCoffeeDetail).state?.uid;
     if (uid != null) {
       read(cafeCoffeeDetail).state =
           await read(cafeCoffeeRepository).fetchByUid(uid);

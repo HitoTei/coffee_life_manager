@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/all.dart';
 
 class BeanListPage extends StatelessWidget {
   const BeanListPage();
-  static const routeName = '/'; // todo: change name
+  static const routeName = '/beanListPage'; // todo: change name
   @override
   Widget build(BuildContext context) {
     context.read(beanListController).initState();

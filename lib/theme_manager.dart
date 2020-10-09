@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/all.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ThemeManager extends ValueNotifier<ThemeData> {
-  factory ThemeManager() {
-    return _cache;
-  }
+final appTheme = StateProvider.autoDispose((_) => ThemeData.light());
+final themeManager = Provider.autoDispose((ref) => ThemeManager(ref.read));
 
-  ThemeManager._internal() : super(themes[0]) {
-    _getValue().then((data) {
-      value = data;
-      notifyListeners();
+class ThemeManager {
+  ThemeManager(this.read) {
+    _pref.then((value) {
+      final index = value.getInt(_key);
+      if (index != null) {
+        read(appTheme).state = themes[index];
+      }
     });
   }
 
-  static final _cache = ThemeManager._internal();
+  final Reader read;
+
   final _pref = SharedPreferences.getInstance();
   static const _key = 'CoffeeLifeManagerThemeData';
   static final themes = <ThemeData>[
@@ -44,30 +47,9 @@ class ThemeManager extends ValueNotifier<ThemeData> {
   ];
 
   void setTheme(ThemeData theme) {
-    if (value == theme) return;
-    int index;
-    for (var i = 0; i < themes.length; i++) {
-      if (themes[i] == theme) {
-        index = i;
-        break;
-      }
-    }
-    if (index == null) return;
-    _savePosition(index);
-
-    value = theme;
-    notifyListeners();
-  }
-
-  Future<ThemeData> _getValue() async {
-    final pref = await _pref;
-    final position = pref.getInt(_key);
-    if (position == null) return null;
-    return themes[position];
-  }
-
-  Future<void> _savePosition(int val) async {
-    final pref = await _pref;
-    await pref.setInt(_key, val);
+    _pref.then((value) {
+      read(appTheme).state = theme;
+      value.setInt(_key, themes.indexOf(theme));
+    });
   }
 }
