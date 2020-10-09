@@ -1,11 +1,12 @@
 import 'package:coffee_life_manager/database/model/repository/entity_repository.dart';
+import 'package:coffee_life_manager/database/shared_pref.dart';
 import 'package:coffee_life_manager/entity/bean.dart';
 import 'package:flutter_riverpod/all.dart';
 
 final beanList = StateProvider<List<Bean>>(
   (ref) {
     final list = ref.watch(_beanList).state;
-    final order = ref.watch(_beanSortOrder).state;
+    final order = ref.watch(beanSortOrder).state;
     if (list == null) return null;
 
     switch (order) {
@@ -15,11 +16,15 @@ final beanList = StateProvider<List<Bean>>(
       case BeanListSortOrder.desByUid:
         list.sort((a, b) => (b?.uid ?? 0) - (a?.uid ?? 0));
         break;
-      case BeanListSortOrder.ascByPrice:
-        list.sort((a, b) => (a?.price ?? 0) - (b?.price ?? 0));
+      case BeanListSortOrder.ascByPrice: // 値段が同じだった場合, uidでソートする
+        list.sort((a, b) => (a.price == b.price)
+            ? (b?.uid ?? 0) - (a?.uid ?? 0)
+            : (a?.price ?? 0) - (b?.price ?? 0));
         break;
       case BeanListSortOrder.desByPrice:
-        list.sort((a, b) => (b?.price ?? 0) - (a?.price ?? 0));
+        list.sort((a, b) => (a.price == b.price)
+            ? (b?.uid ?? 0) - (a?.uid ?? 0)
+            : (b?.price ?? 0) - (a?.price ?? 0));
         break;
     }
     return list;
@@ -29,7 +34,7 @@ final beanList = StateProvider<List<Bean>>(
 final beanListController =
     Provider.autoDispose((ref) => BeanListController(ref.read));
 final _beanList = StateProvider<List<Bean>>((ref) => null);
-final _beanSortOrder = StateProvider((ref) => BeanListSortOrder.ascByUid);
+final beanSortOrder = StateProvider((ref) => BeanListSortOrder.ascByUid);
 
 class BeanListController {
   BeanListController(this.read);
@@ -44,11 +49,15 @@ class BeanListController {
   }
 
   Future<void> initState() async {
-    // 並び順とかの取得
+    final index = await read(beanListOrderPref).fetchIndex();
+    if (index != null) {
+      read(beanSortOrder).state = BeanListSortOrder.values[index];
+    }
   }
 
   Future<void> dispose() async {
     read(_beanList).state = null;
+    await read(beanListOrderPref).save(read(beanSortOrder).state.index);
   }
 
   Future<void> add(Bean bean) async {
@@ -80,7 +89,7 @@ class BeanListController {
 
   // ignore: use_setters_to_change_properties
   void changeSortOrder(BeanListSortOrder order) {
-    read(_beanSortOrder).state = order;
+    read(beanSortOrder).state = order;
   }
 }
 
@@ -90,3 +99,10 @@ enum BeanListSortOrder {
   ascByPrice,
   desByPrice, // TODO: add others
 }
+
+const kBeanListSortOrderStr = <BeanListSortOrder, String>{
+  BeanListSortOrder.ascByUid: '追加したのが早い順',
+  BeanListSortOrder.desByUid: '追加したのが遅い順',
+  BeanListSortOrder.ascByPrice: '値段が安い順',
+  BeanListSortOrder.desByPrice: '値段が高い順',
+};

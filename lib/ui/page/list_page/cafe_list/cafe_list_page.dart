@@ -21,13 +21,37 @@ class CafeListPage extends StatelessWidget {
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          actions: const [
+            CafeOrderMenu(),
+          ],
+        ),
         body: const Padding(
           padding: EdgeInsets.all(8.0),
           child: CafeListBody(),
         ),
         floatingActionButton: const CafeListFab(),
       ),
+    );
+  }
+}
+
+class CafeOrderMenu extends ConsumerWidget {
+  const CafeOrderMenu();
+  @override
+  Widget build(BuildContext context,
+      T Function<T>(ProviderBase<Object, T> provider) watch) {
+    return PopupMenuButton<CafeListSortOrder>(
+      child: const Icon(Icons.sort),
+      initialValue: watch(cafeSortOrder).state,
+      onSelected: context.read(cafeListController).changeSortOrder,
+      itemBuilder: (BuildContext context) => [
+        for (final order in CafeListSortOrder.values)
+          PopupMenuItem(
+            child: Text(kCafeListSortOrderStr[order]),
+            value: order,
+          ),
+      ],
     );
   }
 }

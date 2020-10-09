@@ -1,27 +1,30 @@
 import 'package:coffee_life_manager/database/model/repository/entity_repository.dart';
+import 'package:coffee_life_manager/database/shared_pref.dart';
 import 'package:coffee_life_manager/entity/cafe.dart';
 import 'package:flutter_riverpod/all.dart';
 
-final cafeList = StateProvider<List<Cafe>>((ref) {
-  final list = ref.watch(_cafeList).state;
-  final order = ref.watch(_cafeSortOrder).state;
-  if (list == null) return null;
-  switch (order) {
-    case CafeListSortOrder.ascByUid:
-      list.sort((a, b) => (a?.uid ?? 0) - (b?.uid ?? 0));
-      break;
-    case CafeListSortOrder.desByUid:
-      list.sort((a, b) => (b?.uid ?? 0) - (a?.uid ?? 0));
-      break;
-  }
-  return list;
-});
+final cafeList = StateProvider<List<Cafe>>(
+  (ref) {
+    final list = ref.watch(_cafeList).state;
+    final order = ref.watch(cafeSortOrder).state;
+    if (list == null) return null;
+    switch (order) {
+      case CafeListSortOrder.ascByUid:
+        list.sort((a, b) => (a?.uid ?? 0) - (b?.uid ?? 0));
+        break;
+      case CafeListSortOrder.desByUid:
+        list.sort((a, b) => (b?.uid ?? 0) - (a?.uid ?? 0));
+        break;
+    }
+    return list;
+  },
+);
 
 final cafeListController =
     Provider.autoDispose((ref) => CafeListController(ref.read));
 
 final _cafeList = StateProvider<List<Cafe>>((ref) => null);
-final _cafeSortOrder = StateProvider((ref) => CafeListSortOrder.ascByUid);
+final cafeSortOrder = StateProvider((ref) => CafeListSortOrder.ascByUid);
 
 class CafeListController {
   CafeListController(this.read);
@@ -32,11 +35,15 @@ class CafeListController {
   }
 
   Future<void> initState() async {
-    // orderなどを取得
+    final index = await read(cafeListOrderPref).fetchIndex();
+    if (index != null) {
+      read(cafeSortOrder).state = CafeListSortOrder.values[index];
+    }
   }
 
   Future<void> dispose() async {
     read(_cafeList).state = null;
+    await read(cafeListOrderPref).save(read(cafeSortOrder).state.index);
   }
 
   void add(Cafe cafe) {
@@ -69,11 +76,17 @@ class CafeListController {
 
   // ignore: use_setters_to_change_properties
   void changeSortOrder(CafeListSortOrder order) {
-    read(_cafeSortOrder).state = order;
+    read(cafeSortOrder).state = order;
   }
 }
 
 enum CafeListSortOrder {
   ascByUid,
   desByUid, // add others
+
 }
+
+const kCafeListSortOrderStr = <CafeListSortOrder, String>{
+  CafeListSortOrder.ascByUid: '追加したのが早い順',
+  CafeListSortOrder.desByUid: '追加したのが遅い順',
+};

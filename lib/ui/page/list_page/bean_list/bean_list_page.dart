@@ -26,13 +26,37 @@ class BeanListPage extends StatelessWidget {
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          actions: const [
+            BeanOrderMenu(),
+          ],
+        ),
         body: const Padding(
           padding: EdgeInsets.all(8.0),
           child: BeanListBody(),
         ),
         floatingActionButton: const BeanListFab(),
       ),
+    );
+  }
+}
+
+class BeanOrderMenu extends ConsumerWidget {
+  const BeanOrderMenu();
+  @override
+  Widget build(BuildContext context,
+      T Function<T>(ProviderBase<Object, T> provider) watch) {
+    return PopupMenuButton<BeanListSortOrder>(
+      child: const Icon(Icons.sort),
+      initialValue: watch(beanSortOrder).state,
+      onSelected: context.read(beanListController).changeSortOrder,
+      itemBuilder: (BuildContext context) => [
+        for (final order in BeanListSortOrder.values)
+          PopupMenuItem(
+            child: Text(kBeanListSortOrderStr[order]),
+            value: order,
+          ),
+      ],
     );
   }
 }

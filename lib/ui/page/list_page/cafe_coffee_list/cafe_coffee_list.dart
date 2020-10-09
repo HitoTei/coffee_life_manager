@@ -1,11 +1,12 @@
 import 'package:coffee_life_manager/database/model/repository/entity_repository.dart';
+import 'package:coffee_life_manager/database/shared_pref.dart';
 import 'package:coffee_life_manager/entity/cafe_coffee.dart';
 import 'package:flutter_riverpod/all.dart';
 
 final cafeCoffeeList = StateProvider<List<CafeCoffee>>(
   (ref) {
     final list = ref.watch(_cafeCoffeeList).state;
-    final order = ref.watch(_cafeCoffeeSortOrder).state;
+    final order = ref.watch(cafeCoffeeSortOrder).state;
     if (list == null) return null;
 
     switch (order) {
@@ -16,10 +17,18 @@ final cafeCoffeeList = StateProvider<List<CafeCoffee>>(
         list.sort((a, b) => (b?.uid ?? 0) - (a?.uid ?? 0));
         break;
       case CafeCoffeeListSortOrder.ascByPrice:
-        list.sort((a, b) => (a?.price ?? 0) - (b?.price ?? 0));
+        list.sort(
+          (a, b) => (a?.price ?? 0) != (b?.price ?? 0)
+              ? (a?.price ?? 0) - (b?.price ?? 0)
+              : (a?.uid ?? 0) - (b?.uid ?? 0),
+        );
         break;
       case CafeCoffeeListSortOrder.desByPrice:
-        list.sort((a, b) => (b?.price ?? 0) - (a?.price ?? 0));
+        list.sort(
+          (a, b) => (a?.price ?? 0) != (b?.price ?? 0)
+              ? (b?.price ?? 0) - (a?.price ?? 0)
+              : (a?.uid ?? 0) - (b?.uid ?? 0),
+        );
         break;
     }
     return list;
@@ -29,7 +38,7 @@ final cafeCoffeeList = StateProvider<List<CafeCoffee>>(
 final cafeCoffeeListController =
     Provider.autoDispose((ref) => CafeCoffeeListController(ref.read));
 final _cafeCoffeeList = StateProvider<List<CafeCoffee>>((ref) => null);
-final _cafeCoffeeSortOrder =
+final cafeCoffeeSortOrder =
     StateProvider((ref) => CafeCoffeeListSortOrder.ascByUid);
 
 class CafeCoffeeListController {
@@ -46,11 +55,16 @@ class CafeCoffeeListController {
   }
 
   Future<void> initState() async {
-    // 並び順とかの取得
+    final index = await read(cafeCoffeeListOrderPref).fetchIndex();
+    if (index != null) {
+      read(cafeCoffeeSortOrder).state = CafeCoffeeListSortOrder.values[index];
+    }
   }
 
   Future<void> dispose() async {
     read(_cafeCoffeeList).state = null;
+    final order = read(cafeCoffeeSortOrder).state;
+    await read(cafeCoffeeListOrderPref).save(order.index);
   }
 
   Future<void> add(CafeCoffee cafeCoffee) async {
@@ -82,7 +96,7 @@ class CafeCoffeeListController {
 
   // ignore: use_setters_to_change_properties
   void changeSortOrder(CafeCoffeeListSortOrder order) {
-    read(_cafeCoffeeSortOrder).state = order;
+    read(cafeCoffeeSortOrder).state = order;
   }
 }
 
@@ -92,3 +106,10 @@ enum CafeCoffeeListSortOrder {
   ascByPrice,
   desByPrice, // TODO: add others
 }
+
+const kCafeCoffeeListSortOrderStr = <CafeCoffeeListSortOrder, String>{
+  CafeCoffeeListSortOrder.ascByUid: '追加したのが早い順',
+  CafeCoffeeListSortOrder.desByUid: '追加したのが遅い順',
+  CafeCoffeeListSortOrder.ascByPrice: '値段が安い順',
+  CafeCoffeeListSortOrder.desByPrice: '値段が高い順',
+};

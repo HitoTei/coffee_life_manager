@@ -26,12 +26,36 @@ class HouseCoffeeListPage extends StatelessWidget {
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          actions: const [
+            HouseCoffeeOrderMenu(),
+          ],
+        ),
         body: const Padding(
           padding: EdgeInsets.all(8.0),
           child: HouseCoffeeListBody(),
         ),
       ),
+    );
+  }
+}
+
+class HouseCoffeeOrderMenu extends ConsumerWidget {
+  const HouseCoffeeOrderMenu();
+  @override
+  Widget build(BuildContext context,
+      T Function<T>(ProviderBase<Object, T> provider) watch) {
+    return PopupMenuButton<HouseCoffeeListSortOrder>(
+      child: const Icon(Icons.sort),
+      initialValue: watch(houseCoffeeSortOrder).state,
+      onSelected: context.read(houseCoffeeListController).changeSortOrder,
+      itemBuilder: (BuildContext context) => [
+        for (final order in HouseCoffeeListSortOrder.values)
+          PopupMenuItem(
+            child: Text(kHouseCoffeeListSortOrderStr[order]),
+            value: order,
+          ),
+      ],
     );
   }
 }
