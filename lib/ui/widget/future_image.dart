@@ -2,12 +2,16 @@ import 'dart:io';
 
 import 'package:coffee_life_manager/function/files.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/all.dart';
 
-class ImageByUri extends StatelessWidget {
-  const ImageByUri(this.uri);
-  final String uri;
+final imageByUri = ScopedProvider<String>(null);
+
+class ImageByUri extends ConsumerWidget {
+  const ImageByUri();
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,
+      T Function<T>(ProviderBase<Object, T> provider) watch) {
+    final uri = watch(imageByUri);
     final image = getLocalFile(uri);
 
     return FutureBuilder(
@@ -27,11 +31,25 @@ class ImageByUri extends StatelessWidget {
           );
         }
         final file = snapshot.data;
-        return Image.file(
-          file,
-          fit: BoxFit.fitWidth,
+        return ProviderScope(
+          overrides: [_image.overrideWithValue(file)],
+          child: const _Image(),
         );
       },
+    );
+  }
+}
+
+final _image = ScopedProvider<File>((_) => null);
+
+class _Image extends ConsumerWidget {
+  const _Image();
+  @override
+  Widget build(BuildContext context,
+      T Function<T>(ProviderBase<Object, T> provider) watch) {
+    return Image.file(
+      watch(_image),
+      fit: BoxFit.fitWidth,
     );
   }
 }

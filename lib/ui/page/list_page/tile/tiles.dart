@@ -20,6 +20,8 @@ final currentHouseCoffee = ScopedProvider<HouseCoffee>((_) => null);
 final currentHouseCoffeeUpdater =
     ScopedProvider<Function(HouseCoffee)>((_) => null);
 
+const _kTileHeight = 200.0;
+
 class BeanListTile extends ConsumerWidget {
   const BeanListTile();
 
@@ -33,30 +35,17 @@ class BeanListTile extends ConsumerWidget {
         child: CircularProgressIndicator(),
       );
     }
-    return Hero(
-      tag: state,
-      child: Card(
-        child: Column(
-          children: [
-            SizedBox(height: 100, child: ImageByUri(state.imageUri)),
-            Container(
-              margin: const EdgeInsets.all(10),
-              child: ListTile(
-                title: Text(state.beanName),
-                subtitle: Text('残り${state.remainingAmount}g'),
-                trailing: IconButton(
-                  icon: Icon(
-                    (state.isFavorite) ? Icons.favorite : Icons.favorite_border,
-                  ),
-                  onPressed: () {
-                    update(
-                      state.copyWith(isFavorite: !state.isFavorite),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
+    return _ListTile(
+      state,
+      state.imageUri,
+      ListTile(
+        title: Text(state.beanName),
+        subtitle: Text('残り${state.remainingAmount}g'),
+        trailing: _FavoriteButton(
+          state.isFavorite,
+          () => update(
+            state.copyWith(isFavorite: !state.isFavorite),
+          ),
         ),
       ),
     );
@@ -76,32 +65,19 @@ class CafeCoffeeListTile extends ConsumerWidget {
         child: CircularProgressIndicator(),
       );
     }
-    return Hero(
-      tag: state,
-      child: Card(
-        child: Column(
-          children: [
-            SizedBox(height: 100, child: ImageByUri(state.imageUri)),
-            Container(
-              margin: const EdgeInsets.all(10),
-              child: ListTile(
-                title: Text(state.productName),
-                subtitle: Text(
-                  '${(state?.drinkDay != null) ? DateFormat.yMMMMEEEEd().format(state?.drinkDay) : '未設定'}',
-                ),
-                trailing: IconButton(
-                  icon: Icon(
-                    (state.isFavorite) ? Icons.favorite : Icons.favorite_border,
-                  ),
-                  onPressed: () {
-                    update(
-                      state.copyWith(isFavorite: !state.isFavorite),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
+    return _ListTile(
+      state,
+      state.imageUri,
+      ListTile(
+        title: Text(state.productName),
+        subtitle: Text(
+          '${(state?.drinkDay != null) ? DateFormat.yMMMMEEEEd().format(state?.drinkDay) : '未設定'}',
+        ),
+        trailing: _FavoriteButton(
+          state.isFavorite,
+          () => update(
+            state.copyWith(isFavorite: !state.isFavorite),
+          ),
         ),
       ),
     );
@@ -121,34 +97,21 @@ class CafeListTile extends ConsumerWidget {
         child: CircularProgressIndicator(),
       );
     }
-    return Hero(
-      tag: state,
-      child: Card(
-        child: Column(
-          children: [
-            SizedBox(height: 100, child: ImageByUri(state.imageUri)),
-            Container(
-              margin: const EdgeInsets.all(10),
-              child: ListTile(
-                title: Text(state.cafeName),
-                subtitle: Text(
-                  '${listToTimeOfDay(state.startTime).format(context)}'
-                  ' ~ '
-                  '${listToTimeOfDay(state.endTime).format(context)}',
-                ),
-                trailing: IconButton(
-                  icon: Icon(
-                    (state.isFavorite) ? Icons.favorite : Icons.favorite_border,
-                  ),
-                  onPressed: () {
-                    update(
-                      state.copyWith(isFavorite: !state.isFavorite),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
+    return _ListTile(
+      state,
+      state.imageUri,
+      ListTile(
+        title: Text(state.cafeName),
+        subtitle: Text(
+          '${listToTimeOfDay(state.startTime).format(context)}'
+          ' ~ '
+          '${listToTimeOfDay(state.endTime).format(context)}',
+        ),
+        trailing: _FavoriteButton(
+          state.isFavorite,
+          () => update(
+            state.copyWith(isFavorite: !state.isFavorite),
+          ),
         ),
       ),
     );
@@ -168,43 +131,75 @@ class HouseCoffeeListTile extends ConsumerWidget {
         child: CircularProgressIndicator(),
       );
     }
-    return Hero(
-      tag: state,
-      child: Card(
-        child: Column(
-          children: [
-            SizedBox(height: 100, child: ImageByUri(state.imageUri)),
-            Container(
-              margin: const EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      Text(state.beanName),
-                      Text(
-                        '${(state?.drinkDay != null) ? DateFormat.yMMMMEEEEd().format(state?.drinkDay) : '未設定'}',
-                      ),
-                    ],
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      (state.isFavorite)
-                          ? Icons.favorite
-                          : Icons.favorite_border,
-                    ),
-                    onPressed: () {
-                      update(
-                        state.copyWith(isFavorite: !state.isFavorite),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
+    return _ListTile(
+      state,
+      state.imageUri,
+      ListTile(
+        title: Text(state.beanName),
+        subtitle: Text(
+          '${(state?.drinkDay != null) ? DateFormat.yMMMMEEEEd().format(state?.drinkDay) : '未設定'}',
+        ),
+        trailing: _FavoriteButton(
+          state.isFavorite,
+          () => update(
+            state.copyWith(isFavorite: !state.isFavorite),
+          ),
         ),
       ),
+    );
+  }
+}
+
+class _ListTile extends StatelessWidget {
+  const _ListTile(this.tag, this.imageUri, this.child);
+  final dynamic tag;
+  final String imageUri;
+  final Widget child;
+  @override
+  Widget build(BuildContext context) {
+    return Hero(
+      tag: tag,
+      child: Card(
+        child: SizedBox(
+          height: _kTileHeight,
+          child: Stack(
+            children: [
+              SizedBox(
+                height: _kTileHeight,
+                width: MediaQuery.of(context).size.width,
+                child: ProviderScope(
+                  overrides: [imageByUri.overrideWithValue(imageUri)],
+                  child: const ImageByUri(),
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  color: Theme.of(context).cardColor.withOpacity(0.90),
+                  margin: const EdgeInsets.all(10),
+                  child: child,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FavoriteButton extends StatelessWidget {
+  const _FavoriteButton(this.isFavorite, this.onPressed);
+  final bool isFavorite;
+  final Function() onPressed;
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(
+        isFavorite ? Icons.favorite : Icons.favorite_border,
+        color: isFavorite ? Colors.pink : Colors.grey,
+      ),
+      onPressed: onPressed,
     );
   }
 }

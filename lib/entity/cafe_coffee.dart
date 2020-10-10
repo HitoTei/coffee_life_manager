@@ -8,7 +8,7 @@ abstract class CafeCoffee with _$CafeCoffee {
   const factory CafeCoffee({
     @nullable int uid,
     @Default('') String productName,
-    @Default(0) int price,
+    @Default(500) int price,
     @nullable DateTime drinkDay,
     @Default([0, 0, 0, 0, 0]) List<int> rate, // 評価
     @nullable int cafeId,

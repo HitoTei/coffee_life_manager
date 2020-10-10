@@ -27,6 +27,7 @@ class HouseCoffeeListPage extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
+          title: const Text('家コーヒー'),
           actions: const [
             HouseCoffeeOrderMenu(),
           ],

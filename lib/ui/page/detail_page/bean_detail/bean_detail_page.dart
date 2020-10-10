@@ -206,6 +206,14 @@ class BeanDetailBody extends ConsumerWidget {
           value: state.price,
           onChanged: (val) => controller.update(state.copyWith(price: val)),
         ),
+        ListTile(
+          title: (state.firstAmount != 0)
+              ? Text('値段 ￥${(state.price * 100) / state.firstAmount}/100g')
+              : Text(
+                  '購入したときの量が設定されていません',
+                  style: TextStyle(color: Theme.of(context).errorColor),
+                ),
+        ),
         RoastListTile(
           value: state.roast,
           onChanged: (val) => controller.update(state.copyWith(roast: val)),

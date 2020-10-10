@@ -27,6 +27,7 @@ class BeanListPage extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
+          title: const Text('コーヒー'),
           actions: const [
             BeanOrderMenu(),
           ],

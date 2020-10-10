@@ -11,45 +11,36 @@ class ThemeSelectorPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('テーマを選択'),
       ),
-      body: GridView.count(
+      body: const ThemeSelectorWidget(),
+    );
+  }
+}
+
+class ThemeSelectorWidget extends StatelessWidget {
+  const ThemeSelectorWidget();
+  @override
+  Widget build(BuildContext context) {
+    const size = 50.0;
+    return SizedBox(
+      height: size * 4 * ThemeManager.themes.length,
+      width: size * 5,
+      child: GridView.count(
         crossAxisCount: 4,
         children: [
           for (var theme in ThemeManager.themes)
-            Container(
-              color: theme.primaryColor,
-              child: ListTile(
-                leading: Icon(
-                  Icons.adjust,
-                  color: theme.accentColor,
+            InkWell(
+              onTap: () => context.read(themeManager).setTheme(theme),
+              child: Container(
+                margin: const EdgeInsets.all(size / 5),
+                height: size,
+                width: size,
+                decoration: BoxDecoration(
+                  color: theme.primaryColor,
+                  shape: BoxShape.circle,
                 ),
-                onTap: () {
-                  context.read(themeManager).setTheme(theme);
-                },
               ),
             ),
         ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.close),
-        onPressed: () {},
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Theme.of(context).primaryColor,
-        shape: const AutomaticNotchedShape(
-          RoundedRectangleBorder(),
-          StadiumBorder(
-            side: BorderSide(),
-          ),
-        ),
-        child: Row(
-          children: [
-            IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () {},
-            ),
-          ],
-        ),
       ),
     );
   }

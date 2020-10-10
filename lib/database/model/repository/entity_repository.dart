@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:coffee_life_manager/constant_string.dart';
 import 'package:coffee_life_manager/database/sql_database.dart';
 import 'package:coffee_life_manager/entity/bean.dart';
@@ -318,8 +320,14 @@ Map<String, dynamic> sqlToInstance(Map<String, dynamic> e) {
       }
     } else if ([rateKey, startTimeKey, endTimeKey].contains(key)) {
       map[key] = (value as String).split(',').map(int.parse).toList();
-    } else if ([dayOfTheWeekStr].contains(key)) {
-      map[key] = jsonStrToDayOfTheWeekList(value as String);
+    } else if ([regularHolidayKey].contains(key)) {
+      final intList = (value as String).split(',');
+      final val = <String>[];
+      for (var value1 in intList) {
+        val.add(
+            DayOfTheWeek.values[int.parse(value1)].toString().substring(13));
+      }
+      map[key] = val;
     } else if ([isFavoriteKey].contains(key)) {
       map[key] = (value as int) == 1;
     } else {
@@ -356,10 +364,20 @@ Map<String, dynamic> instanceToSql(Map<String, dynamic> e) {
         buffer.write((value as List<int>)[i].toString());
       }
       map[key] = buffer.toString();
-    } else if ([dayOfTheWeekStr].contains(key)) {
+    } else if ([''].contains(key)) {
       map[key] = dayOfTheWeekListToJsonStr(value as List<DayOfTheWeek>);
     } else if ([isFavoriteKey].contains(key)) {
       map[key] = (value as bool) ? 1 : 0;
+    } else if ([regularHolidayKey].contains(key)) {
+      final list = (value as List<String>)
+          .map((e) => DayOfTheWeek.values
+              .indexWhere((element) => element.toString().substring(13) == e))
+          .toList();
+      var str = '';
+      for (final value1 in list) {
+        str += ',$value1';
+      }
+      map[key] = str.substring(min(1, str.length));
     } else {
       map[key] = value;
     }

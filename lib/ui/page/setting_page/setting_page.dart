@@ -18,7 +18,7 @@ class SettingPage extends StatelessWidget {
                 context,
                 MaterialPageRoute<dynamic>(
                   builder: (_) {
-                    return ThemeSelectorPage();
+                    return const ThemeSelectorPage();
                   },
                 ),
               );
