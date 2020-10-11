@@ -106,14 +106,12 @@ class HouseCoffeeListBody extends ConsumerWidget {
                 .read(houseCoffeeListController)
                 .update(res as HouseCoffee ?? houseCoffee);
           },
-          removeFromList: () => context
-              .read(houseCoffeeListController)
-              .removeFromList(houseCoffee),
           removeFromRepository: () => context
               .read(houseCoffeeListController)
               .removeFromRepository(houseCoffee),
           undoDelete: () =>
               context.read(houseCoffeeListController).add(houseCoffee),
+          imageUri: houseCoffee.imageUri,
         );
       },
       separatorBuilder: (_, __) => const Divider(),

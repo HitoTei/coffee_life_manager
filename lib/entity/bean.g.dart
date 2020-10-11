@@ -10,9 +10,9 @@ _$_Bean _$_$_BeanFromJson(Map<String, dynamic> json) {
   return _$_Bean(
     uid: json['uid'] as int,
     beanName: json['beanName'] as String ?? '',
-    remainingAmount: json['remainingAmount'] as int ?? 0,
-    firstAmount: json['firstAmount'] as int ?? 0,
-    oneCupPerGram: json['oneCupPerGram'] as int ?? 0,
+    remainingAmount: json['remainingAmount'] as int ?? 200,
+    firstAmount: json['firstAmount'] as int ?? 200,
+    oneCupPerGram: json['oneCupPerGram'] as int ?? 10,
     roast: _$enumDecodeNullable(_$RoastEnumMap, json['roast']) ??
         Roast.mediumRoast,
     freshnessDate: json['freshnessDate'] == null
@@ -21,7 +21,7 @@ _$_Bean _$_$_BeanFromJson(Map<String, dynamic> json) {
     openTime: json['openTime'] == null
         ? null
         : DateTime.parse(json['openTime'] as String),
-    price: json['price'] as int ?? 0,
+    price: json['price'] as int ?? 1000,
     rate: (json['rate'] as List)?.map((dynamic e) => e as int)?.toList() ??
         [0, 0, 0, 0, 0],
     cafeId: json['cafeId'] as int,

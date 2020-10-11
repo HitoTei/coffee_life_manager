@@ -20,13 +20,13 @@ class _$BeanTearOff {
   _Bean call(
       {@nullable int uid,
       String beanName = '',
-      int remainingAmount = 0,
-      int firstAmount = 0,
-      int oneCupPerGram = 0,
+      int remainingAmount = 200,
+      int firstAmount = 200,
+      int oneCupPerGram = 10,
       Roast roast = Roast.mediumRoast,
       @nullable DateTime freshnessDate,
       @nullable DateTime openTime,
-      int price = 0,
+      int price = 1000,
       List<int> rate = const [0, 0, 0, 0, 0],
       @nullable int cafeId,
       String memo = '',
@@ -240,13 +240,13 @@ class _$_Bean implements _Bean {
   const _$_Bean(
       {@nullable this.uid,
       this.beanName = '',
-      this.remainingAmount = 0,
-      this.firstAmount = 0,
-      this.oneCupPerGram = 0,
+      this.remainingAmount = 200,
+      this.firstAmount = 200,
+      this.oneCupPerGram = 10,
       this.roast = Roast.mediumRoast,
       @nullable this.freshnessDate,
       @nullable this.openTime,
-      this.price = 0,
+      this.price = 1000,
       this.rate = const [0, 0, 0, 0, 0],
       @nullable this.cafeId,
       this.memo = '',
@@ -272,13 +272,13 @@ class _$_Bean implements _Bean {
   @JsonKey(defaultValue: '')
   @override
   final String beanName;
-  @JsonKey(defaultValue: 0)
+  @JsonKey(defaultValue: 200)
   @override
   final int remainingAmount;
-  @JsonKey(defaultValue: 0)
+  @JsonKey(defaultValue: 200)
   @override // 残量
   final int firstAmount;
-  @JsonKey(defaultValue: 0)
+  @JsonKey(defaultValue: 10)
   @override // 最初の量
   final int oneCupPerGram;
   @JsonKey(defaultValue: Roast.mediumRoast)
@@ -290,7 +290,7 @@ class _$_Bean implements _Bean {
   @override // 賞味期限
   @nullable
   final DateTime openTime;
-  @JsonKey(defaultValue: 0)
+  @JsonKey(defaultValue: 1000)
   @override // 開封日時
   final int price;
   @JsonKey(defaultValue: const [0, 0, 0, 0, 0])

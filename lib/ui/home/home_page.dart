@@ -8,8 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 
-
-
 class HomePage extends StatelessWidget {
   const HomePage();
   static const routeName = '/';
@@ -21,7 +19,7 @@ class HomePage extends StatelessWidget {
         title: const Text('たいとる！'),
         actions: [
           IconButton(
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
             onPressed: () async {
               final res = await showMenu<ThemeData>(
                 context: context,

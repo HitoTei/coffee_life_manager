@@ -64,13 +64,10 @@ class CafeListController {
     read(_cafeList).state = list;
   }
 
-  void removeFromList(Cafe cafe) {
+  void removeFromRepository(Cafe cafe) {
     final list = read(_cafeList).state;
     list.remove(cafe);
     read(_cafeList).state = list;
-  }
-
-  void removeFromRepository(Cafe cafe) {
     read(cafeRepository).delete(cafe);
   }
 

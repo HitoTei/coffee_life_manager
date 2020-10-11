@@ -1,23 +1,27 @@
+import 'dart:io';
+
+import 'package:coffee_life_manager/function/files.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ListPageSlidable extends StatelessWidget {
   const ListPageSlidable({
     @required this.child,
     @required this.slidableKey,
-    @required this.removeFromList,
     @required this.removeFromRepository,
     @required this.undoDelete,
     @required this.goDetailPage,
+    @required this.imageUri,
   });
 
   final Widget child;
   final Key slidableKey;
-  final Function() removeFromList;
   final Function() removeFromRepository;
   final Function() undoDelete;
   final Function() goDetailPage;
+  final String imageUri;
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +34,12 @@ class ListPageSlidable extends StatelessWidget {
             icon: Icons.delete,
             caption: '削除する',
             color: Colors.red,
-            onTap: () {
-              removeFromList();
+            onTap: () async {
+              final path = (await getApplicationDocumentsDirectory()).path;
+              if (imageUri != null && imageUri.isNotEmpty) {
+                await File('$path/$imageUri').copy('$path/cache');
+              }
+              removeFromRepository();
               Scaffold.of(context)
                 ..removeCurrentSnackBar()
                 ..showSnackBar(
@@ -39,15 +47,15 @@ class ListPageSlidable extends StatelessWidget {
                     content: const Text('削除しました'),
                     action: SnackBarAction(
                       label: '元に戻す',
-                      onPressed: undoDelete,
+                      onPressed: () async {
+                        if (imageUri != null && imageUri.isNotEmpty) {
+                          final file = await getLocalFile('cache');
+                          await file.copy('$path/$imageUri');
+                        }
+                        undoDelete();
+                      },
                     ),
                   ),
-                ).closed.then(
-                  (value) {
-                    if (value != SnackBarClosedReason.action) {
-                      removeFromRepository();
-                    }
-                  },
                 );
             },
           ),

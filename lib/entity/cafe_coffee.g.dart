@@ -10,7 +10,7 @@ _$_CafeCoffee _$_$_CafeCoffeeFromJson(Map<String, dynamic> json) {
   return _$_CafeCoffee(
     uid: json['uid'] as int,
     productName: json['productName'] as String ?? '',
-    price: json['price'] as int ?? 0,
+    price: json['price'] as int ?? 500,
     drinkDay: json['drinkDay'] == null
         ? null
         : DateTime.parse(json['drinkDay'] as String),

@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/all.dart';
 
 class BeanListPage extends StatelessWidget {
   const BeanListPage();
-  static const routeName = '/beanListPage'; // todo: change name
+  static const routeName = '/beanListPage';
   @override
   Widget build(BuildContext context) {
     context.read(beanListController).initState();
@@ -33,7 +33,7 @@ class BeanListPage extends StatelessWidget {
           ],
         ),
         body: const Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8),
           child: BeanListBody(),
         ),
         floatingActionButton: const BeanListFab(),
@@ -104,11 +104,10 @@ class BeanListBody extends ConsumerWidget {
             );
             context.read(beanListController).update(res as Bean ?? bean);
           },
-          removeFromList: () =>
-              context.read(beanListController).removeFromList(bean),
           removeFromRepository: () =>
               context.read(beanListController).removeFromRepository(bean),
           undoDelete: () => context.read(beanListController).add(bean),
+          imageUri: bean.imageUri,
         );
       },
       separatorBuilder: (_, __) => const Divider(),

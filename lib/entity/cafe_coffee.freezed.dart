@@ -20,7 +20,7 @@ class _$CafeCoffeeTearOff {
   _CafeCoffee call(
       {@nullable int uid,
       String productName = '',
-      int price = 0,
+      int price = 500,
       @nullable DateTime drinkDay,
       List<int> rate = const [0, 0, 0, 0, 0],
       @nullable int cafeId,
@@ -185,7 +185,7 @@ class _$_CafeCoffee implements _CafeCoffee {
   const _$_CafeCoffee(
       {@nullable this.uid,
       this.productName = '',
-      this.price = 0,
+      this.price = 500,
       @nullable this.drinkDay,
       this.rate = const [0, 0, 0, 0, 0],
       @nullable this.cafeId,
@@ -208,7 +208,7 @@ class _$_CafeCoffee implements _CafeCoffee {
   @JsonKey(defaultValue: '')
   @override
   final String productName;
-  @JsonKey(defaultValue: 0)
+  @JsonKey(defaultValue: 500)
   @override
   final int price;
   @override

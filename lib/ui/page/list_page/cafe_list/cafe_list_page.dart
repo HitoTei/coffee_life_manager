@@ -100,11 +100,10 @@ class CafeListBody extends ConsumerWidget {
             );
             context.read(cafeListController).update(res as Cafe ?? cafe);
           },
-          removeFromList: () =>
-              context.read(cafeListController).removeFromList(cafe),
           removeFromRepository: () =>
               context.read(cafeListController).removeFromRepository(cafe),
           undoDelete: () => context.read(cafeListController).add(cafe),
+          imageUri: cafe.imageUri,
         );
       },
       separatorBuilder: (_, __) => const Divider(),
