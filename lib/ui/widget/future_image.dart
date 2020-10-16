@@ -18,8 +18,10 @@ class ImageByUri extends ConsumerWidget {
       future: image,
       builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
         if (!snapshot.hasData) {
-          return const Center(
-            child: Text('None'),
+          // todo: いい感じの画像
+          return Image.asset(
+            'assets/coffee.jpg',
+            fit: BoxFit.cover,
           );
         }
         if (snapshot.hasError) {

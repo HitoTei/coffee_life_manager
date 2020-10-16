@@ -40,7 +40,6 @@ class CafeDetailPage extends StatelessWidget {
           children: const [
             CafeDetailTop(),
             CafeDetailBody(),
-            Text('飲んだコーヒー'),
             CoffeeList(),
           ],
         ),
@@ -60,37 +59,43 @@ class CoffeeList extends ConsumerWidget {
         child: CircularProgressIndicator(),
       );
     }
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          for (final coffee in state)
-            ListPageTile(
-              ProviderScope(
-                overrides: [
-                  currentCafeCoffee.overrideWithValue(coffee),
-                  currentCafeCoffeeUpdater.overrideWithValue(
-                    context.read(cafeCoffeeListController).update,
+    return Column(
+      children: [
+        const Text('飲んだコーヒー'),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              for (final coffee in state)
+                ListPageTile(
+                  ProviderScope(
+                    overrides: [
+                      currentCafeCoffee.overrideWithValue(coffee),
+                      currentCafeCoffeeUpdater.overrideWithValue(
+                        context.read(cafeCoffeeListController).update,
+                      ),
+                    ],
+                    child:
+                        const SizedBox(width: 260, child: CafeCoffeeListTile()),
                   ),
-                ],
-                child: const SizedBox(width: 260, child: CafeCoffeeListTile()),
-              ),
-              () async {
-                final res = await Navigator.pushNamed(
-                  context,
-                  CafeCoffeeDetailPage.routeName,
-                  arguments: {
-                    cafeIdKey: context.read(cafeDetail).state.uid,
-                    uidKey: coffee.uid
+                  () async {
+                    final res = await Navigator.pushNamed(
+                      context,
+                      CafeCoffeeDetailPage.routeName,
+                      arguments: {
+                        cafeIdKey: context.read(cafeDetail).state.uid,
+                        uidKey: coffee.uid
+                      },
+                    );
+                    context
+                        .read(cafeCoffeeListController)
+                        .update(res as CafeCoffee);
                   },
-                );
-                context
-                    .read(cafeCoffeeListController)
-                    .update(res as CafeCoffee);
-              },
-            ),
-        ],
-      ),
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -227,7 +232,7 @@ class CafeDetailPageBottomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: Theme.of(context).accentColor,
+      color: Theme.of(context).primaryColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

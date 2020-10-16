@@ -324,8 +324,11 @@ Map<String, dynamic> sqlToInstance(Map<String, dynamic> e) {
       final intList = (value as String).split(',');
       final val = <String>[];
       for (var value1 in intList) {
-        val.add(
-            DayOfTheWeek.values[int.parse(value1)].toString().substring(13));
+        if (value1.isNotEmpty) {
+          val.add(
+            DayOfTheWeek.values[int.parse(value1)].toString().substring(13),
+          );
+        }
       }
       map[key] = val;
     } else if ([isFavoriteKey].contains(key)) {

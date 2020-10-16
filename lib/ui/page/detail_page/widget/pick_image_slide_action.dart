@@ -23,6 +23,7 @@ class PickImageSlideAction extends StatelessWidget {
                   final image = await ImagePicker().getImage(
                     source: ImageSource.gallery,
                   );
+
                   if (image != null) setImage(image);
                   Navigator.pop(context, image);
                 },

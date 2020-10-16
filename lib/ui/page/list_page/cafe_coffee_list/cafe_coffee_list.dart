@@ -40,10 +40,22 @@ final cafeCoffeeListController =
 final _cafeCoffeeList = StateProvider<List<CafeCoffee>>((ref) => null);
 final cafeCoffeeSortOrder =
     StateProvider((ref) => CafeCoffeeListSortOrder.ascByUid);
+final cafeCoffeeFavorite = StateProvider((_) => false);
 
 class CafeCoffeeListController {
   CafeCoffeeListController(this.read);
   final Reader read;
+
+  Future<void> changeFavorite() async {
+    final fav =
+        read(cafeCoffeeFavorite).state = !read(cafeCoffeeFavorite).state;
+    if (fav) {
+      read(_cafeCoffeeList).state =
+          await read(cafeCoffeeRepository).fetchFavorite();
+    } else {
+      read(_cafeCoffeeList).state = await read(cafeCoffeeRepository).fetchAll();
+    }
+  }
 
   Future<void> fetchAll() async {
     read(_cafeCoffeeList).state = await read(cafeCoffeeRepository).fetchAll();

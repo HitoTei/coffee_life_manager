@@ -6,6 +6,7 @@ import 'package:coffee_life_manager/ui/page/list_page/tile/tiles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/all.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class BeanListPage extends StatelessWidget {
   const BeanListPage();
@@ -27,8 +28,9 @@ class BeanListPage extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('コーヒー'),
+          title: const Text('コーヒー豆'),
           actions: const [
+            BeanFavButton(),
             BeanOrderMenu(),
           ],
         ),
@@ -38,6 +40,25 @@ class BeanListPage extends StatelessWidget {
         ),
         floatingActionButton: const BeanListFab(),
       ),
+    );
+  }
+}
+
+class BeanFavButton extends ConsumerWidget {
+  const BeanFavButton();
+  @override
+  Widget build(BuildContext context,
+      T Function<T>(ProviderBase<Object, T> provider) watch) {
+    return IconButton(
+      icon: Icon(
+        watch(beanFavorite).state ? Icons.favorite : Icons.favorite_border,
+      ),
+      onPressed: () {
+        context.read(beanListController).changeFavorite();
+        Fluttertoast.showToast(
+            msg: context.read(beanFavorite).state ? 'お気に入りのみ表示' : 'すべて表示',
+            gravity: ToastGravity.TOP);
+      },
     );
   }
 }

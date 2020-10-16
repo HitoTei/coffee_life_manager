@@ -20,15 +20,6 @@ class ThemeManager {
   final _pref = SharedPreferences.getInstance();
   static const _key = 'CoffeeLifeManagerThemeData';
   static final themes = <ThemeData>[
-    ThemeData.dark(),
-    ThemeData.light(),
-    ThemeData(
-      primarySwatch: Colors.brown,
-      primaryColor: const Color(0xFF795548),
-      accentColor: const Color(0xFFbc2a11),
-      canvasColor: const Color(0xFFfafafa),
-      fontFamily: 'Merriweather',
-    ),
     ThemeData(
       primarySwatch: Colors.brown,
       primaryColor: const Color(0xFF795548),

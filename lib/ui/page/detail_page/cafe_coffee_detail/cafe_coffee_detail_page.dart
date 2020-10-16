@@ -159,18 +159,15 @@ class CafeCoffeeDetailBody extends ConsumerWidget {
           ),
         ),
         const Divider(),
-        const Text('カフェ'),
-        cafe == null
-            ? const Center(
-                child: Text('カフェは削除されました'),
-              )
-            : ProviderScope(
-                overrides: [
-                  currentCafe.overrideWithValue(cafe),
-                  currentCafeUpdater.overrideWithValue((_) {})
-                ],
-                child: const CafeListTile(),
-              ),
+        if (cafe != null) const Text('カフェ'),
+        if (cafe != null)
+          ProviderScope(
+            overrides: [
+              currentCafe.overrideWithValue(cafe),
+              currentCafeUpdater.overrideWithValue((_) {})
+            ],
+            child: const CafeListTile(),
+          ),
       ],
     );
   }
@@ -181,7 +178,7 @@ class CafeCoffeeDetailPageBottomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: Theme.of(context).accentColor,
+      color: Theme.of(context).primaryColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

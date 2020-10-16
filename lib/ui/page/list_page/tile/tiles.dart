@@ -72,6 +72,9 @@ class CafeCoffeeListTile extends ConsumerWidget {
         title: Text(state.productName),
         subtitle: Text(
           '${(state?.drinkDay != null) ? DateFormat.yMMMMEEEEd().format(state?.drinkDay) : '未設定'}',
+          style: const TextStyle(
+            fontSize: 14.2,
+          ),
         ),
         trailing: _FavoriteButton(
           state.isFavorite,
@@ -138,6 +141,9 @@ class HouseCoffeeListTile extends ConsumerWidget {
         title: Text(state.beanName),
         subtitle: Text(
           '${(state?.drinkDay != null) ? DateFormat.yMMMMEEEEd().format(state?.drinkDay) : '未設定'}',
+          style: const TextStyle(
+            fontSize: 14.2,
+          ),
         ),
         trailing: _FavoriteButton(
           state.isFavorite,
@@ -150,41 +156,52 @@ class HouseCoffeeListTile extends ConsumerWidget {
   }
 }
 
-class _ListTile extends StatelessWidget {
+final isNotHero = ScopedProvider<bool>((_) => null);
+
+class _ListTile extends ConsumerWidget {
   const _ListTile(this.tag, this.imageUri, this.child);
   final dynamic tag;
   final String imageUri;
   final Widget child;
   @override
-  Widget build(BuildContext context) {
-    return Hero(
-      tag: tag,
-      child: Card(
-        child: SizedBox(
-          height: _kTileHeight,
-          child: Stack(
-            children: [
-              SizedBox(
-                height: _kTileHeight,
-                width: MediaQuery.of(context).size.width,
-                child: ProviderScope(
-                  overrides: [imageByUri.overrideWithValue(imageUri)],
-                  child: const ImageByUri(),
-                ),
+  Widget build(BuildContext context,
+      T Function<T>(ProviderBase<Object, T> provider) watch) {
+    final widget = Card(
+      child: SizedBox(
+        height: _kTileHeight,
+        child: Stack(
+          children: [
+            SizedBox(
+              height: _kTileHeight,
+              width: MediaQuery.of(context).size.width,
+              child: ProviderScope(
+                overrides: [imageByUri.overrideWithValue(imageUri)],
+                child: const ImageByUri(),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
                   color: Theme.of(context).cardColor.withOpacity(0.90),
-                  margin: const EdgeInsets.all(10),
-                  child: child,
                 ),
+                margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+                child: child,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
+    if (watch(isNotHero) == null) {
+      return Hero(
+        tag: tag,
+        child: widget,
+      );
+    } else {
+      return widget;
+    }
   }
 }
 

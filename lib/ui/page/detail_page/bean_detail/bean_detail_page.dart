@@ -42,8 +42,7 @@ class BeanDetailPage extends StatelessWidget {
           children: const [
             BeanDetailTop(),
             BeanDetailBody(),
-            Text('淹れたコーヒーのリスト'),
-            CoffeeList(),
+            HouseCoffeeList(),
           ],
         ),
       ),
@@ -51,8 +50,8 @@ class BeanDetailPage extends StatelessWidget {
   }
 }
 
-class CoffeeList extends ConsumerWidget {
-  const CoffeeList();
+class HouseCoffeeList extends ConsumerWidget {
+  const HouseCoffeeList();
   @override
   Widget build(BuildContext context,
       T Function<T>(ProviderBase<Object, T> provider) watch) {
@@ -62,37 +61,43 @@ class CoffeeList extends ConsumerWidget {
         child: CircularProgressIndicator(),
       );
     }
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          for (final coffee in state)
-            ListPageTile(
-              ProviderScope(
-                overrides: [
-                  currentHouseCoffee.overrideWithValue(coffee),
-                  currentHouseCoffeeUpdater.overrideWithValue(
-                    context.read(houseCoffeeListController).update,
+    return Column(
+      children: [
+        if (state.isNotEmpty) const Text('淹れたコーヒーのリスト'),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              for (final coffee in state)
+                ListPageTile(
+                  ProviderScope(
+                    overrides: [
+                      currentHouseCoffee.overrideWithValue(coffee),
+                      currentHouseCoffeeUpdater.overrideWithValue(
+                        context.read(houseCoffeeListController).update,
+                      ),
+                    ],
+                    child: const SizedBox(
+                        width: 260, child: HouseCoffeeListTile()),
                   ),
-                ],
-                child: const SizedBox(width: 260, child: HouseCoffeeListTile()),
-              ),
-              () async {
-                final res = await Navigator.pushNamed(
-                  context,
-                  HouseCoffeeDetailPage.routeName,
-                  arguments: {
-                    beanIdKey: context.read(beanDetail).state.uid,
-                    uidKey: coffee.uid
+                  () async {
+                    final res = await Navigator.pushNamed(
+                      context,
+                      HouseCoffeeDetailPage.routeName,
+                      arguments: {
+                        beanIdKey: context.read(beanDetail).state.uid,
+                        uidKey: coffee.uid
+                      },
+                    );
+                    context
+                        .read(houseCoffeeListController)
+                        .update(res as HouseCoffee);
                   },
-                );
-                context
-                    .read(houseCoffeeListController)
-                    .update(res as HouseCoffee);
-              },
-            ),
-        ],
-      ),
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -260,7 +265,7 @@ class BeanDetailPageBottomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: Theme.of(context).accentColor,
+      color: Theme.of(context).primaryColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

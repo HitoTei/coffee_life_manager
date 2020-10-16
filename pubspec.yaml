@@ -34,10 +34,13 @@ dev_dependencies:
   pedantic_mono: any
   json_serializable:
 
-# 必要なさそうならこれは消したい
-#dependency_overrides:
-#  analyzer: '0.39.14'
 
 flutter:
 
   uses-material-design: true
+  assets:
+    - assets/coffee_bean_icon.png
+    - assets/cafe_icon.png
+    - assets/coffee_icon.png
+    - assets/coffee-shop.jpg
+    - assets/coffee.jpg

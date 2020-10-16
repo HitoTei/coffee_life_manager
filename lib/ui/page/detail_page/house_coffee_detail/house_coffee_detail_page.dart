@@ -177,12 +177,9 @@ class HouseCoffeeDetailBody extends ConsumerWidget {
           ),
         ),
         const Divider(), //
-        const Text('豆'), // divider
-        if (bean == null)
-          const Center(
-            child: Text('豆は削除されました'),
-          )
-        else
+
+        if (bean != null) const Text('豆'), // divider
+        if (bean != null)
           ProviderScope(
             overrides: [
               currentBean.overrideWithValue(bean),
@@ -200,7 +197,7 @@ class HouseCoffeeDetailPageBottomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: Theme.of(context).accentColor,
+      color: Theme.of(context).primaryColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
