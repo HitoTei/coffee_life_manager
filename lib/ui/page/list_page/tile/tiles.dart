@@ -39,8 +39,14 @@ class BeanListTile extends ConsumerWidget {
       state,
       state.imageUri,
       ListTile(
-        title: Text(state.beanName),
-        subtitle: Text('残り${state.remainingAmount}g'),
+        title: Text(
+          state.beanName,
+          style: const TextStyle(color: Colors.black87),
+        ),
+        subtitle: Text(
+          '残り${state.remainingAmount}g',
+          style: const TextStyle(color: Colors.black87),
+        ),
         trailing: _FavoriteButton(
           state.isFavorite,
           () => update(
@@ -69,12 +75,13 @@ class CafeCoffeeListTile extends ConsumerWidget {
       state,
       state.imageUri,
       ListTile(
-        title: Text(state.productName),
+        title: Text(
+          state.productName,
+          style: const TextStyle(color: Colors.black87),
+        ),
         subtitle: Text(
-          '${(state?.drinkDay != null) ? DateFormat.yMMMMEEEEd().format(state?.drinkDay) : '未設定'}',
-          style: const TextStyle(
-            fontSize: 14.2,
-          ),
+          '${(state?.drinkDay != null) ? DateFormat.yMMMMd().format(state?.drinkDay) : '未設定'}',
+          style: const TextStyle(color: Colors.black87),
         ),
         trailing: _FavoriteButton(
           state.isFavorite,
@@ -104,11 +111,15 @@ class CafeListTile extends ConsumerWidget {
       state,
       state.imageUri,
       ListTile(
-        title: Text(state.cafeName),
+        title: Text(
+          state.cafeName,
+          style: const TextStyle(color: Colors.black87),
+        ),
         subtitle: Text(
           '${listToTimeOfDay(state.startTime).format(context)}'
           ' ~ '
           '${listToTimeOfDay(state.endTime).format(context)}',
+          style: const TextStyle(color: Colors.black87),
         ),
         trailing: _FavoriteButton(
           state.isFavorite,
@@ -138,12 +149,13 @@ class HouseCoffeeListTile extends ConsumerWidget {
       state,
       state.imageUri,
       ListTile(
-        title: Text(state.beanName),
+        title: Text(
+          state.beanName,
+          style: const TextStyle(color: Colors.black87),
+        ),
         subtitle: Text(
-          '${(state?.drinkDay != null) ? DateFormat.yMMMMEEEEd().format(state?.drinkDay) : '未設定'}',
-          style: const TextStyle(
-            fontSize: 14.2,
-          ),
+          '${(state?.drinkDay != null) ? DateFormat.yMMMMd().format(state?.drinkDay) : '未設定'}',
+          style: const TextStyle(color: Colors.black87),
         ),
         trailing: _FavoriteButton(
           state.isFavorite,
@@ -184,7 +196,7 @@ class _ListTile extends ConsumerWidget {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
-                  color: Theme.of(context).cardColor.withOpacity(0.90),
+                  color: Colors.white70,
                 ),
                 margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
                 child: child,

@@ -20,7 +20,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
-      child: _MyApp(),
+      child: Builder(builder: (cxt) {
+        cxt.read(themeManager).init();
+        return _MyApp();
+      }),
     );
   }
 }

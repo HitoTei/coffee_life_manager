@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:coffee_life_manager/ui/page/list_page/bean_list/bean_list_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_coffee_list/cafe_coffee_list_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_list/cafe_list_page.dart';
@@ -58,7 +56,9 @@ class HomePage extends StatelessWidget {
                 ],
               );
               if (res != null) {
-                context.read(appTheme).state = res;
+                context.read(themeManager).setTheme(
+                      ThemeManager.themes.indexOf(res),
+                    );
               }
             },
           ),
@@ -76,7 +76,7 @@ class HomeBody extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // #### begin 家(豆・コーヒー)
+          // 家(豆・コーヒー)
           _TitleImage(
             image: const AssetImage('assets/coffee.jpg'),
             text: 'House',
@@ -106,7 +106,7 @@ class HomeBody extends StatelessWidget {
             ],
           ),
 
-          // #### begin カフェ (カフェ・コーヒー)
+          // カフェ (カフェ・コーヒー)
           _TitleImage(
             image: const AssetImage('assets/coffee-shop.jpg'),
             text: 'Cafe',
@@ -135,7 +135,6 @@ class HomeBody extends StatelessWidget {
               ),
             ],
           ),
-          // #### end カフェ (カフェ・コーヒー)
         ],
       ),
     );
@@ -210,48 +209,10 @@ class _TitleImage extends StatelessWidget {
 
     final orientation = MediaQuery.of(context).orientation;
     return SizedBox(
-      height: (max(
-                MediaQuery.of(context).size.height,
-                MediaQuery.of(context).size.width,
-              ) -
-              kToolbarHeight -
-              20 * ((orientation == Orientation.portrait) ? 1 : -1)) /
-          2,
+      height: (orientation == Orientation.landscape)
+          ? MediaQuery.of(context).size.height - kToolbarHeight - 20
+          : (MediaQuery.of(context).size.height - kToolbarHeight - 30) / 2,
       child: widget,
-    );
-  }
-}
-
-class _AssetIconButtonWithText extends StatelessWidget {
-  const _AssetIconButtonWithText({
-    @required this.imageUri,
-    @required this.text,
-    @required this.onTap,
-  });
-  final String imageUri;
-  final String text;
-  final Function() onTap;
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Row(
-        children: [
-          SizedBox(
-            height: 30,
-            child: Image.asset(
-              imageUri,
-              color: Theme.of(context).iconTheme.color,
-            ),
-          ),
-          Text(
-            text,
-            style: const TextStyle(
-              fontSize: 20,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

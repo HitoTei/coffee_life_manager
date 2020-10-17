@@ -27,15 +27,15 @@ class ThemeSelectorWidget extends StatelessWidget {
       child: GridView.count(
         crossAxisCount: 4,
         children: [
-          for (var theme in ThemeManager.themes)
+          for (var i = 0; i < ThemeManager.themes.length; i++)
             InkWell(
-              onTap: () => context.read(themeManager).setTheme(theme),
+              onTap: () => context.read(themeManager).setTheme(i),
               child: Container(
                 margin: const EdgeInsets.all(size / 5),
                 height: size,
                 width: size,
                 decoration: BoxDecoration(
-                  color: theme.primaryColor,
+                  color: ThemeManager.themes[i].primaryColor,
                   shape: BoxShape.circle,
                 ),
               ),

@@ -3,6 +3,7 @@ import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail/cafe_detail_
 import 'package:coffee_life_manager/ui/page/list_page/cafe_list/cafe_list.dart';
 import 'package:coffee_life_manager/ui/page/list_page/tile/list_page_slidable.dart';
 import 'package:coffee_life_manager/ui/page/list_page/tile/tiles.dart';
+import 'package:coffee_life_manager/ui/widget/fade_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -29,10 +30,7 @@ class CafeListPage extends StatelessWidget {
             CafeOrderMenu(),
           ],
         ),
-        body: const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: CafeListBody(),
-        ),
+        body: const CafeListBody(),
         floatingActionButton: const CafeListFab(),
       ),
     );
@@ -44,11 +42,13 @@ class CafeFavButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context,
       T Function<T>(ProviderBase<Object, T> provider) watch) {
+    final opacity = context.read(opacityController);
     return IconButton(
       icon: Icon(
         watch(cafeFavorite).state ? Icons.favorite : Icons.favorite_border,
       ),
       onPressed: () {
+        opacity.onPageUpdate();
         context.read(cafeListController).changeFavorite();
         Fluttertoast.showToast(
           msg: context.read(cafeFavorite).state ? 'お気に入りのみ表示' : 'すべて表示',
@@ -64,10 +64,15 @@ class CafeOrderMenu extends ConsumerWidget {
   @override
   Widget build(BuildContext context,
       T Function<T>(ProviderBase<Object, T> provider) watch) {
+    final opacity = context.read(opacityController);
+
     return PopupMenuButton<CafeListSortOrder>(
       child: const Icon(Icons.sort),
       initialValue: watch(cafeSortOrder).state,
-      onSelected: context.read(cafeListController).changeSortOrder,
+      onSelected: (val) {
+        context.read(cafeListController).changeSortOrder(val);
+        opacity.onPageUpdate();
+      },
       itemBuilder: (BuildContext context) => [
         for (final order in CafeListSortOrder.values)
           PopupMenuItem(
@@ -92,43 +97,45 @@ class CafeListBody extends ConsumerWidget {
       );
     }
 
-    return ListView.separated(
-      // updateのたびに順番が逆になる。
-      itemCount: state.length + 1,
-      itemBuilder: (context, index) {
-        if (index == state.length) {
-          return const SizedBox(
-            height: 56,
-          );
-        }
-
-        final cafe = state[index];
-        return ListPageSlidable(
-          slidableKey: ObjectKey(cafe),
-          child: ProviderScope(
-            overrides: [
-              currentCafe.overrideWithValue(state[index]),
-              currentCafeUpdater.overrideWithValue(
-                context.read(cafeListController).update,
-              ),
-            ],
-            child: const CafeListTile(),
-          ),
-          goDetailPage: () async {
-            final res = await Navigator.pushNamed(
-              context,
-              CafeDetailPage.routeName,
-              arguments: cafe.uid,
+    return FadeWidget(
+      child: ListView.separated(
+        // updateのたびに順番が逆になる。
+        itemCount: state.length + 1,
+        itemBuilder: (context, index) {
+          if (index == state.length) {
+            return const SizedBox(
+              height: 56,
             );
-            context.read(cafeListController).update(res as Cafe ?? cafe);
-          },
-          removeFromRepository: () =>
-              context.read(cafeListController).removeFromRepository(cafe),
-          undoDelete: () => context.read(cafeListController).add(cafe),
-          imageUri: cafe.imageUri,
-        );
-      },
-      separatorBuilder: (_, __) => const Divider(),
+          }
+
+          final cafe = state[index];
+          return ListPageSlidable(
+            slidableKey: ObjectKey(cafe),
+            child: ProviderScope(
+              overrides: [
+                currentCafe.overrideWithValue(state[index]),
+                currentCafeUpdater.overrideWithValue(
+                  context.read(cafeListController).update,
+                ),
+              ],
+              child: const CafeListTile(),
+            ),
+            goDetailPage: () async {
+              final res = await Navigator.pushNamed(
+                context,
+                CafeDetailPage.routeName,
+                arguments: cafe.uid,
+              );
+              context.read(cafeListController).update(res as Cafe ?? cafe);
+            },
+            removeFromRepository: () =>
+                context.read(cafeListController).removeFromRepository(cafe),
+            undoDelete: () => context.read(cafeListController).add(cafe),
+            imageUri: cafe.imageUri,
+          );
+        },
+        separatorBuilder: (_, __) => const SizedBox(),
+      ),
     );
   }
 }

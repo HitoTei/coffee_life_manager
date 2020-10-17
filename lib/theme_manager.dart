@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,14 +8,7 @@ final appTheme = StateProvider.autoDispose((_) => ThemeData.light());
 final themeManager = Provider.autoDispose((ref) => ThemeManager(ref.read));
 
 class ThemeManager {
-  ThemeManager(this.read) {
-    _pref.then((value) {
-      final index = value.getInt(_key);
-      if (index != null) {
-        read(appTheme).state = themes[index];
-      }
-    });
-  }
+  ThemeManager(this.read);
 
   final Reader read;
 
@@ -31,16 +26,26 @@ class ThemeManager {
       brightness: Brightness.dark,
       primarySwatch: Colors.blueGrey,
       primaryColor: const Color(0xFF212121),
-      accentColor: Colors.redAccent,
+      accentColor: Colors.brown,
       canvasColor: Colors.brown[800],
       fontFamily: 'Merriweather',
     ),
   ];
 
-  void setTheme(ThemeData theme) {
+  void init() {
     _pref.then((value) {
-      read(appTheme).state = theme;
-      value.setInt(_key, themes.indexOf(theme));
+      final index = value.getInt(_key);
+      if (index != null) {
+        read(appTheme).state = themes[index];
+      }
+    });
+  }
+
+  void setTheme(int index) {
+    log('set theme! index is $index');
+    _pref.then((value) {
+      read(appTheme).state = ThemeManager.themes[index];
+      value.setInt(_key, index);
     });
   }
 }
