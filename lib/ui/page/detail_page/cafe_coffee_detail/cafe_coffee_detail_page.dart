@@ -1,4 +1,5 @@
 import 'package:coffee_life_manager/constant_string.dart';
+import 'package:coffee_life_manager/entity/rate.dart';
 import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_coffee_detail/cafe_coffee_detail.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/datetime_list_tile.dart';
@@ -10,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
+import 'package:share/share.dart';
 
 class CafeCoffeeDetailPage extends StatelessWidget {
   const CafeCoffeeDetailPage();
@@ -63,6 +66,7 @@ class CafeCoffeeDetailTop extends ConsumerWidget {
           context.read(cafeCoffeeDetailController).setImage,
         ),
         IconSlideAction(
+          color: Theme.of(context).canvasColor,
           caption: '商品名を変更',
           icon: Icons.text_fields,
           onTap: () async {
@@ -183,6 +187,7 @@ class CafeCoffeeDetailPageBottomAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
+            tooltip: '戻る',
             icon: Icon(
               Icons.arrow_back,
               color: Theme.of(context).accentIconTheme.color,
@@ -197,11 +202,24 @@ class CafeCoffeeDetailPageBottomAppBar extends StatelessWidget {
           Row(
             children: [
               IconButton(
+                tooltip: '共有',
                 icon: Icon(
                   Icons.share,
                   color: Theme.of(context).accentIconTheme.color,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  final cafeCoffee = context.read(cafeCoffeeDetail).state;
+                  Share.share('''
+${cafeCoffee.productName}
+${DateFormat.yMMMMd().format(cafeCoffee.drinkDay)}に飲みました
+値段: ${cafeCoffee.price}円
+$bitternessDisplayString: ${cafeCoffee.rate[0] + 1}
+$sournessDisplayString: ${cafeCoffee.rate[1] + 1}
+$fragranceDisplayString: ${cafeCoffee.rate[2] + 1}
+$richDisplayString: ${cafeCoffee.rate[3] + 1}
+$overallDisplayString: ${cafeCoffee.rate[4] + 1}
+''');
+                },
               ),
             ],
           ),

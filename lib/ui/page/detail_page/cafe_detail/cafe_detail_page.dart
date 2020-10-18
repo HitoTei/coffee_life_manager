@@ -1,6 +1,7 @@
 import 'package:coffee_life_manager/constant_string.dart';
 import 'package:coffee_life_manager/entity/cafe.dart';
 import 'package:coffee_life_manager/entity/cafe_coffee.dart';
+import 'package:coffee_life_manager/entity/enums/day_of_the_week.dart';
 import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_coffee_detail/cafe_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail/cafe_detail.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:share/share.dart';
 
 class CafeDetailPage extends StatelessWidget {
   const CafeDetailPage();
@@ -59,6 +61,7 @@ class CoffeeList extends ConsumerWidget {
         child: CircularProgressIndicator(),
       );
     }
+    if (state.isEmpty) return const SizedBox();
     return Column(
       children: [
         const Text('飲んだコーヒー'),
@@ -120,7 +123,8 @@ class CafeDetailTop extends ConsumerWidget {
           context.read(cafeDetailController).setImage,
         ),
         IconSlideAction(
-          caption: 'カフェの名前を変更',
+          color: Theme.of(context).canvasColor,
+          caption: 'カフェの\n名前を変更',
           icon: Icons.text_fields,
           onTap: () async {
             removeFocus(context);
@@ -237,6 +241,7 @@ class CafeDetailPageBottomAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
+            tooltip: '戻る',
             icon: Icon(
               Icons.arrow_back,
               color: Theme.of(context).accentIconTheme.color,
@@ -251,6 +256,7 @@ class CafeDetailPageBottomAppBar extends StatelessWidget {
           Row(
             children: [
               IconButton(
+                tooltip: 'コーヒーを追加',
                 icon: Icon(
                   Icons.local_cafe,
                   color: Theme.of(context).accentIconTheme.color,
@@ -264,11 +270,33 @@ class CafeDetailPageBottomAppBar extends StatelessWidget {
                 },
               ),
               IconButton(
+                tooltip: '共有',
                 icon: Icon(
                   Icons.share,
                   color: Theme.of(context).accentIconTheme.color,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  final cafe = context.read(cafeDetail).state;
+
+                  var regularHolidayStr = '';
+                  [
+                    for (var i = 0; i < DayOfTheWeek.values.length; i++)
+                      if (cafe.regularHoliday.contains(DayOfTheWeek.values[i]))
+                        dayOfTheWeekStr[i],
+                  ].forEach((element) {
+                    regularHolidayStr += ',$element';
+                  });
+                  regularHolidayStr = regularHolidayStr.isEmpty
+                      ? '無し'
+                      : regularHolidayStr.substring(1);
+                  Share.share('''
+${cafe.cafeName}
+場所: ${cafe.mapUrl}
+開業時間: ${cafe.startTime[0]}時${cafe.startTime[1]}分
+終業時間: ${cafe.endTime[0]}時${cafe.endTime[1]}分
+定休日: $regularHolidayStr
+''');
+                },
               ),
             ],
           ),

@@ -11,6 +11,7 @@ class PickImageSlideAction extends StatelessWidget {
     return IconSlideAction(
       caption: '画像を変更',
       icon: Icons.image,
+      color: Theme.of(context).canvasColor,
       onTap: () async {
         removeFocus(context);
         final image = await await showDialog<Future<PickedFile>>(

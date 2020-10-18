@@ -61,13 +61,19 @@ class _RateItem extends ConsumerWidget {
     final state = watch(rateState);
     final update = watch(rateStateUpdater);
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title),
+        Text(
+          title,
+          style: const TextStyle(fontSize: 20),
+        ),
         Row(
           children: [
             for (int i = 0; i < 5; i++)
               Expanded(
                 child: IconButton(
+                  tooltip: '$title を ${i + 1}点に変更',
                   icon: (i <= state[index])
                       ? const Icon(Icons.star)
                       : const Icon(Icons.star_border),

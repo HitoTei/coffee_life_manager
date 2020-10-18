@@ -44,3 +44,10 @@ flutter:
     - assets/coffee_icon.png
     - assets/coffee-shop.jpg
     - assets/coffee.jpg
+  fonts:
+    - family: AbriFatface
+      fonts:
+        - asset: assets/fonts/AbrilFatface-Regular.ttf
+    - family: Charm
+      fonts:
+        - asset: assets/fonts/Charm-Regular.ttf

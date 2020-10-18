@@ -1,4 +1,8 @@
 import 'package:coffee_life_manager/constant_string.dart';
+import 'package:coffee_life_manager/entity/enums/drip.dart';
+import 'package:coffee_life_manager/entity/enums/grind.dart';
+import 'package:coffee_life_manager/entity/enums/roast.dart';
+import 'package:coffee_life_manager/entity/rate.dart';
 import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail/house_coffee_detail.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/datetime_list_tile.dart';
@@ -13,6 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
+import 'package:share/share.dart';
 
 class HouseCoffeeDetailPage extends StatelessWidget {
   const HouseCoffeeDetailPage();
@@ -68,6 +74,7 @@ class HouseCoffeeDetailTop extends ConsumerWidget {
           context.read(houseCoffeeDetailController).setImage,
         ),
         IconSlideAction(
+          color: Theme.of(context).canvasColor,
           caption: '商品名を変更',
           icon: Icons.text_fields,
           onTap: () async {
@@ -202,6 +209,7 @@ class HouseCoffeeDetailPageBottomAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
+            tooltip: '戻る',
             icon: Icon(
               Icons.arrow_back,
               color: Theme.of(context).accentIconTheme.color,
@@ -216,11 +224,26 @@ class HouseCoffeeDetailPageBottomAppBar extends StatelessWidget {
           Row(
             children: [
               IconButton(
+                tooltip: '共有',
                 icon: Icon(
                   Icons.share,
                   color: Theme.of(context).accentIconTheme.color,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  final houseCoffee = context.read(houseCoffeeDetail).state;
+                  Share.share('''
+${houseCoffee.beanName}
+${DateFormat.yMMMMd().format(houseCoffee.drinkDay)}に飲みました
+焙煎: ${roastStr[houseCoffee.roast.index]}
+挽き方: ${grindStr[houseCoffee.grind.index]}
+淹れ方: ${dripStr[houseCoffee.drip.index]}
+$bitternessDisplayString: ${houseCoffee.rate[0] + 1}
+$sournessDisplayString: ${houseCoffee.rate[1] + 1}
+$fragranceDisplayString: ${houseCoffee.rate[2] + 1}
+$richDisplayString: ${houseCoffee.rate[3] + 1}
+$overallDisplayString: ${houseCoffee.rate[4] + 1}
+''');
+                },
               ),
             ],
           ),

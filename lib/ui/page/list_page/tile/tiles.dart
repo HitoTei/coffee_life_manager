@@ -224,6 +224,7 @@ class _FavoriteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      tooltip: isFavorite ? 'お気に入りを解除' : 'お気に入りに登録',
       icon: Icon(
         isFavorite ? Icons.favorite : Icons.favorite_border,
         color: isFavorite ? Colors.pink : Colors.grey,

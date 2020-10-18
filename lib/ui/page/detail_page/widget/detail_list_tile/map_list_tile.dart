@@ -50,30 +50,65 @@ class MapListTile extends StatelessWidget {
     return showDialog<void>(
       context: context,
       builder: (_) {
-        return AlertDialog(
-          title: title,
-          content: TextField(
-            controller: editingController,
-            decoration: const InputDecoration(
-              hintText: '地名を入力',
-            ),
+        final input = TextField(
+          controller: editingController,
+          decoration: const InputDecoration(
+            hintText: '地名を入力',
           ),
-          actions: [
-            FlatButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                editingController.text = value.toString();
-                Navigator.pop(context);
-              },
-            ),
-            FlatButton(
-              child: const Text('Ok'),
-              onPressed: () {
-                onChanged(editingController.text);
-                Navigator.pop(context);
-              },
-            ),
-          ],
+        );
+        final cancel = FlatButton(
+          child: const Text('Cancel'),
+          onPressed: () {
+            editingController.text = value.toString();
+            Navigator.pop(context);
+          },
+        );
+        final ok = FlatButton(
+          child: const Text('Ok'),
+          onPressed: () {
+            onChanged(editingController.text);
+            Navigator.pop(context);
+          },
+        );
+        return OrientationBuilder(
+          builder: (context, orientation) {
+            if (orientation == Orientation.portrait) {
+              return AlertDialog(
+                title: title,
+                content: input,
+                actions: [
+                  cancel,
+                  ok,
+                ],
+              );
+            } else {
+              return Scaffold(
+                body: Column(
+                  children: [
+                    title,
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width - 80,
+                          child: input,
+                        ),
+                        SizedBox(
+                          width: 80,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ok,
+                              cancel,
+                            ],
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              );
+            }
+          },
         );
       },
     );

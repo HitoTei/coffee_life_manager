@@ -94,6 +94,6 @@ enum CafeListSortOrder {
 }
 
 const kCafeListSortOrderStr = <CafeListSortOrder, String>{
-  CafeListSortOrder.ascByUid: '追加したのが早い順',
-  CafeListSortOrder.desByUid: '追加したのが遅い順',
+  CafeListSortOrder.ascByUid: '追加したのが古い順',
+  CafeListSortOrder.desByUid: '追加したのが新しい',
 };

@@ -26,9 +26,8 @@ class ThemeManager {
       brightness: Brightness.dark,
       primarySwatch: Colors.blueGrey,
       primaryColor: const Color(0xFF212121),
-      accentColor: Colors.brown,
-      canvasColor: Colors.brown[800],
-      fontFamily: 'Merriweather',
+      accentColor: Colors.deepOrange,
+      canvasColor: const Color(0xFF212121),
     ),
   ];
 
@@ -37,6 +36,8 @@ class ThemeManager {
       final index = value.getInt(_key);
       if (index != null) {
         read(appTheme).state = themes[index];
+      } else {
+        setTheme(0);
       }
     });
   }

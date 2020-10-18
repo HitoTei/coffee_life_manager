@@ -49,6 +49,7 @@ class BeanFavButton extends ConsumerWidget {
       T Function<T>(ProviderBase<Object, T> provider) watch) {
     final opacity = context.read(opacityController);
     return IconButton(
+      tooltip: watch(beanFavorite).state ? 'お気に入りのみ表示' : 'すべて表示',
       icon: Icon(
         watch(beanFavorite).state ? Icons.favorite : Icons.favorite_border,
       ),
@@ -99,6 +100,22 @@ class BeanListBody extends ConsumerWidget {
     if (state == null) {
       return const Center(
         child: CircularProgressIndicator(),
+      );
+    }
+
+    if (state.isEmpty) {
+      return Center(
+        child: RichText(
+          text: const TextSpan(
+            style: TextStyle(fontSize: 20),
+            children: [
+              TextSpan(text: 'まだ要素がありません\n'),
+              TextSpan(text: '右下の'),
+              WidgetSpan(child: Icon(Icons.add)),
+              TextSpan(text: 'から要素を追加できます'),
+            ],
+          ),
+        ),
       );
     }
 

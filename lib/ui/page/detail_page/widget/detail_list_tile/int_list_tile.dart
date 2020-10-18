@@ -31,34 +31,70 @@ class IntListTile extends StatelessWidget {
         showDialog<void>(
           context: context,
           builder: (_) {
-            return AlertDialog(
-              content: TextField(
-                controller: _editingController,
-                keyboardType: TextInputType.number,
-                maxLength: digit,
-                inputFormatters: <TextInputFormatter>[
-                  WhitelistingTextInputFormatter.digitsOnly
-                ],
-                decoration: InputDecoration(
-                  labelText: title.data,
-                ),
-              ),
-              actions: [
-                FlatButton(
-                  child: const Text('Cancel'),
-                  onPressed: () {
-                    _editingController.text = value.toString();
-                    Navigator.pop(context);
-                  },
-                ),
-                FlatButton(
-                  child: const Text('Ok'),
-                  onPressed: () {
-                    onChanged(int.parse(_editingController.text));
-                    Navigator.pop(context);
-                  },
-                ),
+            final input = TextField(
+              controller: _editingController,
+              keyboardType: TextInputType.number,
+              maxLength: digit,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly
               ],
+              decoration: InputDecoration(
+                labelText: title.data,
+              ),
+            );
+            final cancel = FlatButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                _editingController.text = value.toString();
+                Navigator.pop(context);
+              },
+            );
+
+            final ok = FlatButton(
+              child: const Text('Ok'),
+              onPressed: () {
+                onChanged(int.parse(_editingController.text));
+                Navigator.pop(context);
+              },
+            );
+            return OrientationBuilder(
+              builder: (context, orientation) {
+                if (orientation == Orientation.portrait) {
+                  return AlertDialog(
+                    content: input,
+                    actions: [
+                      cancel,
+                      ok,
+                    ],
+                  );
+                } else {
+                  return Scaffold(
+                    body: Column(
+                      children: [
+                        title,
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width - 80,
+                              child: input,
+                            ),
+                            SizedBox(
+                              width: 80,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ok,
+                                  cancel,
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  );
+                }
+              },
             );
           },
         );

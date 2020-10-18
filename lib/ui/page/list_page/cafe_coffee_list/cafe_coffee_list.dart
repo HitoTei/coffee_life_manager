@@ -113,12 +113,12 @@ enum CafeCoffeeListSortOrder {
   ascByUid,
   desByUid,
   ascByPrice,
-  desByPrice, // TODO: add others
+  desByPrice,
 }
 
 const kCafeCoffeeListSortOrderStr = <CafeCoffeeListSortOrder, String>{
-  CafeCoffeeListSortOrder.ascByUid: '追加したのが早い順',
-  CafeCoffeeListSortOrder.desByUid: '追加したのが遅い順',
+  CafeCoffeeListSortOrder.ascByUid: '追加したのが古い順',
+  CafeCoffeeListSortOrder.desByUid: '追加したのが新しい順',
   CafeCoffeeListSortOrder.ascByPrice: '値段が安い順',
   CafeCoffeeListSortOrder.desByPrice: '値段が高い順',
 };

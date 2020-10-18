@@ -96,10 +96,10 @@ class HouseCoffeeListController {
 
 enum HouseCoffeeListSortOrder {
   ascByUid,
-  desByUid, // TODO: add others
+  desByUid,
 }
 
 const kHouseCoffeeListSortOrderStr = <HouseCoffeeListSortOrder, String>{
-  HouseCoffeeListSortOrder.ascByUid: '追加したのが早い順',
-  HouseCoffeeListSortOrder.desByUid: '追加したのが遅い順',
+  HouseCoffeeListSortOrder.ascByUid: '追加したのが古い順',
+  HouseCoffeeListSortOrder.desByUid: '追加したのが新しい順',
 };

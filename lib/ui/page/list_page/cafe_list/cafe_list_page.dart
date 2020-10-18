@@ -44,6 +44,7 @@ class CafeFavButton extends ConsumerWidget {
       T Function<T>(ProviderBase<Object, T> provider) watch) {
     final opacity = context.read(opacityController);
     return IconButton(
+      tooltip: watch(cafeFavorite).state ? 'お気に入りのみ表示' : 'すべて表示',
       icon: Icon(
         watch(cafeFavorite).state ? Icons.favorite : Icons.favorite_border,
       ),
@@ -96,7 +97,21 @@ class CafeListBody extends ConsumerWidget {
         child: CircularProgressIndicator(),
       );
     }
-
+    if (state.isEmpty) {
+      return Center(
+        child: RichText(
+          text: const TextSpan(
+            style: TextStyle(fontSize: 20),
+            children: [
+              TextSpan(text: 'まだ要素がありません\n'),
+              TextSpan(text: '右下の'),
+              WidgetSpan(child: Icon(Icons.add)),
+              TextSpan(text: 'から要素を追加できます'),
+            ],
+          ),
+        ),
+      );
+    }
     return FadeWidget(
       child: ListView.separated(
         // updateのたびに順番が逆になる。
@@ -146,6 +161,7 @@ class CafeListFab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      tooltip: 'カフェを追加',
       child: const Icon(Icons.add),
       onPressed: () async {
         final cafe = await Navigator.pushNamed(

@@ -2,64 +2,67 @@ import 'package:coffee_life_manager/ui/page/list_page/bean_list/bean_list_page.d
 import 'package:coffee_life_manager/ui/page/list_page/cafe_coffee_list/cafe_coffee_list_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_list/cafe_list_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/house_coffee_list/house_coffee_list_page.dart';
+import 'package:coffee_life_manager/ui/page/theme_selector/theme_selector_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/all.dart';
 
-import '../../theme_manager.dart';
+const _fontFamily = 'AbriFatface'; // or Charm
 
 class HomePage extends StatelessWidget {
   const HomePage();
   static const routeName = '/';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('たいとる！'),
+        title: const Text(
+          'CoLiSu',
+          style: TextStyle(
+            fontStyle: FontStyle.italic,
+            fontFamily: _fontFamily,
+          ),
+        ),
         actions: [
           IconButton(
+            tooltip: '設定',
             icon: const Icon(Icons.settings),
             onPressed: () async {
-              final res = await showMenu<ThemeData>(
+              await showModalBottomSheet<dynamic>(
                 context: context,
-                position: RelativeRect.fromSize(Rect.zero, Size(100, 100)),
-                items: [
-                  for (final theme in ThemeManager.themes)
-                    PopupMenuItem(
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        margin: const EdgeInsets.all(
-                          10,
-                        ),
-                        child: GridView.count(
-                          crossAxisCount: 2,
-                          children: [
-                            Container(
-                              color: theme.accentColor,
+                builder: (_) => BottomSheet(
+                  onClosing: () {},
+                  builder: (_) => Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                        title: const Text('テーマを変更'),
+                        onTap: () {
+                          Navigator.pop(context);
+                          showDialog<dynamic>(
+                            context: context,
+                            child: const SimpleDialog(
+                              children: [
+                                ThemeSelectorWidget(),
+                              ],
                             ),
-                            Container(
-                              color: theme.primaryColor,
-                            ),
-                            Container(
-                              color: theme.cardColor,
-                            ),
-                            Container(
-                              color: theme.backgroundColor,
-                            ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
-                      value: theme,
-                    ),
-                ],
+                      ListTile(
+                        title: const Text('ライセンスを表示'),
+                        onTap: () {
+                          Navigator.pop(context);
+                          showAboutDialog(
+                            context: context,
+                            applicationName: 'CoLiSu',
+                            applicationVersion: '1.0.0',
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               );
-              if (res != null) {
-                context.read(themeManager).setTheme(
-                      ThemeManager.themes.indexOf(res),
-                    );
-              }
             },
           ),
         ],
@@ -79,7 +82,7 @@ class HomeBody extends StatelessWidget {
           // 家(豆・コーヒー)
           _TitleImage(
             image: const AssetImage('assets/coffee.jpg'),
-            text: 'House',
+            text: 'Home',
             children: [
               FlatButton(
                 child: const Text(
@@ -188,6 +191,7 @@ class _TitleImage extends StatelessWidget {
                   fontSize: 60,
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.bold,
+                  fontFamily: _fontFamily,
                 ),
               ),
               Container(

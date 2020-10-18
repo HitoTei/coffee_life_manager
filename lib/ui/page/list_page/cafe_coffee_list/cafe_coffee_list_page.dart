@@ -49,6 +49,7 @@ class CafeCoffeeFavButton extends ConsumerWidget {
       T Function<T>(ProviderBase<Object, T> provider) watch) {
     final opacity = context.read(opacityController);
     return IconButton(
+      tooltip: watch(cafeCoffeeFavorite).state ? 'お気に入りのみ表示' : 'すべて表示',
       icon: Icon(
         watch(cafeCoffeeFavorite).state
             ? Icons.favorite
@@ -100,6 +101,22 @@ class CafeCoffeeListBody extends ConsumerWidget {
     if (state == null) {
       return const Center(
         child: CircularProgressIndicator(),
+      );
+    }
+
+    if (state.isEmpty) {
+      return Center(
+        child: RichText(
+          text: const TextSpan(
+            style: TextStyle(fontSize: 20),
+            children: [
+              TextSpan(text: 'まだ要素がありません\n'),
+              TextSpan(text: 'カフェの'),
+              WidgetSpan(child: Icon(Icons.local_cafe)),
+              TextSpan(text: 'から要素を追加できます'),
+            ],
+          ),
+        ),
       );
     }
 

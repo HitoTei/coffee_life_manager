@@ -1,6 +1,8 @@
 import 'package:coffee_life_manager/constant_string.dart';
 import 'package:coffee_life_manager/entity/bean.dart';
+import 'package:coffee_life_manager/entity/enums/roast.dart';
 import 'package:coffee_life_manager/entity/house_coffee.dart';
+import 'package:coffee_life_manager/entity/rate.dart';
 import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/bean_detail/bean_detail.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail/add_house_coffee_page.dart';
@@ -17,6 +19,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
+import 'package:share/share.dart';
 
 class BeanDetailPage extends StatelessWidget {
   const BeanDetailPage();
@@ -61,9 +65,11 @@ class HouseCoffeeList extends ConsumerWidget {
         child: CircularProgressIndicator(),
       );
     }
+    if (state.isEmpty) return const SizedBox();
+
     return Column(
       children: [
-        if (state.isNotEmpty) const Text('淹れたコーヒーのリスト'),
+        const Text('淹れたコーヒーのリスト'),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -78,7 +84,9 @@ class HouseCoffeeList extends ConsumerWidget {
                       ),
                     ],
                     child: const SizedBox(
-                        width: 260, child: HouseCoffeeListTile()),
+                      width: 260,
+                      child: HouseCoffeeListTile(),
+                    ),
                   ),
                   () async {
                     final res = await Navigator.pushNamed(
@@ -122,7 +130,8 @@ class BeanDetailTop extends ConsumerWidget {
           context.read(beanDetailController).setImage,
         ),
         IconSlideAction(
-          caption: '豆の名前を変更',
+          color: Theme.of(context).canvasColor,
+          caption: '豆の名前を\n変更',
           icon: Icons.text_fields,
           onTap: () async {
             removeFocus(context);
@@ -270,6 +279,7 @@ class BeanDetailPageBottomAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
+            tooltip: '戻る',
             icon: Icon(
               Icons.arrow_back,
               color: Theme.of(context).accentIconTheme.color,
@@ -284,6 +294,7 @@ class BeanDetailPageBottomAppBar extends StatelessWidget {
           Row(
             children: [
               IconButton(
+                tooltip: 'コーヒーを追加',
                 icon: Icon(
                   Icons.local_cafe,
                   color: Theme.of(context).accentIconTheme.color,
@@ -312,11 +323,25 @@ class BeanDetailPageBottomAppBar extends StatelessWidget {
                 },
               ),
               IconButton(
+                tooltip: '共有',
                 icon: Icon(
                   Icons.share,
                   color: Theme.of(context).accentIconTheme.color,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  final bean = context.read(beanDetail).state;
+                  Share.share('''
+${bean.beanName}
+${(bean.openTime == null) ? '未設定' : DateFormat.yMMMMd().format(bean.openTime)}に開封しました
+賞味期限: ${(bean.freshnessDate == null) ? '未設定' : DateFormat.yMMMMd().format(bean.freshnessDate)}
+焙煎: ${roastStr[bean.roast.index]}
+$bitternessDisplayString: ${bean.rate[0] + 1}
+$sournessDisplayString: ${bean.rate[1] + 1}
+$fragranceDisplayString: ${bean.rate[2] + 1}
+$richDisplayString: ${bean.rate[3] + 1}
+$overallDisplayString: ${bean.rate[4] + 1}
+''');
+                },
               ),
             ],
           ),
