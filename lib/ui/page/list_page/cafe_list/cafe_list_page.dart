@@ -97,26 +97,28 @@ class CafeListBody extends ConsumerWidget {
         child: CircularProgressIndicator(),
       );
     }
-    if (state.isEmpty) {
-      return Center(
-        child: RichText(
-          text: const TextSpan(
-            style: TextStyle(fontSize: 20),
-            children: [
-              TextSpan(text: 'まだ要素がありません\n'),
-              TextSpan(text: '右下の'),
-              WidgetSpan(child: Icon(Icons.add)),
-              TextSpan(text: 'から要素を追加できます'),
-            ],
-          ),
-        ),
-      );
-    }
     return FadeWidget(
       child: ListView.separated(
         // updateのたびに順番が逆になる。
         itemCount: state.length + 1,
         itemBuilder: (context, index) {
+          // ここに置かないとundoDeleteが上手く動かない
+          if (state.isEmpty) {
+            return Center(
+              child: RichText(
+                text: const TextSpan(
+                  style: TextStyle(fontSize: 20),
+                  children: [
+                    TextSpan(text: 'まだ要素がありません\n'),
+                    TextSpan(text: '右下の'),
+                    WidgetSpan(child: Icon(Icons.add)),
+                    TextSpan(text: 'から要素を追加できます'),
+                  ],
+                ),
+              ),
+            );
+          }
+
           if (index == state.length) {
             return const SizedBox(
               height: 56,

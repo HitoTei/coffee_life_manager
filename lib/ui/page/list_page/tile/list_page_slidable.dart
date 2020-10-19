@@ -34,7 +34,6 @@ class ListPageSlidable extends StatelessWidget {
           if (imageUri != null && imageUri.isNotEmpty) {
             await File('$path/$imageUri').copy('$path/cache');
           }
-          removeFromRepository();
           Scaffold.of(context)
             ..removeCurrentSnackBar()
             ..showSnackBar(
@@ -52,6 +51,8 @@ class ListPageSlidable extends StatelessWidget {
                 ),
               ),
             );
+
+          removeFromRepository();
         },
       ),
     );

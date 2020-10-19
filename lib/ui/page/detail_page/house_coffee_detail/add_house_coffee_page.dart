@@ -33,7 +33,9 @@ class AddHouseCoffeePage extends ConsumerWidget {
     context.read(_controller).init(map[beanIdKey]);
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text('${watch(_bean)?.state?.beanName}を淹れる'),
+      ),
       body: AddHouseCoffeeBody(),
     );
   }

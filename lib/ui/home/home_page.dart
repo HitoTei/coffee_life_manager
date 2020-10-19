@@ -6,7 +6,7 @@ import 'package:coffee_life_manager/ui/page/theme_selector/theme_selector_page.d
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-const _fontFamily = 'AbriFatface'; // or Charm
+const _fontFamily = 'Charm'; // or Charm
 
 class HomePage extends StatelessWidget {
   const HomePage();

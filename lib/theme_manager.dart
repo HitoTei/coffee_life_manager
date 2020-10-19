@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final appTheme = StateProvider.autoDispose((_) => ThemeData.light());
+final appTheme = StateProvider.autoDispose((_) => ThemeManager.themes[0]);
 final themeManager = Provider.autoDispose((ref) => ThemeManager(ref.read));
 
 class ThemeManager {
