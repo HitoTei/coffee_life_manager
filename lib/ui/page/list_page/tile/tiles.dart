@@ -40,8 +40,12 @@ class BeanListTile extends ConsumerWidget {
       state.imageUri,
       ListTile(
         title: Text(
-          state.beanName,
-          style: const TextStyle(color: Colors.black87),
+          state.beanName.isEmpty ? '詳細画面で右にスワイプ' : state.beanName,
+          style: TextStyle(
+            color: state.beanName.isEmpty
+                ? Theme.of(context).accentColor
+                : Colors.black87,
+          ),
         ),
         subtitle: Text(
           '残り${state.remainingAmount}g',
@@ -76,8 +80,12 @@ class CafeCoffeeListTile extends ConsumerWidget {
       state.imageUri,
       ListTile(
         title: Text(
-          state.productName,
-          style: const TextStyle(color: Colors.black87),
+          state.productName.isEmpty ? '詳細画面で右にスワイプ' : state.productName,
+          style: TextStyle(
+            color: state.productName.isEmpty
+                ? Theme.of(context).accentColor
+                : Colors.black87,
+          ),
         ),
         subtitle: Text(
           '${(state?.drinkDay != null) ? DateFormat.yMMMMd().format(state?.drinkDay) : '未設定'}',
@@ -112,8 +120,12 @@ class CafeListTile extends ConsumerWidget {
       state.imageUri,
       ListTile(
         title: Text(
-          state.cafeName,
-          style: const TextStyle(color: Colors.black87),
+          state.cafeName.isEmpty ? '詳細画面で右にスワイプ' : state.cafeName,
+          style: TextStyle(
+            color: state.cafeName.isEmpty
+                ? Theme.of(context).accentColor
+                : Colors.black87,
+          ),
         ),
         subtitle: Text(
           '${listToTimeOfDay(state.startTime).format(context)}'
@@ -150,8 +162,12 @@ class HouseCoffeeListTile extends ConsumerWidget {
       state.imageUri,
       ListTile(
         title: Text(
-          state.beanName,
-          style: const TextStyle(color: Colors.black87),
+          state.beanName.isEmpty ? '詳細画面で右にスワイプ' : state.beanName,
+          style: TextStyle(
+            color: state.beanName.isEmpty
+                ? Theme.of(context).accentColor
+                : Colors.black87,
+          ),
         ),
         subtitle: Text(
           '${(state?.drinkDay != null) ? DateFormat.yMMMMd().format(state?.drinkDay) : '未設定'}',

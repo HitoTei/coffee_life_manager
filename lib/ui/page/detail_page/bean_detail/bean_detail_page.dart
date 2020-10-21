@@ -3,12 +3,14 @@ import 'package:coffee_life_manager/entity/bean.dart';
 import 'package:coffee_life_manager/entity/enums/roast.dart';
 import 'package:coffee_life_manager/entity/house_coffee.dart';
 import 'package:coffee_life_manager/entity/rate.dart';
+import 'package:coffee_life_manager/function/files.dart';
 import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/bean_detail/bean_detail.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail/add_house_coffee_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail/house_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/datetime_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/int_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/map_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/roast_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/pick_image_slide_action.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget.dart';
@@ -136,31 +138,17 @@ class BeanDetailTop extends ConsumerWidget {
           onTap: () async {
             removeFocus(context);
             final textEditor = TextEditingController()..text = state.beanName;
-            await showDialog<void>(
-              context: context,
-              child: AlertDialog(
-                content: TextField(
-                  controller: textEditor,
-                  decoration: const InputDecoration(labelText: '豆の名前を変更'),
-                ),
-                actions: [
-                  FlatButton(
-                    child: const Text('CANCEL'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  FlatButton(
-                    child: const Text('OK'),
-                    onPressed: () async {
-                      await context.read(beanDetailController).update(
-                            state.copyWith(beanName: textEditor.text),
-                          );
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
+            await showEditTextDialog(
+              context,
+              textEditor,
+              onChanged: (val) async {
+                await context.read(beanDetailController).update(
+                      state.copyWith(beanName: val),
+                    );
+              },
+              title: const Text('豆の名前を変更'),
+              initialValue: textEditor.text,
+              hintText: '豆の名前を変更',
             );
           },
         ),
@@ -328,9 +316,11 @@ class BeanDetailPageBottomAppBar extends StatelessWidget {
                   Icons.share,
                   color: Theme.of(context).accentIconTheme.color,
                 ),
-                onPressed: () {
+                onPressed: () async {
                   final bean = context.read(beanDetail).state;
-                  Share.share('''
+                  await Share.shareFiles(
+                      [(await getLocalFile(bean.imageUri)).path],
+                      text: '''
 ${bean.beanName}
 ${(bean.openTime == null) ? '未設定' : DateFormat.yMMMMd().format(bean.openTime)}に開封しました
 賞味期限: ${(bean.freshnessDate == null) ? '未設定' : DateFormat.yMMMMd().format(bean.freshnessDate)}

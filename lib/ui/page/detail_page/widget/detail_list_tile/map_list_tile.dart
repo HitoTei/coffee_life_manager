@@ -28,8 +28,13 @@ class MapListTile extends StatelessWidget {
                 children: [
                   FlatButton(
                     child: const Text('場所を編集'),
-                    onPressed: () =>
-                        _showEditTextDialog(context, editingController),
+                    onPressed: () => showEditTextDialog(
+                      context,
+                      editingController,
+                      onChanged: onChanged,
+                      title: const Text('地名を入力'),
+                      initialValue: value,
+                    ),
                   ),
                   FlatButton(
                     child: const Text('マップへ移動'),
@@ -44,73 +49,77 @@ class MapListTile extends StatelessWidget {
       },
     );
   }
+}
 
-  Future<void> _showEditTextDialog(
-      BuildContext context, TextEditingController editingController) {
-    return showDialog<void>(
-      context: context,
-      builder: (_) {
-        final input = TextField(
-          controller: editingController,
-          decoration: const InputDecoration(
-            hintText: '地名を入力',
-          ),
-        );
-        final cancel = FlatButton(
-          child: const Text('Cancel'),
-          onPressed: () {
-            editingController.text = value.toString();
-            Navigator.pop(context);
-          },
-        );
-        final ok = FlatButton(
-          child: const Text('Ok'),
-          onPressed: () {
-            onChanged(editingController.text);
-            Navigator.pop(context);
-          },
-        );
-        return OrientationBuilder(
-          builder: (context, orientation) {
-            if (orientation == Orientation.portrait) {
-              return AlertDialog(
-                title: title,
-                content: input,
-                actions: [
-                  cancel,
-                  ok,
-                ],
-              );
-            } else {
-              return Scaffold(
-                body: Column(
-                  children: [
-                    title,
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width - 80,
-                          child: input,
+Future<void> showEditTextDialog(
+    BuildContext context, TextEditingController editingController,
+    {@required Function(String) onChanged,
+    @required Widget title,
+    @required String initialValue,
+    @required String hintText}) {
+  return showDialog<void>(
+    context: context,
+    builder: (_) {
+      final input = TextField(
+        controller: editingController,
+        decoration: InputDecoration(
+          hintText: hintText,
+        ),
+      );
+      final cancel = FlatButton(
+        child: const Text('Cancel'),
+        onPressed: () {
+          editingController.text = initialValue.toString();
+          Navigator.pop(context);
+        },
+      );
+      final ok = FlatButton(
+        child: const Text('Ok'),
+        onPressed: () {
+          onChanged(editingController.text);
+          Navigator.pop(context);
+        },
+      );
+      return OrientationBuilder(
+        builder: (context, orientation) {
+          if (orientation == Orientation.portrait) {
+            return AlertDialog(
+              title: title,
+              content: input,
+              actions: [
+                cancel,
+                ok,
+              ],
+            );
+          } else {
+            return Scaffold(
+              body: Column(
+                children: [
+                  title,
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width - 80,
+                        child: input,
+                      ),
+                      SizedBox(
+                        width: 80,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ok,
+                            cancel,
+                          ],
                         ),
-                        SizedBox(
-                          width: 80,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ok,
-                              cancel,
-                            ],
-                          ),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              );
-            }
-          },
-        );
-      },
-    );
-  }
+                      )
+                    ],
+                  )
+                ],
+              ),
+            );
+          }
+        },
+      );
+    },
+  );
 }

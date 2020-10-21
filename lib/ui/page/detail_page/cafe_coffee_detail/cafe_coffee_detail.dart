@@ -43,7 +43,7 @@ class CafeCoffeeDetailController {
 
   Future<void> setImage(PickedFile file) async {
     final path = (await getApplicationDocumentsDirectory()).path;
-    final imageUri = DateTime.now().toString();
+    final imageUri = '${DateTime.now()}.png';
     await File(file.path).copy('$path/$imageUri');
 
     final cafeCoffee = read(cafeCoffeeDetail).state;

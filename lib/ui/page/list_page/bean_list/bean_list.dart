@@ -45,7 +45,7 @@ final beanListController =
     Provider.autoDispose((ref) => BeanListController(ref.read));
 final _beanList = StateProvider<List<Bean>>((ref) => null);
 final beanSortOrder = StateProvider((ref) => BeanListSortOrder.ascByUid);
-final beanFavorite = StateProvider((ref) => false);
+final beanFavorite = StateProvider.autoDispose((ref) => false);
 
 class BeanListController {
   BeanListController(this.read);

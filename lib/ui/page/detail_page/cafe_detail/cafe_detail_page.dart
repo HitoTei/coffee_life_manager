@@ -2,6 +2,7 @@ import 'package:coffee_life_manager/constant_string.dart';
 import 'package:coffee_life_manager/entity/cafe.dart';
 import 'package:coffee_life_manager/entity/cafe_coffee.dart';
 import 'package:coffee_life_manager/entity/enums/day_of_the_week.dart';
+import 'package:coffee_life_manager/function/files.dart';
 import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_coffee_detail/cafe_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail/cafe_detail.dart';
@@ -129,31 +130,17 @@ class CafeDetailTop extends ConsumerWidget {
           onTap: () async {
             removeFocus(context);
             final textEditor = TextEditingController()..text = state.cafeName;
-            await showDialog<void>(
-              context: context,
-              child: AlertDialog(
-                content: TextField(
-                  controller: textEditor,
-                  decoration: const InputDecoration(labelText: 'カフェ'),
-                ),
-                actions: [
-                  FlatButton(
-                    child: const Text('CANCEL'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  FlatButton(
-                    child: const Text('OK'),
-                    onPressed: () async {
-                      await context.read(cafeDetailController).update(
-                            state.copyWith(cafeName: textEditor.text),
-                          );
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
+            await showEditTextDialog(
+              context,
+              textEditor,
+              onChanged: (val) async {
+                await context.read(cafeDetailController).update(
+                      state.copyWith(cafeName: val),
+                    );
+              },
+              title: const Text('カフェの名前を変更'),
+              initialValue: textEditor.text,
+              hintText: 'カフェの名前を変更',
             );
           },
         ),
@@ -275,7 +262,7 @@ class CafeDetailPageBottomAppBar extends StatelessWidget {
                   Icons.share,
                   color: Theme.of(context).accentIconTheme.color,
                 ),
-                onPressed: () {
+                onPressed: () async {
                   final cafe = context.read(cafeDetail).state;
 
                   var regularHolidayStr = '';
@@ -289,7 +276,9 @@ class CafeDetailPageBottomAppBar extends StatelessWidget {
                   regularHolidayStr = regularHolidayStr.isEmpty
                       ? '無し'
                       : regularHolidayStr.substring(1);
-                  Share.share('''
+                  await Share.shareFiles(
+                      [(await getLocalFile(cafe.imageUri)).path],
+                      text: '''
 ${cafe.cafeName}
 場所: ${cafe.mapUrl}
 開業時間: ${cafe.startTime[0]}時${cafe.startTime[1]}分

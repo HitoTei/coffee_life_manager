@@ -40,7 +40,7 @@ final cafeCoffeeListController =
 final _cafeCoffeeList = StateProvider<List<CafeCoffee>>((ref) => null);
 final cafeCoffeeSortOrder =
     StateProvider((ref) => CafeCoffeeListSortOrder.ascByUid);
-final cafeCoffeeFavorite = StateProvider((_) => false);
+final cafeCoffeeFavorite = StateProvider.autoDispose((_) => false);
 
 class CafeCoffeeListController {
   CafeCoffeeListController(this.read);

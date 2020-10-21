@@ -1,9 +1,11 @@
 import 'package:coffee_life_manager/constant_string.dart';
 import 'package:coffee_life_manager/entity/rate.dart';
+import 'package:coffee_life_manager/function/files.dart';
 import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_coffee_detail/cafe_coffee_detail.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/datetime_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/int_list_tile.dart';
+import 'package:coffee_life_manager/ui/page/detail_page/widget/detail_list_tile/map_list_tile.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/pick_image_slide_action.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/widget/rate_widget.dart';
 import 'package:coffee_life_manager/ui/page/list_page/tile/tiles.dart';
@@ -73,31 +75,17 @@ class CafeCoffeeDetailTop extends ConsumerWidget {
             removeFocus(context);
             final textEditor = TextEditingController()
               ..text = state.productName;
-            await showDialog<void>(
-              context: context,
-              child: AlertDialog(
-                content: TextField(
-                  controller: textEditor,
-                  decoration: const InputDecoration(labelText: '商品名'),
-                ),
-                actions: [
-                  FlatButton(
-                    child: const Text('CANCEL'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  FlatButton(
-                    child: const Text('OK'),
-                    onPressed: () async {
-                      await context.read(cafeCoffeeDetailController).update(
-                            state.copyWith(productName: textEditor.text),
-                          );
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
+            await showEditTextDialog(
+              context,
+              textEditor,
+              onChanged: (val) async {
+                await context.read(cafeCoffeeDetailController).update(
+                      state.copyWith(productName: val),
+                    );
+              },
+              title: const Text('商品の名前を変更'),
+              initialValue: textEditor.text,
+              hintText: '商品の名前を変更',
             );
           },
         ),
@@ -207,9 +195,12 @@ class CafeCoffeeDetailPageBottomAppBar extends StatelessWidget {
                   Icons.share,
                   color: Theme.of(context).accentIconTheme.color,
                 ),
-                onPressed: () {
+                onPressed: () async {
                   final cafeCoffee = context.read(cafeCoffeeDetail).state;
-                  Share.share('''
+
+                  await Share.shareFiles([
+                    (await getLocalFile(cafeCoffee.imageUri)).path,
+                  ], text: '''
 ${cafeCoffee.productName}
 ${DateFormat.yMMMMd().format(cafeCoffee.drinkDay)}に飲みました
 値段: ${cafeCoffee.price}円
