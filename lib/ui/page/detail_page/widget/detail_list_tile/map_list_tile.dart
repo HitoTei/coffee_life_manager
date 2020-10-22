@@ -1,6 +1,6 @@
-import 'package:coffee_life_manager/function/remove_focus.dart';
 import 'package:flutter/material.dart';
-import 'package:maps_launcher/maps_launcher.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MapListTile extends StatelessWidget {
   const MapListTile({
@@ -18,34 +18,28 @@ class MapListTile extends StatelessWidget {
     final editingController = TextEditingController()..text = value;
     return ListTile(
       title: title,
-      subtitle: Text('$value'),
-      onTap: () {
-        removeFocus(context);
-        showDialog<void>(
-            context: context,
-            builder: (_) {
-              return SimpleDialog(
-                children: [
-                  FlatButton(
-                    child: const Text('場所を編集'),
-                    onPressed: () => showEditTextDialog(
-                      context,
-                      editingController,
-                      onChanged: onChanged,
-                      title: const Text('地名を入力'),
-                      initialValue: value,
-                    ),
-                  ),
-                  FlatButton(
-                    child: const Text('マップへ移動'),
-                    onPressed: () {
-                      MapsLauncher.launchQuery(value);
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              );
-            });
+      subtitle: value.isEmpty
+          ? const Text('長押しでURLを設定')
+          : Text(
+              value,
+              style: const TextStyle(color: Colors.lightBlue),
+            ),
+      onTap: () async {
+        if (await canLaunch(value)) {
+          await launch(value);
+        } else {
+          await Fluttertoast.showToast(msg: '無効なURLです\n長押しでURLを変更できます');
+        }
+      },
+      onLongPress: () {
+        showEditTextDialog(
+          context,
+          editingController,
+          onChanged: onChanged,
+          title: const Text('URLを入力'),
+          initialValue: value,
+          hintText: 'URLを入力',
+        );
       },
     );
   }

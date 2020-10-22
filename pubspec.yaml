@@ -33,7 +33,7 @@ dev_dependencies:
   freezed:
   pedantic_mono: any
   json_serializable:
-
+  url_launcher: ^5.7.6
 
 flutter:
 

@@ -182,6 +182,13 @@ class BeanDetailBody extends ConsumerWidget {
     return Column(
       children: [
         IntListTile(
+          title: const Text('購入したときの量'),
+          subtitle: Text('${state.firstAmount}g'),
+          value: state.firstAmount,
+          onChanged: (val) =>
+              controller.update(state.copyWith(firstAmount: val)),
+        ),
+        IntListTile(
           title: const Text('残量'),
           subtitle: Text('${state.remainingAmount}g'),
           value: state.remainingAmount,
@@ -194,13 +201,6 @@ class BeanDetailBody extends ConsumerWidget {
           value: state.oneCupPerGram,
           onChanged: (val) =>
               controller.update(state.copyWith(oneCupPerGram: val)),
-        ),
-        IntListTile(
-          title: const Text('購入したときの量'),
-          subtitle: Text('${state.firstAmount}g'),
-          value: state.firstAmount,
-          onChanged: (val) =>
-              controller.update(state.copyWith(firstAmount: val)),
         ),
         IntListTile(
           title: const Text('値段'),
@@ -318,9 +318,7 @@ class BeanDetailPageBottomAppBar extends StatelessWidget {
                 ),
                 onPressed: () async {
                   final bean = context.read(beanDetail).state;
-                  await Share.shareFiles(
-                      [(await getLocalFile(bean.imageUri)).path],
-                      text: '''
+                  final str = '''
 ${bean.beanName}
 ${(bean.openTime == null) ? '未設定' : DateFormat.yMMMMd().format(bean.openTime)}に開封しました
 賞味期限: ${(bean.freshnessDate == null) ? '未設定' : DateFormat.yMMMMd().format(bean.freshnessDate)}
@@ -329,8 +327,17 @@ $bitternessDisplayString: ${bean.rate[0] + 1}
 $sournessDisplayString: ${bean.rate[1] + 1}
 $fragranceDisplayString: ${bean.rate[2] + 1}
 $richDisplayString: ${bean.rate[3] + 1}
-$overallDisplayString: ${bean.rate[4] + 1}
-''');
+$sweetnessDisplayString: ${bean.rate[4] + 1}
+${bean.memo}
+''';
+                  if (bean.imageUri != null && bean.imageUri.isNotEmpty) {
+                    await Share.shareFiles(
+                      [(await getLocalFile(bean.imageUri)).path],
+                      text: str,
+                    );
+                  } else {
+                    await Share.share(str);
+                  }
                 },
               ),
             ],

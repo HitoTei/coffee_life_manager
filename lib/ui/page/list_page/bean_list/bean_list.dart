@@ -114,8 +114,8 @@ class BeanListController {
 }
 
 enum BeanListSortOrder {
-  ascByUid,
   desByUid,
+  ascByUid,
   ascByPrice,
   desByPrice,
   ascByRemainingAmount,

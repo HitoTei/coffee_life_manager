@@ -95,8 +95,8 @@ class HouseCoffeeListController {
 }
 
 enum HouseCoffeeListSortOrder {
-  ascByUid,
   desByUid,
+  ascByUid,
 }
 
 const kHouseCoffeeListSortOrderStr = <HouseCoffeeListSortOrder, String>{

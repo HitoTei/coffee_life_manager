@@ -77,7 +77,7 @@ class HouseCoffeeDetailTop extends ConsumerWidget {
         ),
         IconSlideAction(
           color: Theme.of(context).canvasColor,
-          caption: '商品名を変更',
+          caption: 'コーヒーの\n名前を変更',
           icon: Icons.text_fields,
           onTap: () async {
             removeFocus(context);
@@ -90,9 +90,9 @@ class HouseCoffeeDetailTop extends ConsumerWidget {
                       state.copyWith(beanName: val),
                     );
               },
-              title: const Text('商品名を変更'),
+              title: const Text('コーヒーの名前を変更'),
               initialValue: textEditor.text,
-              hintText: '商品名を変更',
+              hintText: 'コーヒーの名前を変更',
             );
           },
         ),
@@ -219,9 +219,7 @@ class HouseCoffeeDetailPageBottomAppBar extends StatelessWidget {
                 ),
                 onPressed: () async {
                   final houseCoffee = context.read(houseCoffeeDetail).state;
-                  await Share.shareFiles(
-                      [(await getLocalFile(houseCoffee.imageUri)).path],
-                      text: '''
+                  final str = '''
 ${houseCoffee.beanName}
 ${DateFormat.yMMMMd().format(houseCoffee.drinkDay)}に飲みました
 焙煎: ${roastStr[houseCoffee.roast.index]}
@@ -231,8 +229,18 @@ $bitternessDisplayString: ${houseCoffee.rate[0] + 1}
 $sournessDisplayString: ${houseCoffee.rate[1] + 1}
 $fragranceDisplayString: ${houseCoffee.rate[2] + 1}
 $richDisplayString: ${houseCoffee.rate[3] + 1}
-$overallDisplayString: ${houseCoffee.rate[4] + 1}
-''');
+$sweetnessDisplayString: ${houseCoffee.rate[4] + 1}
+${houseCoffee.memo}
+''';
+                  if (houseCoffee.imageUri != null &&
+                      houseCoffee.imageUri.isNotEmpty) {
+                    await Share.shareFiles(
+                      [(await getLocalFile(houseCoffee.imageUri)).path],
+                      text: str,
+                    );
+                  } else {
+                    await Share.share(str);
+                  }
                 },
               ),
             ],

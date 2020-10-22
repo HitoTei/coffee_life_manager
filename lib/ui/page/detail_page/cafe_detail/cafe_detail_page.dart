@@ -199,7 +199,7 @@ class CafeDetailBody extends ConsumerWidget {
           ),
         ),
         MapListTile(
-          title: const Text('場所'),
+          title: const Text('お店のURL'),
           value: state.mapUrl,
           onChanged: (val) => controller.update(state.copyWith(mapUrl: val)),
         ),
@@ -276,15 +276,23 @@ class CafeDetailPageBottomAppBar extends StatelessWidget {
                   regularHolidayStr = regularHolidayStr.isEmpty
                       ? '無し'
                       : regularHolidayStr.substring(1);
-                  await Share.shareFiles(
-                      [(await getLocalFile(cafe.imageUri)).path],
-                      text: '''
+                  final str = '''
 ${cafe.cafeName}
-場所: ${cafe.mapUrl}
+URL: ${cafe.mapUrl}
 開業時間: ${cafe.startTime[0]}時${cafe.startTime[1]}分
 終業時間: ${cafe.endTime[0]}時${cafe.endTime[1]}分
 定休日: $regularHolidayStr
-''');
+${cafe.memo}
+''';
+                  if (cafe.imageUri != null && cafe.imageUri.isNotEmpty) {
+                    final path = (await getLocalFile(cafe.imageUri)).path;
+                    await Share.shareFiles(
+                      [path],
+                      text: str,
+                    );
+                  } else {
+                    await Share.share(str);
+                  }
                 },
               ),
             ],

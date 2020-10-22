@@ -119,6 +119,7 @@ class AddHouseCoffeeController {
   Future<void> init(int beanId) async {
     read(_bean).state = await read(beanRepository).fetchByUid(beanId);
     read(_houseCoffee).state = HouseCoffee(
+      beanName: read(_bean).state.beanName,
       beanId: beanId,
       roast: read(_bean).state.roast,
       drinkDay: DateTime.now(),

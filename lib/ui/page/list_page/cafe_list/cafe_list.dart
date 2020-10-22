@@ -88,9 +88,8 @@ class CafeListController {
 }
 
 enum CafeListSortOrder {
-  ascByUid,
   desByUid, // add others
-
+  ascByUid,
 }
 
 const kCafeListSortOrderStr = <CafeListSortOrder, String>{

@@ -197,19 +197,29 @@ class CafeCoffeeDetailPageBottomAppBar extends StatelessWidget {
                 ),
                 onPressed: () async {
                   final cafeCoffee = context.read(cafeCoffeeDetail).state;
-
-                  await Share.shareFiles([
-                    (await getLocalFile(cafeCoffee.imageUri)).path,
-                  ], text: '''
+                  final str = '''
 ${cafeCoffee.productName}
+${context.read(parentCafe).state.cafeName}で
 ${DateFormat.yMMMMd().format(cafeCoffee.drinkDay)}に飲みました
 値段: ${cafeCoffee.price}円
 $bitternessDisplayString: ${cafeCoffee.rate[0] + 1}
 $sournessDisplayString: ${cafeCoffee.rate[1] + 1}
 $fragranceDisplayString: ${cafeCoffee.rate[2] + 1}
 $richDisplayString: ${cafeCoffee.rate[3] + 1}
-$overallDisplayString: ${cafeCoffee.rate[4] + 1}
-''');
+$sweetnessDisplayString: ${cafeCoffee.rate[4] + 1}
+${cafeCoffee.memo}
+''';
+                  if (cafeCoffee.imageUri != null &&
+                      cafeCoffee.imageUri.isNotEmpty) {
+                    await Share.shareFiles(
+                      [
+                        (await getLocalFile(cafeCoffee.imageUri)).path,
+                      ],
+                      text: str,
+                    );
+                  } else {
+                    await Share.share(str);
+                  }
                 },
               ),
             ],

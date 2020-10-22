@@ -110,8 +110,8 @@ class CafeCoffeeListController {
 }
 
 enum CafeCoffeeListSortOrder {
-  ascByUid,
   desByUid,
+  ascByUid,
   ascByPrice,
   desByPrice,
 }

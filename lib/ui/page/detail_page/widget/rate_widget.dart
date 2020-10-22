@@ -34,8 +34,8 @@ class RateWidget extends StatelessWidget {
             index: 3,
           ),
           _RateItem(
-            title: overallDisplayString,
-            rateKey: overallKey,
+            title: sweetnessDisplayString,
+            rateKey: sweetnessKey,
             index: 4,
           ),
         ],
