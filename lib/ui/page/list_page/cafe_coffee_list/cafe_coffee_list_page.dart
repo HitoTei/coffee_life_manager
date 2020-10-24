@@ -1,5 +1,6 @@
 import 'package:coffee_life_manager/constant_string.dart';
 import 'package:coffee_life_manager/entity/cafe_coffee.dart';
+import 'package:coffee_life_manager/myadmob.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_coffee_detail/cafe_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_coffee_list/cafe_coffee_list.dart';
 import 'package:coffee_life_manager/ui/page/list_page/tile/list_page_slidable.dart';
@@ -131,33 +132,38 @@ class CafeCoffeeListBody extends ConsumerWidget {
           }
           final cafeCoffee = state[index];
 
-          return ListPageSlidable(
-            slidableKey: ObjectKey(cafeCoffee),
-            child: ProviderScope(
-              overrides: [
-                currentCafeCoffee.overrideWithValue(cafeCoffee),
-                currentCafeCoffeeUpdater.overrideWithValue(
-                  context.read(cafeCoffeeListController).update,
+          return Column(
+            children: [
+              if (index % 5 == 0) MyBannerAdMob(),
+              ListPageSlidable(
+                slidableKey: ObjectKey(cafeCoffee),
+                child: ProviderScope(
+                  overrides: [
+                    currentCafeCoffee.overrideWithValue(cafeCoffee),
+                    currentCafeCoffeeUpdater.overrideWithValue(
+                      context.read(cafeCoffeeListController).update,
+                    ),
+                  ],
+                  child: const CafeCoffeeListTile(),
                 ),
-              ],
-              child: const CafeCoffeeListTile(),
-            ),
-            goDetailPage: () async {
-              final res = await Navigator.pushNamed(
-                context,
-                CafeCoffeeDetailPage.routeName,
-                arguments: {uidKey: cafeCoffee.uid},
-              );
-              context
-                  .read(cafeCoffeeListController)
-                  .update(res as CafeCoffee ?? cafeCoffee);
-            },
-            removeFromRepository: () => context
-                .read(cafeCoffeeListController)
-                .removeFromRepository(cafeCoffee),
-            undoDelete: () =>
-                context.read(cafeCoffeeListController).add(cafeCoffee),
-            imageUri: cafeCoffee.imageUri,
+                goDetailPage: () async {
+                  final res = await Navigator.pushNamed(
+                    context,
+                    CafeCoffeeDetailPage.routeName,
+                    arguments: {uidKey: cafeCoffee.uid},
+                  );
+                  context
+                      .read(cafeCoffeeListController)
+                      .update(res as CafeCoffee ?? cafeCoffee);
+                },
+                removeFromRepository: () => context
+                    .read(cafeCoffeeListController)
+                    .removeFromRepository(cafeCoffee),
+                undoDelete: () =>
+                    context.read(cafeCoffeeListController).add(cafeCoffee),
+                imageUri: cafeCoffee.imageUri,
+              ),
+            ],
           );
         },
         separatorBuilder: (_, __) => const SizedBox(),

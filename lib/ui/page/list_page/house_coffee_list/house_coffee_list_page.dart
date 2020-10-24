@@ -1,5 +1,6 @@
 import 'package:coffee_life_manager/constant_string.dart';
 import 'package:coffee_life_manager/entity/house_coffee.dart';
+import 'package:coffee_life_manager/myadmob.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail/house_coffee_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/house_coffee_list/house_coffee_list.dart';
 import 'package:coffee_life_manager/ui/page/list_page/tile/list_page_slidable.dart';
@@ -11,7 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class HouseCoffeeListPage extends StatelessWidget {
   const HouseCoffeeListPage();
-  static const routeName = '/houseListPage'; // todo: change name
+  static const routeName = '/houseListPage';
   @override
   Widget build(BuildContext context) {
     context.read(houseCoffeeListController).initState();
@@ -133,33 +134,38 @@ class HouseCoffeeListBody extends ConsumerWidget {
           }
 
           final houseCoffee = state[index];
-          return ListPageSlidable(
-            slidableKey: ObjectKey(houseCoffee),
-            child: ProviderScope(
-              overrides: [
-                currentHouseCoffee.overrideWithValue(houseCoffee),
-                currentHouseCoffeeUpdater.overrideWithValue(
-                  context.read(houseCoffeeListController).update,
+          return Column(
+            children: [
+              if (index % 5 == 0) MyBannerAdMob(),
+              ListPageSlidable(
+                slidableKey: ObjectKey(houseCoffee),
+                child: ProviderScope(
+                  overrides: [
+                    currentHouseCoffee.overrideWithValue(houseCoffee),
+                    currentHouseCoffeeUpdater.overrideWithValue(
+                      context.read(houseCoffeeListController).update,
+                    ),
+                  ],
+                  child: const HouseCoffeeListTile(),
                 ),
-              ],
-              child: const HouseCoffeeListTile(),
-            ),
-            goDetailPage: () async {
-              final res = await Navigator.pushNamed(
-                context,
-                HouseCoffeeDetailPage.routeName,
-                arguments: {uidKey: houseCoffee.uid},
-              );
-              context
-                  .read(houseCoffeeListController)
-                  .update(res as HouseCoffee ?? houseCoffee);
-            },
-            removeFromRepository: () => context
-                .read(houseCoffeeListController)
-                .removeFromRepository(houseCoffee),
-            undoDelete: () =>
-                context.read(houseCoffeeListController).add(houseCoffee),
-            imageUri: houseCoffee.imageUri,
+                goDetailPage: () async {
+                  final res = await Navigator.pushNamed(
+                    context,
+                    HouseCoffeeDetailPage.routeName,
+                    arguments: {uidKey: houseCoffee.uid},
+                  );
+                  context
+                      .read(houseCoffeeListController)
+                      .update(res as HouseCoffee ?? houseCoffee);
+                },
+                removeFromRepository: () => context
+                    .read(houseCoffeeListController)
+                    .removeFromRepository(houseCoffee),
+                undoDelete: () =>
+                    context.read(houseCoffeeListController).add(houseCoffee),
+                imageUri: houseCoffee.imageUri,
+              ),
+            ],
           );
         },
         separatorBuilder: (_, __) => const SizedBox(),

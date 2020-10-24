@@ -1,4 +1,5 @@
 import 'package:coffee_life_manager/entity/bean.dart';
+import 'package:coffee_life_manager/myadmob.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/bean_detail/bean_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/bean_list/bean_list.dart';
 import 'package:coffee_life_manager/ui/page/list_page/tile/list_page_slidable.dart';
@@ -129,32 +130,37 @@ class BeanListBody extends ConsumerWidget {
             );
           }
           final bean = state[index];
-          return ListPageSlidable(
-            slidableKey: ObjectKey(bean),
-            child: ProviderScope(
-              overrides: [
-                currentBean.overrideWithValue(state[index]),
-                currentBeanUpdater.overrideWithValue(
-                  context.read(beanListController).update,
+          return Column(
+            children: [
+              if (index % 5 == 0) MyBannerAdMob(),
+              ListPageSlidable(
+                slidableKey: ObjectKey(bean),
+                child: ProviderScope(
+                  overrides: [
+                    currentBean.overrideWithValue(state[index]),
+                    currentBeanUpdater.overrideWithValue(
+                      context.read(beanListController).update,
+                    ),
+                  ],
+                  child: const BeanListTile(),
                 ),
-              ],
-              child: const BeanListTile(),
-            ),
-            goDetailPage: () async {
-              final res = await Navigator.pushNamed(
-                context,
-                BeanDetailPage.routeName,
-                arguments: bean.uid,
-              );
-              context.read(beanListController).update(res as Bean ?? bean);
-            },
-            removeFromRepository: () {
-              context.read(beanListController).removeFromRepository(bean);
-            },
-            undoDelete: () {
-              context.read(beanListController).add(bean);
-            },
-            imageUri: bean.imageUri,
+                goDetailPage: () async {
+                  final res = await Navigator.pushNamed(
+                    context,
+                    BeanDetailPage.routeName,
+                    arguments: bean.uid,
+                  );
+                  context.read(beanListController).update(res as Bean ?? bean);
+                },
+                removeFromRepository: () {
+                  context.read(beanListController).removeFromRepository(bean);
+                },
+                undoDelete: () {
+                  context.read(beanListController).add(bean);
+                },
+                imageUri: bean.imageUri,
+              ),
+            ],
           );
         },
         separatorBuilder: (BuildContext context, int index) => const SizedBox(),

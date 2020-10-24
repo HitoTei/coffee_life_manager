@@ -1,4 +1,5 @@
 import 'package:coffee_life_manager/entity/cafe.dart';
+import 'package:coffee_life_manager/myadmob.dart';
 import 'package:coffee_life_manager/ui/page/detail_page/cafe_detail/cafe_detail_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_list/cafe_list.dart';
 import 'package:coffee_life_manager/ui/page/list_page/tile/list_page_slidable.dart';
@@ -10,7 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class CafeListPage extends StatelessWidget {
   const CafeListPage();
-  static const routeName = '/cafeListPage'; // todo: change name
+  static const routeName = '/cafeListPage';
   @override
   Widget build(BuildContext context) {
     context.read(cafeListController)
@@ -126,29 +127,34 @@ class CafeListBody extends ConsumerWidget {
           }
 
           final cafe = state[index];
-          return ListPageSlidable(
-            slidableKey: ObjectKey(cafe),
-            child: ProviderScope(
-              overrides: [
-                currentCafe.overrideWithValue(state[index]),
-                currentCafeUpdater.overrideWithValue(
-                  context.read(cafeListController).update,
+          return Column(
+            children: [
+              if (index % 5 == 0) MyBannerAdMob(),
+              ListPageSlidable(
+                slidableKey: ObjectKey(cafe),
+                child: ProviderScope(
+                  overrides: [
+                    currentCafe.overrideWithValue(state[index]),
+                    currentCafeUpdater.overrideWithValue(
+                      context.read(cafeListController).update,
+                    ),
+                  ],
+                  child: const CafeListTile(),
                 ),
-              ],
-              child: const CafeListTile(),
-            ),
-            goDetailPage: () async {
-              final res = await Navigator.pushNamed(
-                context,
-                CafeDetailPage.routeName,
-                arguments: cafe.uid,
-              );
-              context.read(cafeListController).update(res as Cafe ?? cafe);
-            },
-            removeFromRepository: () =>
-                context.read(cafeListController).removeFromRepository(cafe),
-            undoDelete: () => context.read(cafeListController).add(cafe),
-            imageUri: cafe.imageUri,
+                goDetailPage: () async {
+                  final res = await Navigator.pushNamed(
+                    context,
+                    CafeDetailPage.routeName,
+                    arguments: cafe.uid,
+                  );
+                  context.read(cafeListController).update(res as Cafe ?? cafe);
+                },
+                removeFromRepository: () =>
+                    context.read(cafeListController).removeFromRepository(cafe),
+                undoDelete: () => context.read(cafeListController).add(cafe),
+                imageUri: cafe.imageUri,
+              ),
+            ],
           );
         },
         separatorBuilder: (_, __) => const SizedBox(),

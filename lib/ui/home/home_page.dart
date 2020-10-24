@@ -6,7 +6,7 @@ import 'package:coffee_life_manager/ui/page/theme_selector/theme_selector_page.d
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-const _fontFamily = 'Charm'; // or Charm
+const _fontFamily = 'Charm';
 
 class HomePage extends StatelessWidget {
   const HomePage();
@@ -56,6 +56,11 @@ class HomePage extends StatelessWidget {
                             context: context,
                             applicationName: 'CoLiSu',
                             applicationVersion: '1.0.0',
+                            applicationIcon: Image.asset(
+                              'assets/icon/icon.png',
+                              width: 50,
+                              height: 50,
+                            ),
                           );
                         },
                       ),
@@ -108,7 +113,6 @@ class HomeBody extends StatelessWidget {
               ),
             ],
           ),
-
           // カフェ (カフェ・コーヒー)
           _TitleImage(
             image: const AssetImage('assets/coffee-shop.jpg'),
