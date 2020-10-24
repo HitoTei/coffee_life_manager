@@ -47,6 +47,7 @@ app.*.map.json
 # Edit at https://www.toptal.com/developers/gitignore?templates=flutter
 
 ### Flutter ###
+lib/myadmob.dart
 # Flutter/Dart/Pub related
 
 build/
@@ -60,7 +61,7 @@ build/
 **/android/key.properties
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
-
+**/android/app/google-services.json
 # iOS/XCode related
 **/ios/**/*.mode1v3
 **/ios/**/*.mode2v3
@@ -97,3 +98,4 @@ build/
 !**/ios/**/default.perspectivev3
 
 # End of https://www.toptal.com/developers/gitignore/api/flutter
+
