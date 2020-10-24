@@ -8,6 +8,8 @@ import 'package:coffee_life_manager/ui/page/detail_page/house_coffee_detail/hous
 import 'package:coffee_life_manager/ui/page/list_page/bean_list/bean_list_page.dart';
 import 'package:coffee_life_manager/ui/page/list_page/cafe_list/cafe_list_page.dart';
 import 'package:coffee_life_manager/ui/page/theme_selector/theme_selector_page.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/all.dart';
@@ -19,21 +21,27 @@ import 'ui/page/list_page/house_coffee_list/house_coffee_list_page.dart';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final analytics = FirebaseAnalytics();
     return ProviderScope(
       child: Builder(builder: (cxt) {
         cxt.read(themeManager).init();
-        return _MyApp();
+        return _MyApp(analytics);
       }),
     );
   }
 }
 
 class _MyApp extends ConsumerWidget {
+  const _MyApp(this.analytics);
+  final FirebaseAnalytics analytics;
   @override
   Widget build(BuildContext context,
       T Function<T>(ProviderBase<Object, T> provider) watch) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: analytics),
+      ],
+      title: 'CoLiSu',
       theme: watch(appTheme).state,
       initialRoute: '/',
       routes: {
